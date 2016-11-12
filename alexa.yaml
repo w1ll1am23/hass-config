@@ -47,7 +47,7 @@
             {%- endif -%}
           {%- else -%}
             I am sorry, I do not know.
-          {%- endif -%}
+          {%- endfor -%}
 
 
     DryerStatusIntent:
