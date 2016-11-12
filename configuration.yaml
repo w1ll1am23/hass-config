@@ -1,0 +1,122 @@
+homeassistant:
+  name: Home
+  latitude: !secret latitude
+  longitude: !secret longitude 
+  elevation: 247
+  unit_system: imperial
+  time_zone: America/Louisville
+  customize: !include customize.yaml
+  
+http:
+  api_password: !secret http_password
+
+updater:
+
+frontend:
+
+logbook:
+
+history:
+
+sun:
+
+wemo:
+  static:
+    - 192.168.5.33
+
+mqtt:
+  broker: 192.168.5.4
+  port: 1883
+  client_id: HASS
+  keepalive: 60
+  username: homeassistant
+  password: !secret mqtt_password
+
+octoprint:
+  host: 192.168.5.36
+  api_key: !secret octoprint_api_key
+
+wink:
+  email: !secret wink_user
+  password: !secret wink_password
+  client_id: !secret wink_client_id 
+  client_secret: !secret wink_client_secret 
+
+camera:
+  platform: generic
+  still_image_url: https://radblast.wunderground.com/cgi-bin/radar/WUNIDS_map?station=ILN&brand=wui&num=10&delay=15&type=N0R&frame=0&scale=1.000&noclutter=0&showstorms=0&mapx=400&mapy=240&centerx=400&centery=240&transx=0&transy=0&showlabels=1&severe=0&rainsnow=0&lightning=0&smooth=1&rand=24474020&lat=0&lon=0&label=you
+  name: CIN
+
+device_tracker:
+  platform: owntracks
+  max_gps_accuracy: 200
+
+climate:
+  platform: nest
+
+nest:
+  username: !secret nest_user
+  password: !secret nest_password
+
+alarm_control_panel:
+  platform: manual
+  name: "HA Alarm"
+  code: 1218
+  pending_time: 60
+  trigger_time: 120
+      
+notify:
+  - platform: smtp
+    name: sms_billy
+    server: smtp.gmail.com
+    port: 587
+    sender: !secret sender_email
+    starttls: 1
+    username: !secret sender_email
+    password: !secret sender_email_password
+    recipient: !secret billys_number
+#  - platform: smtp
+#    name: sms_melina
+#    server: smtp.gmail.com
+#    port: 587
+#    sender: !secret sender_email
+#    starttls: 1
+#    username: !secret sender_email
+#    password: !secret sender_email_password
+#    recipient: !secret melinas_number
+    
+zone: !include zones.yaml
+switch: !include switches.yaml
+sensor: !include sensors.yaml
+binary_sensor: !include binary_sensors.yaml
+automation: !include automations.yaml
+script: !include scripts.yaml
+group: !include groups.yaml   
+media_player: !include media_player.yaml
+alexa: !include alexa.yaml
+
+################################################
+################Input booleans#################
+################################################
+
+input_boolean:
+  dryer_switch:
+    name: Toggle dryer automation
+    initial: off
+    icon: mdi:sync
+
+cover:
+  - platform: command_line
+    covers:
+      garage_door:
+        command_open: /usr/bin/curl 192.168.5.28:3000/toggleDoor
+        command_close: /usr/bin/curl 192.168.5.28:3000/toggleDoor
+        command_stop: /usr/bin/curl 192.168.5.28:3000/toggleDoor
+        command_state: /usr/bin/curl 192.168.5.28:3000
+        value_template: >
+          {%- if is_state("sensor.arest_sensor_door", "Closed") -%}
+          0
+          {%- else -%}
+          100
+          {%- endif %}
+        friendly_name: Garage Door

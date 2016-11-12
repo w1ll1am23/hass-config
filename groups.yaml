@@ -1,0 +1,128 @@
+  ######################
+  ########Views#########
+  ######################
+
+  tablet:
+    name: Tablet
+    view: yes
+    entities:
+      - camera.cin
+      - group.switches
+      - group.weather 
+      - group.bedroom_lights
+
+  bedroom:
+    name: Bedroom
+    view: yes
+    entities: 
+      - group.bedroom_sensors
+      - group.bedroom_lights
+      - media_player.bedroom
+  
+  Living_room:
+    name: Living Room
+    view: yes
+    entities:
+      - group.living_room_lights
+      - group.living_room_sensors
+      - media_player.living_room
+
+  laundry:
+    name: Laundry Room
+    view: yes
+    entities:
+      - group.laundry_room
+
+  Kitchen:
+    name: Kitchen
+    view: yes
+    entities:
+      - group.kitchen_lights
+      - group.kitchen_sensors
+  
+  Garage:
+    name: Garage
+    view: yes
+    entities:
+      - group.garage_lights
+      - group.garage_sensors
+      - group.garage_switches
+
+  Turtle:
+    name: Turtle
+    view: yes
+    entities:
+      - group.turtle_tank
+  
+  Outside:
+    name: Outside
+    view: yes
+    entities:
+      - group.outside_switches
+      - group.outside_sensors
+  
+  Office:
+    name: Office
+    view: yes
+    entities:
+      - group.office_lights
+      - group.office_sensors
+      - media_player.office
+
+  Hallway:
+    name: Hallway
+    view: yes
+    entities:
+      - group.hallway_lights
+      - group.hallway_thermostat
+      - group.hallway_sensors
+  
+  ######################################
+  ############Light Groups##############
+  ######################################
+
+  Bedroom_lights: switch.bedroom_lamp, light.melinas_night_stand, light.billys_night_stand
+  Living_room_lights: light.living_room_lamp, light.shelf_lamp, switch.dining_room_fan
+  Kitchen_lights: switch.kitchen_cabinet_lights, light.kitchen_sink_light
+  Garage_lights: light.garage
+  Office_lights: switch.melinas_office_lamp, switch.billys_office_lamp, light.office_lamp, script.power_strip_off, script.power_strip_on
+  Hallway_lights: switch.hallway_ceiling_fan_light, switch.hallway_ceiling_fan_fan, light.down_stairs_hallway
+  entryway: switch.outside_lights, switch.entry
+  every_light: switch.outside_lights, switch.hallway_ceiling_fan_light, switch.office_lamp, switch.kitchen_cabinet_lights, switch.bedroom_lamp, light.down_stairs_hallway, light.garage, light.living_room_lamp, light.billys_night_stand, light.office_lamp, light.laundry, switch.entry, switch.dining_room_fan, light.kitchen_sink_light, light.shelf_lamp
+  wink_lights: light.laundry, light.billys_night_stand, light.office_lamp, light.living_room_lamp, light.garage, light.down_stairs_hallway, light.shelf_lamp
+
+  ######################################
+  ############Sensor Groups#############
+  ######################################
+
+  bedroom_sensors: sensor.porkfolio_balance
+  Hallway_sensors: switch.siren, binary_sensor.up_stairs_hallway_motion, binary_sensor.down_stairs_bathroom_door, sensor.up_stairs_hallway_temperature
+  Security: switch.siren, binary_sensor.living_room_motion, binary_sensor.front_door, binary_sensor.garage_entry_door, binary_sensor.up_stairs_hallway_motion, binary_sensor.kitchen_door, binary_sensor.down_stairs_bathroom_door, binary_sensor.office_door, binary_sensor.bedroom_door
+  Weather: sun.sun, sensor.hallway_humidity_2, sensor.hallway_temperature, sensor.dark_sky_precip_probability, sensor.dark_sky_summary, sensor.dark_sky_daily_summary, sensor.pws_alerts
+  Office_sensors: binary_sensor.office_door
+  Garage_sensors: binary_sensor.garage_entry_door, sensor.garage_freezer_temperature
+  Outside_sensors: binary_sensor.front_door
+  Turtle_tank: sensor.turtle_tank_water, sensor.turtle_tank_basking, sensor.turtle_tank_uvb
+  Kitchen_sensors: sensor.egg_minder, binary_sensor.kitchen_door, binary_sensor.dishwasher_liquid_detected
+  Bedroom_sensors: sensor.bedroom_temperature, binary_sensor.bedroom_door, binary_sensor.bedroom_motion
+  Living_room_sensors: binary_sensor.living_room_motion, sensor.living_room_temperature
+  external_doors: binary_sensor.front_door, binary_sensor.garage_entry_door, binary_sensor.kitchen_door
+
+  ######################################
+  ############Random Groups#############
+  ######################################
+
+  Hallway_thermostat: thermostat.hallway, sensor.hallway_mode, sensor.hallway_humidity
+  Outside_switches: switch.outside_lights, lock.front_door, switch.entry
+  Living_room_switches: switch.heated_blanket
+  switches: script.good_night_melina
+  laundry_room: light.laundry, binary_sensor.spotter_vibration, binary_sensor.laundry_door, input_boolean.dryer_switch
+  garage_switches: cover.garage_door, switch.start_camry
+
+  M3D:
+    name: Micro3D
+    entities:
+      - switch.printer_light
+      - binary_sensor.octoprint_printing
+      - binary_sensor.octoprint_printing_error
+      - sensor.octoprint_job_percentage

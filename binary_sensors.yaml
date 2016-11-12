@@ -1,0 +1,16 @@
+  - platform: octoprint
+    monitored_conditions:
+      - Printing
+      - Printing Error
+
+  - platform: template
+    sensors:
+      tank_basking_threshold:
+        value_template: "{{ states('sensor.turtle_tank_basking')|int <= 80 }}"
+        entity_id: sensor.turtle_tank_basking
+
+  - platform: template
+    sensors:
+      freezer_temp_threshold:
+        value_template: "{{ states('sensor.garage_freezer_temperature')|int >= 5 }}"
+        entity_id: sensor.garage_freezer_temperature

@@ -1,0 +1,46 @@
+  - platform: arest
+    resource: http://192.168.5.34
+    name: Hallway ceiling fan
+    pins:
+      5:
+       name: Light
+      4:
+       name: Fan
+
+  - platform: command_line
+    switches:
+      start_car:
+        friendly_name: Start Camry
+        command_on: /usr/bin/curl 192.168.5.28:3000/startCar
+        command_off: /usr/bin/curl 192.168.5.28:3000
+        command_state: /usr/bin/curl 192.168.5.28:3000
+        value_template: '{{ false }}'
+
+  - platform: rpi_rf
+    gpio: 17
+    switches:
+        Kitchen Cabinet lights:
+          pulselength: 182
+          protocol: 1
+          code_on: 5313987
+          code_off: 5313996
+        Bedroom lamp:
+          pulselength: 182
+          protocol: 1
+          code_on: 5314307
+          code_off: 5314316
+        Heated Blanket:
+          pulselength: 182
+          protocol: 1
+          code_on: 5315843
+          code_off: 5315852
+        #Garage Light:
+        #  pulselength: 182
+        #  protocol: 1
+        #  code_on: 5313843
+        #  code_off: 531352
+        Printer Light:
+          pulselength: 182
+          protocol: 1
+          code_on: 5321987
+          code_off: 5321996

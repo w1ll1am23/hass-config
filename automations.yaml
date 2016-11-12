@@ -1,0 +1,1075 @@
+################################################
+###############Time Automations#################
+################################################
+
+  - alias: Turn outside lights off
+    initial_state: false
+    trigger:
+      - platform: sun
+        event: sunrise
+      - platform: time
+        hours: 22
+        minutes: 30
+        seconds: 0
+      - platform: event
+        event_type: toggle_outside_lights
+    action:
+      service: homeassistant.turn_off
+      entity_id: switch.outside_lights
+
+  - alias: Turn on living room lamp at dusk
+    initial_state: false
+    trigger:
+      - platform: template
+        value_template: '{{ states.sun.sun.attributes.elevation < 3.0 }}'
+    condition:
+        condition: or
+        conditions:
+          - condition: state
+            entity_id: device_tracker.w1ll1am_a0001
+            state: home
+          - condition: state
+            entity_id: device_tracker.melina_iphone
+            state: home
+    action:
+      service: homeassistant.turn_on
+      entity_id: light.shelf_lamp
+    
+
+################################################
+##############Sensor Automations################
+################################################
+
+  - alias: Dryer started
+    initial_state: false
+    trigger:
+      platform: state
+      entity_id: binary_sensor.spotter_vibration
+      state: 'on'
+      for:
+        minutes: 3
+    action:
+      service: homeassistant.turn_on
+      entity_id: input_boolean.dryer_switch
+
+  - alias: dryer_done
+    initial_state: false
+    trigger:
+      - platform: state
+        entity_id: binary_sensor.spotter_vibration
+        state: 'off'
+        for:
+          minutes: 2
+    condition:
+      condition: state
+      entity_id: input_boolean.dryer_switch
+      state: 'on'
+    action:
+      - service: homeassistant.turn_off
+        entity_id: input_boolean.dryer_switch
+      - service: notify.sms_billy
+        data:
+          message: >
+            Dryer is done!
+
+  - alias: check dishwasher
+    initial_state: false
+    trigger:
+      - platform: state
+        entity_id: binary_sensor.dishwasher_liquid_detected
+        state: 'on'
+    action:
+      - service: notify.sms_billy
+        data:
+          message: >
+            The dishwasher is leaking!!!
+      - service: notify.sms_melina
+        data:
+          message: >
+            The dishwasher is leaking!!!
+    
+
+  - alias: check freezer
+    initial_state: false
+    trigger:
+      - platform: state
+        entity_id: binary_sensor.freezer_temp_threshold
+        state: 'on'
+        for:
+          minutes: 15
+    action:
+      - service: notify.sms_billy
+        data:
+          message: >
+            Check the freezer! {{ states('sensor.freezer_temperature') }}
+      - service: notify.sms_melina
+        data:
+          message: >
+            Check the freezer! {{ states('sensor.freezer_temperature') }}
+
+  - alias: laundry light on when door opens
+    initial_state: false
+    trigger:
+      - platform: state
+        entity_id: binary_sensor.laundry_door
+        state: 'on'
+    action:
+      service: homeassistant.turn_on
+      entity_id: light.laundry
+
+  - alias: outside lights on when door opens
+    initial_state: false
+    trigger:
+      - platform: state
+        entity_id: binary_sensor.front_door
+        state: 'on'
+    condition:
+      - condition: template
+        value_template: '{{ states.sun.sun.attributes.elevation < 1.0 }}'
+    action:
+      service: homeassistant.turn_on
+      entity_id: switch.outside_lights
+
+  - alias: laundry light off when door closes
+    initial_state: false
+    trigger:
+      - platform: state
+        entity_id: binary_sensor.laundry_door
+        state: 'off'
+    action:
+      service: homeassistant.turn_off
+      entity_id: light.laundry
+
+  - alias: Printing done
+    initial_state: false
+    trigger:
+      - platform: state
+        entity_id: binary_sensor.octoprint_printing
+        from: "on"
+        to: "off"
+    action:
+      service: notify.sms_billy
+      data:
+        message: 'Printing done!'
+    
+  - alias: office lights on when door opens
+    initial_state: false
+    trigger:
+      - platform: state
+        entity_id: binary_sensor.office_door
+        state: 'on'
+    action:
+      - service: light.turn_on
+        entity_id: light.office_lamp
+      - service: homeassistant.turn_on
+        entity_id: script.power_strip_on
+
+  - alias: bedroom lights on when door opens
+    initial_state: false
+    trigger:
+      - platform: state
+        entity_id: binary_sensor.bedroom_door
+        state: 'on'
+    action:
+      service: homeassistant.turn_on
+      entity_id: group.bedroom_lights
+
+  - alias: garage light off
+    initial_state: false
+    trigger:
+      - platform: state
+        entity_id: binary_sensor.garage_entry_door
+        from: 'on'
+        to: 'off'
+    condition:
+      - condition: state
+        entity_id: light.garage
+        state: 'on'
+    action:
+      service: homeassistant.turn_on
+      entity_id: script.garage_light
+
+  - alias: Front door
+    initial_state: false
+    trigger:
+      - platform: state
+        entity_id: binary_sensor.front_door
+        state: 'off'
+    action:
+      service: homeassistant.turn_on
+      entity_id: script.lock_the_door
+
+  - alias: garage light on if door open
+    initial_state: false
+    trigger:
+      - platform: state
+        entity_id: binary_sensor.garage_entry_door
+        state: 'on'
+    condition:
+      - condition: template
+        value_template: '{{ states.sun.sun.attributes.elevation < 3.0 }}'
+    action:
+      service: light.turn_on
+      entity_id: light.garage
+
+  - alias: Downstairs hall light
+    initial_state: false
+    trigger:
+      - platform: state
+        entity_id: light.down_stairs_hallway
+        state: 'on'
+    action:
+      service: homeassistant.turn_on
+      entity_id: script.hall_light
+
+  - alias: up in morning
+    initial_state: false
+    trigger:
+      - platform: state
+        entity_id: binary_sensor.bedroom_motion
+        state: 'on'
+    condition:
+      condition: and
+      conditions:
+        - condition: state
+          entity_id: light.melinas_night_stand
+          state: 'off'
+        - condition: time
+          before: '07:00:00'
+    action:
+      service: homeassistant.turn_on
+      entity_id: script.melinas_light
+        
+  - alias: up at night
+    initial_state: false
+    trigger:
+      - platform: state
+        entity_id: binary_sensor.bedroom_motion
+        state: 'on'
+    condition:
+      condition: and
+      conditions:
+        - condition: time
+          after: '22:00:00'
+        - condition: state
+          entity_id: light.melinas_night_stand
+          state: 'off'
+    action:
+      service: homeassistant.turn_on
+      entity_id: script.melinas_light
+
+  - alias: water_too_cold
+    initial_state: false
+    trigger:
+      - platform: numeric_state
+        entity_id: sensor.tank_water
+        below: 23
+    action:
+      - service: notify.sms_billy
+        data:
+          message: >
+            Tank water too cold! {{ states('sensor.tank_water') }}
+      - service: notify.sms_melina
+        data:
+          message: >
+            Tank water too cold! {{ states('sensor.tank_water') }}
+
+  - alias: check_bulbs
+    initial_state: false
+    trigger:
+      - platform: state
+        entity_id: binary_sensor.turtle_tank_basking_threshold
+        state: 'on'
+        for:
+          minutes: 45
+    action:
+      - service: notify.sms_billy
+        data:
+          message: >
+            Check basking bulbs! {{ states('sensor.tank_basking') }}
+
+  - alias: bulb_needs_changed
+    initial_state: false
+    trigger:
+      - platform: numeric_state
+        entity_id: sensor.tank_uvb
+        below: 6
+    action:
+      service: notify.sms_billy
+      data:
+        message: >
+          UVB output too low! Replace bulb {{ states('sensor.tank_uvb') }}
+ 
+  - alias: 'Trigger alarm while armed away'
+    initial_state: false
+    trigger:
+      - platform: state
+        entity_id: binary_sensor.front_door
+        from: 'off'
+        to: 'on'
+      - platform: state
+        entity_id: binary_sensor.garage_entry_door
+        from: 'off'
+        to: 'on'
+      - platform: state
+        entity_id: binary_sensor.living_room_motion
+        from: 'off'
+        to: 'on'
+      - platform: state
+        entity_id: binary_sensor.up_stairs_hallway_motion
+        from: 'off'
+        to: 'on'
+      - platform: state
+        entity_id: binary_sensor.kitchen_door
+        from: 'off'
+        to: 'on'
+      - platform: state
+        entity_id: binary_sensor.down_stairs_bathroom_door
+        from: 'off'
+        to: 'on'
+      - platform: state
+        entity_id: binary_sensor.office_door
+        from: 'off'
+        to: 'on'
+    condition:
+        - condition: state
+          entity_id: alarm_control_panel.ha_alarm
+          state: armed_away
+    action:
+        service: homeassistant.turn_on
+        entity_id: script.alarm
+
+  - alias: billy unlocked the door
+    initial_state: false
+    trigger:
+      - platform: state
+        entity_id: binary_sensor.billy
+        state: 'on'
+    condition:
+      - condition: state
+        entity_id: lock.front_door
+        state: locked
+        for:
+          minutes: 15
+    action:
+      - service: notify.sms_billy
+        data:
+          message: 'Billy unlocked the door'
+      - service: notify.sms_melina
+        data:
+          message: 'Billy unlocked the door'
+    
+  - alias: melina unlocked the door
+    initial_state: false
+    trigger:
+      - platform: state
+        entity_id: binary_sensor.melina
+        state: 'on'
+    condition:
+      - condition: state
+        entity_id: lock.front_door
+        state: locked
+        for:
+          minutes: 15
+    action:
+      service: notify.sms_billy
+      data:
+        message: 'Melina unlocked the door'
+
+  - alias: gdottie unlocked the door
+    initial_state: false
+    trigger:
+      - platform: state
+        entity_id: binary_sensor.gdottie
+        state: 'on'
+    action:
+      - service: notify.sms_billy
+        data:
+          message: 'Grandma unlocked the door'
+      - service: notify.sms_billy
+        data:
+          message: 'Grandma unlocked the door'
+
+  - alias: parents unlocked the door
+    initial_state: false
+    trigger:
+      - platform: state
+        entity_id: binary_sensor.parents
+        state: 'on'
+    action:
+      service: notify.sms_billy
+      data:
+        message: 'Mother unlocked the door'
+
+################################################
+##############Tasker Automations################
+################################################    
+
+  - alias: Good night
+    initial_state: false
+    trigger:
+      - platform: event
+        event_type: good_night
+    action:
+      - service: homeassistant.turn_on
+        entity_id: script.good_night
+      - service: homeassistant.turn_on
+        entity_id: script.power_strip_off
+
+  - alias: Check doors are closed
+    initial_state: false
+    trigger:
+      - platform: event
+        event_type: good_night
+    condition:
+      condition: and
+      conditions:
+        - condition: state
+          entity_id: group.external_doors
+          state: 'on'
+    action:
+      - service: notify.sms_billy
+        data:
+          message: 'There is a door open.'
+      - service: notify.sms_billy
+        data:
+          message: 'There is a door open.'
+
+  - alias: Good morning
+    initial_state: false
+    trigger:
+      - platform: event
+        event_type: good_morning
+    action:
+      service: homeassistant.turn_on
+      entity_id: script.good_morning
+
+################################################
+##############Dasher Automations################
+################################################
+
+  - alias: kitchen_sink_off
+    initial_state: false
+    trigger:
+      - platform: event
+        event_type: toggle_kitchen_sink_light
+    condition:
+      - condition: state
+        entity_id: light.kitchen_sink_light
+        state: 'on'
+    action:
+      service: homeassistant.turn_off
+      entity_id: light.kitchen_sink_light
+
+  - alias: kitchen_sink_on
+    initial_state: false
+    trigger:
+      - platform: event
+        event_type: toggle_kitchen_sink_light
+    condition:
+      - condition: state
+        entity_id: light.kitchen_sink_light
+        state: 'off'
+    action:
+      service: homeassistant.turn_on
+      entity_id: light.kitchen_sink_light
+
+  - alias: hallway_off
+    initial_state: false
+    trigger:
+      - platform: event
+        event_type: toggle_hallway_light
+      - platform: event
+        event_type: hallway_off
+    condition:
+      - condition: state
+        entity_id: switch.hallway_ceiling_fan_light
+        state: 'on'
+    action:
+      service: homeassistant.turn_off
+      entity_id: switch.hallway_ceiling_fan_light
+
+  - alias: outside_off
+    initial_state: false
+    trigger:
+      - platform: event
+        event_type: toggle_outside_lights
+      - platform: event
+        event_type: outside_off
+    condition:
+      - condition: state
+        entity_id: group.entryway
+        state: 'on'
+    action:
+      service: homeassistant.turn_off
+      entity_id: group.entryway
+
+  - alias: outside_on
+    initial_state: false
+    trigger:
+      - platform: event
+        event_type: toggle_outside_lights
+      - platform: event
+        event_type: outside_on
+    condition:
+      - condition: state
+        entity_id: group.entryway
+        state: 'off'
+    action:
+      service: homeassistant.turn_on
+      entity_id: group.entryway
+
+  - alias: office_off
+    initial_state: false
+    trigger:
+      - platform: event
+        event_type: toggle_office_light
+      - platform: event
+        event_type: office_on
+    condition:
+      - condition: state
+        entity_id: group.office_lights
+        state: 'on'
+    action:
+      - service: light.turn_off
+        entity_id: light.office_lamp
+      - service: homeassistant.turn_on
+        entity_id: script.power_strip_off
+
+  - alias: office_on
+    initial_state: false
+    trigger:
+      - platform: event
+        event_type: toggle_office_light
+      - platform: event
+        event_type: office_on
+    condition:
+      - condition: state
+        entity_id: group.office_lights
+        state: 'off'
+    action:
+      - service: light.turn_on
+        entity_id: light.office_lamp
+      - service: homeassistant.turn_on
+        entity_id: script.power_strip_on
+
+  - alias: bedroom_off
+    initial_state: false
+    trigger:
+      - platform: event
+        event_type: toggle_bedroom_light
+      - platform: event
+        event_type: beroom_off
+    condition:
+      - condition: state
+        entity_id: group.bedroom_lights
+        state: 'on'
+    action:
+      service: homeassistant.turn_off
+      entity_id: group.bedroom_lights
+
+  - alias: bedroom_on_day
+    initial_state: false
+    trigger:
+      - platform: event
+        event_type: toggle_bedroom_light
+      - platform: event
+        event_type: bedroom_on
+    condition:
+      condition: and
+      conditions:
+        - condition: state
+          entity_id: group.bedroom_lights
+          state: 'off'
+        - condition: time
+          before: '21:00:00' 
+    action:
+      service: homeassistant.turn_on
+      entity_id: script.bedroom_lights_on_day
+
+  - alias: bedroom_on_night
+    initial_state: false
+    trigger:
+      - platform: event
+        event_type: toggle_bedroom_light
+      - platform: event
+        event_type: bedroom_on
+    condition:
+      condition: and
+      conditions:
+        - condition: state
+          entity_id: group.bedroom_lights
+          state: 'off'
+        - condition: time
+          after: '21:00:00' 
+    action:
+      service: homeassistant.turn_on
+      entity_id: script.bedroom_lights_on_night
+
+  - alias: kitchen_off
+    initial_state: false
+    trigger:
+      - platform: event
+        event_type: toggle_kitchen_cabinet_lights
+      - platform: event
+        event_type: kitchen_off
+    condition:
+      - condition: state
+        entity_id: switch.kitchen_cabinet_lights
+        state: 'on'
+    action:
+      service: homeassistant.turn_off
+      entity_id: switch.kitchen_cabinet_lights
+
+  - alias: kitchen_on
+    initial_state: false
+    trigger:
+      - platform: event
+        event_type: toggle_kitchen_cabinet_lights
+      - platform: event
+        event_type: kitchen_on
+    condition:
+      - condition: state
+        entity_id: switch.kitchen_cabinet_lights
+        state: 'off'
+    action:
+      service: homeassistant.turn_on
+      entity_id: switch.kitchen_cabinet_lights
+
+  - alias: downstairs hallway off
+    initial_state: false
+    trigger:
+      - platform: event
+        event_type: toggle_hallway_light
+      - platform: event
+        event_type: hallway_off
+    condition:
+      - condition: state
+        entity_id: light.down_stairs_hallway
+        state: 'on'
+    action:
+      service: homeassistant.turn_off
+      entity_id: light.down_stairs_hallway
+
+  - alias: hallway_on
+    initial_state: false
+    trigger:
+      - platform: event
+        event_type: toggle_hallway_light
+      - platform: event
+        event_type: hallway_on
+    condition:
+      condition: and
+      conditions:
+        - condition: state
+          entity_id: switch.hallway_ceiling_fan_light
+          state: 'off'
+        - condition: state
+          entity_id: light.down_stairs_hallway
+          state: 'off'
+    action:
+      service: homeassistant.turn_on
+      entity_id: switch.hallway_ceiling_fan_light
+
+  - alias: living_room_off
+    initial_state: false
+    trigger:
+      - platform: event
+        event_type: toggle_living_room_light
+      - platform: event
+        event_type: living_room_off
+    condition:
+      - condition: state
+        entity_id: light.living_room_lamp
+        state: 'on'
+    action:
+      service: homeassistant.turn_off
+      entity_id: light.living_room_lamp
+
+  - alias: living_room_on
+    initial_state: false
+    trigger:
+      - platform: event
+        event_type: toggle_living_room_light
+      - platform: event
+        event_type: living_room_on
+    condition:
+      - condition: state
+        entity_id: light.living_room_lamp
+        state: 'off'
+    action:
+      service: homeassistant.turn_on
+      entity_id: light.living_room_lamp
+
+  - alias: melinas_night_stand_on
+    initial_state: false
+    trigger:
+      - platform: event
+        event_type: toggle_melinas_night_stand
+    condition:
+      - condition: state
+        entity_id: light.melinas_night_stand
+        state: 'off'
+    action:
+      service: light.turn_on
+      entity_id: light.melinas_night_stand
+
+  - alias: melinas_night_stand_off
+    initial_state: false
+    trigger:
+      - platform: event
+        event_type: toggle_melinas_night_stand
+    condition:
+      - condition: state
+        entity_id: light.melinas_night_stand
+        state: 'on'
+    action:
+      service: light.turn_off
+      entity_id: light.melinas_night_stand
+
+################################################
+#########Device Tracker Automations#############
+################################################
+
+  - alias: left_home
+    initial_state: false
+    trigger:
+      - platform: state
+        entity_id: device_tracker.w1ll1am_a0001
+        from: 'home'
+        to: 'not_home'
+      - platform: state
+        entity_id: device_tracker.melina_iphone
+        from: 'home'
+        to: 'not_home'
+    action:
+      service: homeassistant.turn_on
+      entity_id: script.lock_the_door
+
+  - alias: billy_at_ktown
+    initial_state: false
+    trigger:
+      - platform: state
+        entity_id: device_tracker.w1ll1am_a0001
+        from: 'not_home'
+        to: 'Ktown'
+    condition:
+      - condition: numeric_state
+        entity_id: sensor.egg_minder
+        below: 4
+    action:
+      service: notify.sms_billy
+      data:
+        message: >
+          {% if states('sensor.egg_minder') | float < 4 %}
+            Get eggs! Only {{ states('sensor.egg_minder') }} eggs left.
+          {%endif %}
+
+  - alias: melina_at_ktown
+    initial_state: false
+    trigger:
+      - platform: state
+        entity_id: device_tracker.melina_iphone
+        from: 'not_home'
+        to: 'Ktown'
+    condition:
+      - condition: numeric_state
+        entity_id: sensor.egg_minder
+        below: 4
+    action:
+      service: notify.sms_melina
+      data:
+        message: >
+          {% if states('sensor.egg_minder') | float < 4 %}
+            Get eggs! Only {{ states('sensor.egg_minder') }} eggs left.
+          {%endif %}
+
+  - alias: melina_is_home
+    initial_state: false
+    trigger:
+      - platform: state
+        entity_id: device_tracker.melina_iphone
+        from: 'not_home'
+        to: 'home'
+    condition:
+      condition: state
+      entity_id: script.hass_start
+      state: 'off'
+    action:
+      - service: notify.sms_billy
+        data:
+          message: 'Melina is home'
+
+  - alias: billy_is_home
+    initial_state: false
+    trigger:
+      - platform: state
+        entity_id: device_tracker.w1ll1am_a0001
+        from: 'not_home'
+        to: 'home'
+    condition:
+      condition: state
+      entity_id: script.hass_start
+      state: 'off'
+    action:
+      - service: notify.sms_billy
+        data:
+          message: 'Billy is home'
+      - service: notify.sms_melina
+        data:
+          message: 'Billy is home'
+
+  - alias: Turn outside lights on
+    initial_state: false
+    trigger:
+      - platform: state
+        entity_id: device_tracker.melina_iphone
+        from: 'not_home'
+        to: 'home'
+      - platform: state
+        entity_id: binary_sensor.melina
+        from: 'off'
+        to: 'on'
+      - platform: state
+        entity_id: device_tracker.w1ll1am_a0001
+        from: 'not_home'
+        to: 'home'
+      - platform: state
+        entity_id: binary_sensor.billy
+        from: 'off'
+        to: 'on'
+    condition:
+        condition: and
+        conditions:
+          - condition: template
+            value_template: '{{ states.sun.sun.attributes.elevation < 1.0 }}'
+          - condition: state
+            entity_id: script.hass_start
+            state: 'off'
+    action:
+        service: homeassistant.turn_on
+        entity_id: group.entryway
+
+  - alias: Turn entry and living room on
+    initial_state: false
+    trigger:
+      - platform: state
+        entity_id: device_tracker.melina_iphone
+        from: 'not_home'
+        to: 'home'
+      - platform: state
+        entity_id: binary_sensor.melina
+        from: 'off'
+        to: 'on'
+      - platform: state
+        entity_id: device_tracker.w1ll1am_a0001
+        from: 'not_home'
+        to: 'home'
+      - platform: state
+        entity_id: binary_sensor.billy
+        from: 'off'
+        to: 'on'
+    condition:
+        condition: and
+        conditions:
+          - condition: template
+            value_template: '{{ states.sun.sun.attributes.elevation < 3.0 }}'
+    action:
+        service: homeassistant.turn_on
+        entity_id: script.home_at_dusk
+
+  - alias: Turn lights off when no one is home
+    initial_state: false
+    trigger:
+      - platform: state
+        entity_id: group.device_trackers
+        from: 'home'
+        to: 'not_home'
+    action:
+        service: homeassistant.turn_off
+        entity_id: group.every_light
+
+
+################################################
+###########Random Event Automations#############
+################################################   
+
+  - alias: check for locked lock
+    initial_state: false
+    trigger:
+      - platform: event
+        event_type: check_for_locked_lock
+    condition:
+        condition: or
+        conditions:
+          - condition: state
+            entity_id: lock.front_door
+            state: 'unlocked'
+          - condition: state
+            entity_id: binary_sensor.front_door
+            state: 'on'
+    action:
+      - service: notify.sms_billy
+        data:
+          message: 'Front door failed to lock!'
+      - service: notify.sms_melina
+        data:
+          message: 'Front door failed to lock!'
+
+
+  - alias: Battery low alert
+    initial_state: false
+    trigger:
+      - platform: numeric_state
+        entity_id: sensor.lock_battery
+        below: 30
+      - platform: numeric_state
+        entity_id: sensor.eggtray_battery
+        below: 30
+      - platform: numeric_state
+        entity_id: sensor.front_door_battery
+        below: 30
+      - platform: numeric_state
+        entity_id: sensor.garage_entry_door_battery
+        below: 30
+      - platform: numeric_state
+        entity_id: sensor.kitchen_door_battery
+        below: 30
+    action:
+      - service: notify.sms_billy
+        data_template:
+          message: >
+            Change the {{ trigger.entity_id.split('.')[1].replace('_battery', '').replace('_',' ') }} battery
+      - service: persistent_notification.create
+        data_template:
+          title: Low Battery
+          message: >
+            Change the {{ trigger.entity_id.split('.')[1].replace('_battery', '').replace('_',' ') }} battery
+
+  - alias: Alarm_notification
+    initial_state: false
+    trigger:
+      - platform: event
+        event_type: alarm_triggered
+    #condition:
+    #  - condition: state
+    #    entity_id: switch.siren
+    #    state: 'on'
+    action:
+      - service: notify.sms_billy
+        data:
+          message: 'Intruder detected!'
+      - service: notify.sms_melina
+        data:
+          message: 'Intruder detected!'
+
+  #- alias: pubnub_update
+  #  trigger:
+  #    - platform: time
+  #      minutes: 25
+  #      seconds: 30
+  #  condition:
+  #    - condition: state
+  #      entity_id: light.laundry
+  #      state: 'off'
+  #  action:
+  #    - service: homeassistant.turn_on
+  #      entity_id: script.pubnub_update
+
+  - alias: lock_the_door_off
+    initial_state: false
+    trigger:
+      - platform: state
+        entity_id: lock.front_door
+        from: 'unlocked'
+        to: 'locked'
+    condition:
+      - condition: state
+        entity_id: binary_sensor.front_door
+        state: 'off'
+    action:
+      service: homeassistant.turn_off
+      entity_id: script.lock_the_door
+
+  - alias: home_assistant_started
+    trigger:
+      - platform: event
+        event_type: homeassistant_start
+    action:
+      - service: homeassistant.turn_on
+        entity_id: script.hass_start
+      - service: notify.sms_billy
+        data:
+          message: "Home Assistant started"
+
+  - alias: Offline
+    initial_state: false
+    trigger:
+      - platform: state
+        entity_id: binary_sensor.water_liquid_detected
+        state: 'unavailable'
+      - platform: state
+        entity_id: lock.front_door
+        state: 'unavailable'
+      - platform: state
+        entity_id: binary_sensor.front_door
+        state: 'unavailable'
+      - platform: state
+        entity_id: binary_sensor.grage_entry_door
+        state: 'unavailable'
+      - platform: state
+        entity_id: sensor.tank_uvb
+        state: 'unavailable'
+      - platform: state
+        entity_id: sensor.tank_basking
+        state: 'unavailable'
+      - platform: state
+        entity_id: sensor.tank_water
+        state: 'unavailable'
+      - platform: state
+        entity_id: sensor.freezer_temperature
+        state: 'unavailable'
+      - platform: state
+        entity_id: switch.hallway_ceiling_fan_fan
+        state: 'unavailable'
+      - platform: state
+        entity_id: switch.hallway_ceiling_fan_light
+        state: 'unavailable'
+      - platform: template
+        value_template: "{{ not states.sensor.garage_freezer_temperature }}"
+      - platform: template
+        value_template: "{{ not states.sensor.turtle_tank_water }}"
+    action:
+      service: notify.sms_billy
+      data_template:
+        message: >
+          {{ trigger.entity_id.split('.')[1] }} is offline.
+
+  - alias: Going to bed
+    initial_state: false
+    trigger:
+      - platform: state
+        entity_id: switch.kitchen_cabinet_lights
+        state: 'off'
+      - platform: state
+        entity_id: switch.kitchen_sink_light
+        state: 'off'
+    condition:
+      - condition: time
+        after: '21:40:00'
+    action:
+      service: homeassistant.turn_on
+      entity_id: switch.hallway_ceiling_fan_light
+
+  - alias: wink troubles
+    initial_state: false
+    trigger:
+      platform: state
+      entity_id: sensor.wink_core_api
+      from: "Operational"
+    action:
+      service: notify.sms_billy
+      data_template:
+        message: >
+          Wink core API {{ states.sensor.wink_core_api.state }}.
+

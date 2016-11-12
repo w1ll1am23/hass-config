@@ -1,0 +1,206 @@
+######################################
+##########Binary Sensors##############
+######################################
+
+    
+    binary_sensor.dishwasher_liquid_detected:
+      friendly_name: "Dishwasher leak"
+    binary_sensor.spotter_loudness:
+      hidden: true
+    binary_sensor.spotter_brightness:
+      hidden: true
+    binary_sensor.spotter_vibration:
+      friendly_name: "Dryer"
+    binary_sensor.freezer_temp_threshold:
+      hidden: true
+    binary_sensor.tank_basking_threshold:
+      hidden: true
+    binary_sensor.billy:
+      hidden: true
+    binary_sensor.melina:
+      hidden: true
+    binary_sensor.gdottie:
+      hidden: true
+    binary_sensor.parents:
+      hidden: true
+    binary_sensor.octoprint_printing:
+      icon: mdi:printer-3d
+    binary_sensor.octoprint_printing_error:
+      icon: mdi:printer-3d
+
+######################################
+#############Sensors##################
+######################################
+
+    sensor.arest_sensor_door:
+      hidden: true
+    sensor.porkfolio_balance:
+      icon: mdi:pig
+      friendly_name: "Piggy Bank"
+    sensor.octoprint_job_percentage:
+      icon: mdi:printer-3d
+    sensor.mosquitto_active:
+      hidden: true
+    sensor.hallway_humidity_2:
+      friendly_name: outside_humidity
+      entity_picture: /local/humidity.jpg
+    sensor.hallway_temperature:
+      friendly_name: outside_temperature
+    sensor.lock_battery:
+      hidden: true
+    sensor.siren_battery:
+      hidden: true
+    sensor.eggtray_battery:
+      hidden: true
+    sensor.front_door_battery:
+      hidden: true
+    sensor.kitchen_door_battery:
+      hidden: true
+    sensor.garage_entry_door_battery:
+      hidden: true
+    sensor.turtle_tank_water:
+      friendly_name: Water
+    sensor.turtle_tank_uvb:
+      friendly_name: UVB
+    sensor.turtle_tank_basking:
+      friendly_name: Basking
+    sensor.garage_door:
+      hidden: true
+      friendly_name: Door
+      entity_picture: /local/garage.jpg
+    sensor.weather_raining: 
+      friendly_name: Rain
+      entity_picture: /local/rain.jpg
+    sensor.forecastio_precip_probability: 
+      friendly_name: Rain
+      entity_picture: /local/rain.jpg
+    sensor.weather_temperature:
+      friendly_name: Temperature
+    sensor.spotter_temperature:
+      hidden: true
+    sensor.spotter_humidity:
+      hidden: true
+      entity_picture: /local/humidity.jpg
+    sensor.weather_humidity:
+      friendly_name: Humidity
+      entity_picture: /local/humidity.jpg
+    sensor.outside_humidity:
+      friendly_name: Humidity
+      entity_picture: /local/humidity.jpg
+    sensor.weather_lux:
+      friendly_name: lux
+    sensor.weather_pressure:
+      friendly_name: pressure
+    sensor.weather_heat_index:
+      friendly_name: heat_index
+
+######################################
+###############Lights#################
+######################################
+
+    light.office_lamp:
+      icon: mdi:lamp
+    light.living_room_lamp:
+      icon: mdi:lamp
+    light.shelf_lamp:
+      icon: mdi:lamp
+
+######################################
+#############Switches#################
+######################################
+
+    switch.siren:
+      icon: mdi:bell-ring
+    switch.dining_room_fan:
+      icon: mdi:fan
+    switch.kitchen_cabinet_lights:
+      assumed_state: true
+    switch.heated_blanket:
+      assumed_state: true
+    switch.printer_light:
+      assumed_state: true
+    switch.hallway_ceiling_fan_fan:
+      friendly_name: Fan
+      entity_picture: /local/fan.jpg 
+    switch.hallway_ceiling_fan_light:
+      friendly_name: Light
+      entity_picture: /local/fan_light.jpg 
+    switch.bedroom_lamp:
+      assumed_state: true
+      friendly_name: Lamp
+      icon: mdi:lamp
+    switch.office_lamp:
+      friendly_name: Melina's Lamp
+      icon: mdi:lamp
+    switch.garage_door:
+      entity_picture: /local/garage.jpg
+
+######################################
+##############Groups##################
+######################################
+
+    group.wink_lights:
+      hidden: true
+    group.all_lights:
+      hidden: true
+    group.all_switches:
+      hidden: true
+    group.living_room_light:
+      hidden: true
+    group.hallway_light:
+      hidden: true
+    group.every_light:
+      hidden: true
+    group.entryway:
+      hidden: true
+
+######################################
+##############Script##################
+######################################
+
+    script.good_night_melina:
+      icon: mdi:sleep
+    script.power_strip_off:
+      icon: mdi:power-plug-off
+    script.power_strip_on:
+      icon: mdi:power-plug
+    script.bedroom_lights_on_day:
+      hidden: true
+    script.bedroom_lights_on_night:
+      hidden: true
+    script.hass_start:
+      hidden: true
+    script.home_at_dusk:
+      hidden: true
+    script.pubnub_update:
+      hidden: true
+    script.melinas_light:
+      hidden: true
+    script.good_night:
+      hidden: true
+    script.good_morning:
+      hidden: true
+    script.lock_door:
+      hidden: true
+    script.alarm:
+      hidden: true
+    script.lock_the_door:
+      hidden: true
+    script.garage_light:
+      hidden: true
+    script.office_lights:
+      hidden: true
+    script.test:
+      hidden: true
+    script.hall_light:
+      hidden: true
+    script.garage_is_open:
+      hidden: true
+
+######################################
+##############Random##################
+######################################
+
+    climate.hallway:
+      friendly_name: Nest
+      entity_picture: /local/nest.jpg

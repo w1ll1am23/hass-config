@@ -1,0 +1,139 @@
+  #######################################
+  #############Garage Freezer#############
+  #######################################
+
+  - platform: arest
+    resource: http://192.168.5.26
+    name: Garage Freezer
+    monitored_variables:
+      temperature:
+        name: temperature
+        unit_of_measurement: '°C'
+
+  - platform: arest
+    resource: http://192.168.5.28:3000
+    monitored_variables:
+      door:
+        name: garage
+
+  #######################################
+  #########Turtle Tank Sensors###########
+  #######################################
+
+  - platform: arest
+    resource: http://192.168.5.16:3001
+    name: Turtle Tank
+    monitored_variables:
+      Water:
+        name: Water
+        unit_of_measurement: '°C'
+      Basking:
+        name: Basking
+        unit_of_measurement: '°C'
+      UVB:
+        name: UVB
+        unit_of_measurement: 'uW/cm2'
+
+  #######################################
+  ##########Octoprint Sensors############
+  #######################################
+
+  - platform: octoprint
+    monitored_conditions:
+      - 'Job Percentage'
+
+  #######################################
+  ###########Template Sensors############
+  #######################################
+
+  - platform: template
+    sensors:
+      average_temp:
+        value_template: '{{ ((states.sensor.living_room_temperature.state | float +  states.sensor.living_room_temperature.state | float +  states.sensor.up_stairs_hallway_temperature.state | float + states.climate.hallway.attributes.current_temperature | float + states.sensor.spotter_temperature.state | float) / 5) | round(2) }}' 
+      kitchen_door_battery:
+        value_template: >
+          {% if states.binary_sensor.kitchen_door %}
+            {{ states.binary_sensor.kitchen_door.attributes.battery_level }}
+          {% else %}
+            None
+          {% endif %}
+        unit_of_measurement: '%'
+      front_door_battery:
+        value_template: >
+          {% if states.binary_sensor.front_door %}
+            {{ states.binary_sensor.front_door.attributes.battery_level }}
+          {% else %}
+            None
+          {% endif %}
+        unit_of_measurement: '%'
+      garage_entry_door_battery:
+        value_template: >
+          {% if states.binary_sensor.garage_entry_door %}
+            {{ states.binary_sensor.garage_entry_door.attributes.battery_level }}
+          {% else %}
+            None
+          {% endif %}
+        unit_of_measurement: '%'
+      lock_battery:
+        value_template: >
+          {% if states.lock.front_door %}
+            {{ states.lock.front_door.attributes.battery_level }}
+          {% else %}
+            None
+          {% endif %}
+        unit_of_measurement: '%'
+      siren_battery:
+        value_template: >
+          {% if states.switch.siren %}
+            {{ states.switch.siren.attributes.battery_level }}
+          {% else %}
+            None
+          {% endif %}
+        unit_of_measurement: '%'
+      eggtray_battery:
+        value_template: >
+          {% if states.sensor.egg_minder %}
+            {{ states.sensor.egg_minder.attributes.battery_level }}
+          {% else %}
+            None
+          {% endif %}
+        unit_of_measurement: '%'
+
+  #######################################
+  ########MQTT connection status#########
+  #######################################
+
+  - platform: mqtt
+    state_topic: "$SYS/broker/clients/active"
+    name: "Mosquitto active"
+
+  #######################################
+  #######Weather Forecast Sensors########
+  #######################################
+
+  - platform: darksky
+    api_key: !secret darksky_api_key
+    monitored_conditions:
+      - summary
+      - precip_probability
+      - daily_summary
+
+  - platform: wunderground
+    api_key: !secret wunderground_key
+    monitored_conditions:
+      - alerts
+    
+  #######################################
+  #########Web Scrape Sensors############
+  #######################################
+
+  - platform: scrape
+    resource: http://status.winkapp.com/
+    name: wink
+    select: "span:nth-of-type(5)"
+    value_template: '{{ value.lstrip() }}'
+  - platform: scrape
+    resource: http://status.winkapp.com/
+    name: Wink core api
+    select: "span:nth-of-type(13)"
+    value_template: '{{ value.lstrip() }}'

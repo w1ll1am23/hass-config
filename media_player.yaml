@@ -1,0 +1,6 @@
+  - platform: cast
+    host: 192.168.5.18
+  - platform: cast
+    host: 192.168.5.30
+  - platform: cast
+    host: 192.168.5.29

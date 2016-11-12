@@ -1,0 +1,331 @@
+  power_strip_off:
+    alias: power_strip_off
+    sequence:
+      - service: switch.turn_off
+        data:
+          entity_id: switch.billys_office_lamp
+      - delay:
+          seconds: 2
+      - service: switch.turn_off
+        data:
+          entity_id: switch.melinas_office_lamp
+
+  power_strip_on:
+    alias: power_strip_on
+    sequence:
+      - service: switch.turn_on
+        data:
+          entity_id: switch.billys_office_lamp
+      - delay:
+          seconds: 2
+      - service: switch.turn_on
+        data:
+          entity_id: switch.melinas_office_lamp
+
+  good_night_melina:
+    alias: Good Night Melina
+    sequence:
+        - service: lock.lock
+          data:
+            entity_id: lock.front_door
+        - service: homeassistant.turn_off
+          data:
+            entity_id: group.every_light
+        - service: light.turn_off
+          data:
+            entity_id: light.melinas_night_stand
+        - delay:
+            minutes: 2
+        - event: check_for_locked_lock
+          event_data:
+            name: Locked?
+            message: is the front door locked?
+
+  lock_door:
+    alias: Lock door
+    sequence:
+      - service: lock.lock
+        data:
+          entity_id: lock.front_door
+      - delay:
+          minutes: 2
+      - event: check_for_locked_lock
+        event_data:
+          name: Locked?
+          message: is the front door locked?
+
+  alarm:
+    alias: alarm
+    sequence:
+      - service: homeassistant.turn_on
+        data:
+          entity_id: group.every_light
+      - event: alarm_triggered
+        event_data:
+          name: ALARM
+          message: Intruder
+
+  lock_the_door:
+    sequence:
+      - delay:
+          minutes: 5
+      - service: lock.lock
+        data:
+          entity_id: lock.front_door
+      - delay:
+          minutes: 2
+      - event: check_for_locked_lock
+        event_data:
+          name: Locked?
+          message: is the front door locked?
+
+########################################
+############Sensor Scripts##############
+########################################
+
+  garage_light:
+    sequence:
+      - delay:
+          minutes: 5
+      - service: light.turn_off
+        data:
+          entity_id: light.garage
+
+  bedroom_lights_on_day:
+    sequence:
+      - service: light.turn_on
+        data:
+          entity_id: light.billys_night_stand
+          color_temp: 365
+          brightness: 255
+      - service: light.turn_on
+        data:
+          entity_id: light.melinas_night_stand
+      - service: homeassistant.turn_on
+        data:
+          entity_id: switch.bedroom_lamp
+
+  bedroom_lights_on_night:
+    sequence:
+      - service: light.turn_on
+        data:
+          entity_id: light.billys_night_stand
+          brightness: 150
+          rgb_color: [255, 0, 0]
+      - service: light.turn_on
+        data:
+          entity_id: light.melinas_night_stand
+      - service: homeassistant.turn_on
+        data:
+          entity_id: switch.bedroom_lamp
+
+  melinas_light:
+    sequence:
+      - service: light.turn_on
+        data:
+          entity_id: light.billys_night_stand
+          brightness: 150
+          rgb_color: [255, 0, 0]
+      - delay:
+          minutes: 3
+      - service: light.turn_off
+        data:
+          entity_id: light.billys_night_stand
+
+  hall_light:
+    sequence:
+      - delay:
+          minutes: 3
+      - service: light.turn_off
+        data:
+          entity_id: light.down_stairs_hallway
+
+  office_lights:
+    sequence:
+      - delay:
+          minutes: 5
+      - service: homeassistant.turn_off
+        data:
+          entity_id: group.office_lights
+
+  home_at_dusk:
+    sequence:
+      - service: homeassistant.turn_on
+        data:
+          entity_id: switch.entry
+      - service: homeassistant.turn_on
+        data:
+          entity_id: light.living_room_lamp
+      - delay:
+          minutes: 2
+      - service: homeassistant.turn_off
+        data:
+          entity_id: switch.entry
+      
+########################################
+############Tasker Scripts##############
+########################################
+
+  good_night:
+    alias: Good Night
+    sequence:
+        - service: lock.lock
+          data:
+            entity_id: lock.front_door
+        - service: homeassistant.turn_off
+          data:
+            entity_id: group.every_light
+        - delay:
+            minutes: 2
+        - event: check_for_locked_lock
+          event_data:
+            name: Locked?
+            message: is the front door locked?
+
+  good_morning:
+    alias: Good Morning
+    sequence:
+        - service: light.turn_on
+          data:
+            entity_id: light.billys_night_stand
+            brightness: 5
+
+  pubnub_update:
+    sequence:
+      - service: light.turn_on
+        data:
+          entity_id: light.laundry
+      - delay:
+          seconds: 20
+      - service: light.turn_off
+        data:
+          entity_id: light.laundry
+      
+  hass_start:
+    sequence:
+      - delay:
+          minutes: 2
+      - service: homeassistant.turn_on
+        entity_id: automation.alarm_notification
+      - service: homeassistant.turn_on
+        entity_id: automation.battery_low_alert
+      - service: homeassistant.turn_on
+        entity_id: automation.bedroom_lights_on_when_door_opens
+      - service: homeassistant.turn_on
+        entity_id: automation.bedroom_off
+      - service: homeassistant.turn_on
+        entity_id: automation.bedroom_on_day
+      - service: homeassistant.turn_on
+        entity_id: automation.bedroom_on_night
+      - service: homeassistant.turn_on
+        entity_id: automation.billy_at_ktown
+      - service: homeassistant.turn_on
+        entity_id: automation.billy_is_home
+      - service: homeassistant.turn_on
+        entity_id: automation.billy_unlocked_the_door
+      - service: homeassistant.turn_on
+        entity_id: automation.bulb_needs_changed
+      - service: homeassistant.turn_on
+        entity_id: automation.check_bulbs
+      - service: homeassistant.turn_on
+        entity_id: automation.check_dishwasher
+      - service: homeassistant.turn_on
+        entity_id: automation.check_doors_are_closed
+      - service: homeassistant.turn_on
+        entity_id: automation.check_for_locked_lock
+      - service: homeassistant.turn_on
+        entity_id: automation.check_freezer
+      - service: homeassistant.turn_on
+        entity_id: automation.downstairs_hall_light
+      - service: homeassistant.turn_on
+        entity_id: automation.downstairs_hallway_off
+      - service: homeassistant.turn_on
+        entity_id: automation.dryer_done
+      - service: homeassistant.turn_on
+        entity_id: automation.dryer_started
+      - service: homeassistant.turn_on
+        entity_id: automation.front_door
+      - service: homeassistant.turn_on
+        entity_id: automation.garage_light_off
+      - service: homeassistant.turn_on
+        entity_id: automation.garage_light_on_if_door_open
+      - service: homeassistant.turn_on
+        entity_id: automation.gdottie_unlocked_the_door
+      - service: homeassistant.turn_on
+        entity_id: automation.going_to_bed
+      - service: homeassistant.turn_on
+        entity_id: automation.good_morning
+      - service: homeassistant.turn_on
+        entity_id: automation.good_night
+      - service: homeassistant.turn_on
+        entity_id: automation.hallway_off
+      - service: homeassistant.turn_on
+        entity_id: automation.hallway_on
+      - service: homeassistant.turn_on
+        entity_id: automation.kitchen_off
+      - service: homeassistant.turn_on
+        entity_id: automation.kitchen_on
+      - service: homeassistant.turn_on
+        entity_id: automation.kitchen_sink_off
+      - service: homeassistant.turn_on
+        entity_id: automation.kitchen_sink_on
+      - service: homeassistant.turn_on
+        entity_id: automation.laundry_light_off_when_door_closes
+      - service: homeassistant.turn_on
+        entity_id: automation.laundry_light_on_when_door_opens
+      - service: homeassistant.turn_on
+        entity_id: automation.left_home
+      - service: homeassistant.turn_on
+        entity_id: automation.living_room_off
+      - service: homeassistant.turn_on
+        entity_id: automation.living_room_on
+      - service: homeassistant.turn_on
+        entity_id: automation.lock_the_door_off
+      - service: homeassistant.turn_on
+        entity_id: automation.melina_at_ktown
+      - service: homeassistant.turn_on
+        entity_id: automation.melina_is_home
+      - service: homeassistant.turn_on
+        entity_id: automation.melina_unlocked_the_door
+      - service: homeassistant.turn_on
+        entity_id: automation.melinas_night_stand_off
+      - service: homeassistant.turn_on
+        entity_id: automation.melinas_night_stand_on
+      - service: homeassistant.turn_on
+        entity_id: automation.office_lights_on_when_door_opens
+      - service: homeassistant.turn_on
+        entity_id: automation.office_off
+      - service: homeassistant.turn_on
+        entity_id: automation.office_on
+      - service: homeassistant.turn_on
+        entity_id: automation.offline
+      - service: homeassistant.turn_on
+        entity_id: automation.outside_lights_on_when_door_opens
+      - service: homeassistant.turn_on
+        entity_id: automation.outside_off
+      - service: homeassistant.turn_on
+        entity_id: automation.outside_on
+      - service: homeassistant.turn_on
+        entity_id: automation.parents_unlocked_the_door
+      - service: homeassistant.turn_on
+        entity_id: automation.printing_done
+      - service: homeassistant.turn_on
+        entity_id: automation.trigger_alarm_while_armed_away
+      - service: homeassistant.turn_on
+        entity_id: automation.turn_entry_and_living_room_on
+      - service: homeassistant.turn_on
+        entity_id: automation.turn_lights_off_when_no_one_is_home
+      - service: homeassistant.turn_on
+        entity_id: automation.turn_on_living_room_lamp_at_dusk
+      - service: homeassistant.turn_on
+        entity_id: automation.turn_outside_lights_off
+      - service: homeassistant.turn_on
+        entity_id: automation.turn_outside_lights_on
+      - service: homeassistant.turn_on
+        entity_id: automation.up_at_night
+      - service: homeassistant.turn_on
+        entity_id: automation.up_in_morning
+      - service: homeassistant.turn_on
+        entity_id: automation.water_too_cold
+      - service: homeassistant.turn_on
+        entity_id: automation.wink_troubles
