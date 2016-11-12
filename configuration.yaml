@@ -61,7 +61,7 @@ nest:
 alarm_control_panel:
   platform: manual
   name: "HA Alarm"
-  code: 1218
+  code: !secret alarm_code
   pending_time: 60
   trigger_time: 120
       
