@@ -998,9 +998,9 @@
     action:
       - service: homeassistant.turn_on
         entity_id: script.hass_start
-      - service: notify.sms_billy
-        data:
-          message: "Home Assistant started"
+      #- service: notify.sms_billy
+      #  data:
+      #    message: "Home Assistant started"
 
   - alias: Offline
     initial_state: false

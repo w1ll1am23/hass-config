@@ -39,6 +39,7 @@
     entities:
       - group.kitchen_lights
       - group.kitchen_sensors
+      - group.keurig
   
   Garage:
     name: Garage
@@ -82,7 +83,7 @@
   ######################################
 
   Bedroom_lights: switch.bedroom_lamp, light.melinas_night_stand, light.billys_night_stand
-  Living_room_lights: light.living_room_lamp, light.shelf_lamp, switch.dining_room_fan
+  Living_room_lights: light.living_room_lamp, light.shelf_lamp, switch.dining_room_fan, switch.christmas_tree
   Kitchen_lights: switch.kitchen_cabinet_lights, light.kitchen_sink_light
   Garage_lights: light.garage
   Office_lights: switch.melinas_office_lamp, switch.billys_office_lamp, light.office_lamp, script.power_strip_off, script.power_strip_on
@@ -118,6 +119,7 @@
   switches: script.good_night_melina
   laundry_room: light.laundry, binary_sensor.spotter_vibration, binary_sensor.laundry_door, input_boolean.dryer_switch
   garage_switches: cover.garage_door, switch.start_camry
+  keurig: switch.keurig, binary_sensor.needs_water, binary_sensor.is_on
 
   M3D:
     name: Micro3D

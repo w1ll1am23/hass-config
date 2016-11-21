@@ -14,3 +14,14 @@
       freezer_temp_threshold:
         value_template: "{{ states('sensor.garage_freezer_temperature')|int >= 5 }}"
         entity_id: sensor.garage_freezer_temperature
+
+  - platform: arest
+    resource: http://192.168.5.48
+    pin: 5
+    name: needs water
+    sensor_class: moisture
+
+  - platform: arest
+    resource: http://192.168.5.48
+    pin: 4
+    name: 'is on'

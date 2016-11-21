@@ -10,6 +10,9 @@ homeassistant:
 http:
   api_password: !secret http_password
 
+logger:
+  default: info
+
 updater:
 
 frontend:
@@ -120,3 +123,17 @@ cover:
           100
           {%- endif %}
         friendly_name: Garage Door
+
+light:
+  - platform: mqtt_json
+    command_topic: "home/rgb1/set"
+    state_topic: "home/rgb1"
+    brightness: true
+    rgb: true
+
+feedreader:
+  urls:
+    - https://github.com/blog.atom
+    - http://status.winkapp.com/history.atom
+    - http://status.ifttt.com/history.atom
+    - https://home-assistant.io/atom.xml

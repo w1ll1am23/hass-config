@@ -9,6 +9,14 @@
 
   - platform: command_line
     switches:
+      keurig:
+        command_on: /usr/bin/curl 192.168.5.48/toggleRelay
+        command_off: /usr/bin/curl 192.168.5.48/toggleRelay
+        command_state: /usr/bin/curl 192.168.5.48
+        value_template: "{{ states.binary_sensor.is_on.state == 'on' }}"
+
+  - platform: command_line
+    switches:
       start_car:
         friendly_name: Start Camry
         command_on: /usr/bin/curl 192.168.5.28:3000/startCar
@@ -39,7 +47,7 @@
         #  protocol: 1
         #  code_on: 5313843
         #  code_off: 531352
-        Printer Light:
+        Christmas Tree:
           pulselength: 182
           protocol: 1
           code_on: 5321987

@@ -189,6 +189,9 @@
           data:
             entity_id: light.billys_night_stand
             brightness: 5
+        - service: homeassistant.turn_on
+          data:
+            entity_id: switch.keurig
 
   pubnub_update:
     sequence:
