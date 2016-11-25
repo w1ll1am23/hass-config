@@ -100,6 +100,8 @@
 ###############Lights#################
 ######################################
 
+    light.bedroom_lamp:
+      icon: mdi:lamp
     light.office_lamp:
       icon: mdi:lamp
     light.living_room_lamp:
@@ -111,6 +113,8 @@
 #############Switches#################
 ######################################
 
+    switch.outside_christmas_lights:
+      icon: mdi:pine-tree
     switch.keurig:
       icon: mdi:coffee 
     switch.siren:
@@ -129,10 +133,6 @@
     switch.hallway_ceiling_fan_light:
       friendly_name: Light
       entity_picture: /local/fan_light.jpg 
-    switch.bedroom_lamp:
-      assumed_state: true
-      friendly_name: Lamp
-      icon: mdi:lamp
     switch.office_lamp:
       friendly_name: Melina's Lamp
       icon: mdi:lamp
@@ -210,3 +210,6 @@
     climate.hallway:
       friendly_name: Nest
       entity_picture: /local/nest.jpg
+
+    device_tracker.melina_iphone:
+      hidden: true

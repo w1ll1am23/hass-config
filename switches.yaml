@@ -32,12 +32,12 @@
           protocol: 1
           code_on: 5313987
           code_off: 5313996
-        Bedroom lamp:
+        outside christmas lights:
           pulselength: 182
           protocol: 1
           code_on: 5314307
           code_off: 5314316
-        Heated Blanket:
+        Blanket:
           pulselength: 182
           protocol: 1
           code_on: 5315843

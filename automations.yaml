@@ -29,7 +29,7 @@
             entity_id: device_tracker.w1ll1am_a0001
             state: home
           - condition: state
-            entity_id: device_tracker.melina_iphone
+            entity_id: device_tracker.melina
             state: home
     action:
       service: homeassistant.turn_on
@@ -739,7 +739,7 @@
         from: 'home'
         to: 'not_home'
       - platform: state
-        entity_id: device_tracker.melina_iphone
+        entity_id: device_tracker.melina
         from: 'home'
         to: 'not_home'
     action:
@@ -769,7 +769,7 @@
     initial_state: false
     trigger:
       - platform: state
-        entity_id: device_tracker.melina_iphone
+        entity_id: device_tracker.melina
         from: 'not_home'
         to: 'Ktown'
     condition:
@@ -788,7 +788,7 @@
     initial_state: false
     trigger:
       - platform: state
-        entity_id: device_tracker.melina_iphone
+        entity_id: device_tracker.melina
         from: 'not_home'
         to: 'home'
     condition:
@@ -823,7 +823,7 @@
     initial_state: false
     trigger:
       - platform: state
-        entity_id: device_tracker.melina_iphone
+        entity_id: device_tracker.melina
         from: 'not_home'
         to: 'home'
       - platform: state
@@ -854,7 +854,7 @@
     initial_state: false
     trigger:
       - platform: state
-        entity_id: device_tracker.melina_iphone
+        entity_id: device_tracker.melina
         from: 'not_home'
         to: 'home'
       - platform: state

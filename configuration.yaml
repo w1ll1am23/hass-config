@@ -51,8 +51,12 @@ camera:
   name: CIN
 
 device_tracker:
-  platform: owntracks
-  max_gps_accuracy: 200
+  - platform: owntracks
+    max_gps_accuracy: 200
+  - platform: icloud
+    username: melina.b.thomas09@gmail.com
+    password: !secret icloud
+    account_name: melina
 
 climate:
   platform: nest
