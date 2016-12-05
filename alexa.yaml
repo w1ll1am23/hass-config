@@ -109,6 +109,24 @@
       speech:
         type: plaintext
         text: !include alexa_confirm.yaml
+
+    OfficeLightsOnIntent:
+      action:
+        service: homeassistant.turn_on
+        data_template:
+          entity_id: script.office_on
+      speech:
+        type: plaintext
+        text: !include alexa_confirm.yaml
+
+    OfficeLightsOffIntent:
+      action:
+        service: homeassistant.turn_on
+        data_template:
+          entity_id: script.office_off
+      speech:
+        type: plaintext
+        text: !include alexa_confirm.yaml
         
     GoodNightIntent:
       action:

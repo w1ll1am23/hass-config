@@ -49,7 +49,7 @@
   - platform: template
     sensors:
       average_temp:
-        value_template: '{{ ((states.sensor.living_room_temperature.state | float +  states.sensor.living_room_temperature.state | float +  states.sensor.up_stairs_hallway_temperature.state | float + states.climate.hallway.attributes.current_temperature | float + states.sensor.spotter_temperature.state | float) / 5) | round(2) }}' 
+        value_template: '{{ ((states.sensor.living_room_temperature.state | float +  states.sensor.living_room_temperature.state | float +  states.sensor.up_stairs_hallway_temperature.state | float + states.climate.home_hallway_thermostat.attributes.current_temperature | float + states.sensor.spotter_temperature.state | float) / 5) | round(2) }}' 
       kitchen_door_battery:
         value_template: >
           {% if states.binary_sensor.kitchen_door %}
@@ -137,3 +137,12 @@
     name: Wink core api
     select: "span:nth-of-type(13)"
     value_template: '{{ value.lstrip() }}'
+
+  #######################################
+  #########UPS Sensors############
+  #######################################
+
+  - platform: apcupsd
+    resources:
+      - status
+      - timeleft

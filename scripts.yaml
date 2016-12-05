@@ -1,3 +1,31 @@
+  office_on:
+    sequence:
+      - service: light.turn_on
+        data:
+          entity_id: light.office_lamp
+      - service: switch.turn_on
+        data:
+          entity_id: switch.billys_office_lamp
+      - delay:
+          seconds: 1
+      - service: switch.turn_on
+        data:
+          entity_id: switch.melinas_office_lamp
+
+  office_off:
+    sequence:
+      - service: light.turn_off
+        data:
+         entity_id: light.office_lamp
+      - service: switch.turn_off
+        data:
+          entity_id: switch.billys_office_lamp
+      - delay:
+          seconds: 1
+      - service: switch.turn_off
+        data:
+          entity_id: switch.melinas_office_lamp
+
   power_strip_off:
     alias: power_strip_off
     sequence:
@@ -82,14 +110,6 @@
 ########################################
 ############Sensor Scripts##############
 ########################################
-
-  garage_light:
-    sequence:
-      - delay:
-          minutes: 5
-      - service: light.turn_off
-        data:
-          entity_id: light.garage
 
   bedroom_lights_on_day:
     sequence:
@@ -317,7 +337,7 @@
       - service: homeassistant.turn_on
         entity_id: automation.turn_entry_and_living_room_on
       - service: homeassistant.turn_on
-        entity_id: automation.turn_lights_off_when_no_one_is_home
+        entity_id: automation.no_one_is_home
       - service: homeassistant.turn_on
         entity_id: automation.turn_on_living_room_lamp_at_dusk
       - service: homeassistant.turn_on
@@ -332,3 +352,15 @@
         entity_id: automation.water_too_cold
       - service: homeassistant.turn_on
         entity_id: automation.wink_troubles
+      - service: homeassistant.turn_on
+        entity_id: automation.power_is_out
+      - service: homeassistant.turn_on
+        entity_id: automation.power_is_back_on
+      - service: homeassistant.turn_on
+        entity_id: automation.wink_hub_offline
+      - service: homeassistant.turn_on
+        entity_id: automation.hub_update
+      - service: homeassistant.turn_on
+        entity_id: automation.turn_on_christmas_lights_at_dusk
+      - service: homeassistant.turn_on
+        entity_id: automation.power_back_on

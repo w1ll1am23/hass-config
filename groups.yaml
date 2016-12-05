@@ -121,6 +121,7 @@
   garage_switches: cover.garage_door, switch.start_car
   keurig: switch.keurig, binary_sensor.needs_water, binary_sensor.is_on
   office_scripts: script.power_strip_off, script.power_strip_on
+  christmas: switch.outside_christmas_lights, switch.christmas_tree
 
   M3D:
     name: Micro3D

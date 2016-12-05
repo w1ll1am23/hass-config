@@ -25,3 +25,5 @@
     resource: http://192.168.5.48
     pin: 4
     name: 'is on'
+
+  - platform: apcupsd

@@ -34,6 +34,15 @@
     action:
       service: homeassistant.turn_on
       entity_id: light.shelf_lamp
+
+  - alias: Turn on christmas lights at dusk
+    initial_state: false
+    trigger:
+      - platform: template
+        value_template: '{{ states.sun.sun.attributes.elevation < 3.0 }}'
+    action:
+      service: homeassistant.turn_on
+      entity_id: switch.outside_christmas_lights
     
 
 ################################################
@@ -87,7 +96,43 @@
         data:
           message: >
             The dishwasher is leaking!!!
-    
+
+  - alias: power is out
+    initial_state: false
+    trigger:
+      - platform: state
+        entity_id: binary_sensor.ups_online_status
+        state: 'off'
+    action:
+      - service: notify.sms_billy
+        data:
+          message: >
+            Power is out, running on battery.
+
+  - alias: power back on
+    initial_state: false
+    trigger:
+      - platform: state
+        entity_id: binary_sensor.ups_online_status
+        from: 'off'
+        to: 'on'
+    action:
+      - service: notify.sms_billy
+        data:
+          message: >
+            Power is back on!
+
+  - alias: wink hub offline
+    initial_state: false
+    trigger:
+      - platform: state
+        entity_id: binary_sensor.hub_hub
+        state: 'off'
+    action:
+      - service: notify.sms_billy
+        data:
+          message: >
+            Wink hub is offline
 
   - alias: check freezer
     initial_state: false
@@ -179,15 +224,16 @@
     trigger:
       - platform: state
         entity_id: binary_sensor.garage_entry_door
-        from: 'on'
-        to: 'off'
+        state: 'on'
     condition:
       - condition: state
         entity_id: light.garage
         state: 'on'
+        for:
+          seconds: 15
     action:
-      service: homeassistant.turn_on
-      entity_id: script.garage_light
+      service: homeassistant.turn_off
+      entity_id: light.garage
 
   - alias: Front door
     initial_state: false
@@ -207,7 +253,7 @@
         state: 'on'
     condition:
       - condition: template
-        value_template: '{{ states.sun.sun.attributes.elevation < 3.0 }}'
+        value_template: '{{ states.sun.sun.attributes.elevation < 4.0 }}'
     action:
       service: light.turn_on
       entity_id: light.garage
@@ -252,7 +298,7 @@
         - condition: time
           after: '22:00:00'
         - condition: state
-          entity_id: light.melinas_night_stand
+          entity_id: group.bedroom_lights
           state: 'off'
     action:
       service: homeassistant.turn_on
@@ -878,17 +924,33 @@
         service: homeassistant.turn_on
         entity_id: script.home_at_dusk
 
-  - alias: Turn lights off when no one is home
+  - alias: No one is home
     initial_state: false
     trigger:
       - platform: state
-        entity_id: group.device_trackers
+        entity_id: group.all_device
         from: 'home'
         to: 'not_home'
     action:
-        service: homeassistant.turn_off
-        entity_id: group.every_light
+        - service: homeassistant.turn_off
+          entity_id: group.every_light
+        - service: climate.set_operation_mode
+          data:
+            entitt_id: climate.home_hallway_thermostat
+            operation_mode: 'eco'  
 
+  - alias: someone is home
+    initial_state: false
+    trigger:
+      - platform: state
+        entity_id: group.all_device
+        from: 'not_home'
+        to: 'home'
+    action:
+        - service: climate.set_operation_mode
+          data:
+            entitt_id: climate.home_hallway_thermostat
+            operation_mode: 'heat'  
 
 ################################################
 ###########Random Event Automations#############
@@ -1072,4 +1134,15 @@
       data_template:
         message: >
           Wink core API {{ states.sensor.wink_core_api.state }}.
+
+  - alias: hub update
+    initial_state: false
+    trigger:
+      - platform: template
+        value_template: "{{ is_state_attr('binary_sensor.hub_hub', 'update needed', True) }}"
+    action:
+      service: notify.sms_billy
+      data_template:
+        message: >
+          There is a Wink hub update available!
 

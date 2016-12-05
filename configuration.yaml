@@ -23,6 +23,8 @@ history:
 
 sun:
 
+apcupsd:
+
 wemo:
   static:
     - 192.168.5.33
@@ -58,12 +60,12 @@ device_tracker:
     password: !secret icloud
     account_name: melina
 
-climate:
-  platform: nest
+#climate:
+#  platform: nest
 
-nest:
-  username: !secret nest_user
-  password: !secret nest_password
+#nest:
+#  username: !secret nest_user
+#  password: !secret nest_password
 
 alarm_control_panel:
   platform: manual
