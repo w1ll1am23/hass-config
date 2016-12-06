@@ -128,6 +128,9 @@
       - platform: state
         entity_id: binary_sensor.hub_hub
         state: 'off'
+      - platform: state
+        entity_id: binary_sensor.hub_hub
+        state: 'unavailable'
     action:
       - service: notify.sms_billy
         data:

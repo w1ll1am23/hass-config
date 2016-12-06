@@ -56,7 +56,7 @@ device_tracker:
   - platform: owntracks
     max_gps_accuracy: 200
   - platform: icloud
-    username: melina.b.thomas09@gmail.com
+    username: !secret icloud_user
     password: !secret icloud
     account_name: melina
 
