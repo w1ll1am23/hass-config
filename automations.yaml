@@ -2,6 +2,18 @@
 ###############Time Automations#################
 ################################################
 
+  - alias: garage light off after one hour
+    initial_state: false
+    trigger:
+      - platform: state
+        entity_id: binary_sensor.garage_door
+        to: 'on'
+        for:
+          minutes: 30
+    action:
+      service: homeassistant.turn_off
+      entity_id: light.garage_light
+
   - alias: Turn outside lights off
     initial_state: false
     trigger:
@@ -939,7 +951,7 @@
           entity_id: group.every_light
         - service: climate.set_operation_mode
           data:
-            entitt_id: climate.home_hallway_thermostat
+            entitt_id: climate.home_downstairs_thermostat
             operation_mode: 'eco'  
 
   - alias: someone is home
@@ -952,7 +964,7 @@
     action:
         - service: climate.set_operation_mode
           data:
-            entitt_id: climate.home_hallway_thermostat
+            entitt_id: climate.home_downstairs_thermostat
             operation_mode: 'heat'  
 
 ################################################
@@ -1063,9 +1075,9 @@
     action:
       - service: homeassistant.turn_on
         entity_id: script.hass_start
-      #- service: notify.sms_billy
-      #  data:
-      #    message: "Home Assistant started"
+      - service: notify.sms_billy
+        data:
+          message: "Home Assistant started"
 
   - alias: Offline
     initial_state: false
@@ -1126,18 +1138,6 @@
       service: homeassistant.turn_on
       entity_id: switch.hallway_ceiling_fan_light
 
-  - alias: wink troubles
-    initial_state: false
-    trigger:
-      platform: state
-      entity_id: sensor.wink_core_api
-      from: "Operational"
-    action:
-      service: notify.sms_billy
-      data_template:
-        message: >
-          Wink core API {{ states.sensor.wink_core_api.state }}.
-
   - alias: hub update
     initial_state: false
     trigger:
@@ -1149,3 +1149,12 @@
         message: >
           There is a Wink hub update available!
 
+  - alias: wink feed
+    initial_state: false
+    trigger:
+      - platform: event
+        event_type: feedreader
+    action:
+      service: notify.sms_billy
+      data_template:
+        message: "{{ trigger.event.data.title }}"

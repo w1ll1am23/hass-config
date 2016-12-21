@@ -113,7 +113,7 @@
   ############Random Groups#############
   ######################################
 
-  Hallway_thermostat: thermostat.hallway, sensor.hallway_mode, sensor.hallway_humidity
+  Hallway_thermostat: climate.thermostat
   Outside_switches: switch.outside_lights, lock.front_door, switch.entry
   Living_room_switches: switch.blanket
   switches: script.good_night_melina

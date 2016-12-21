@@ -364,3 +364,7 @@
         entity_id: automation.turn_on_christmas_lights_at_dusk
       - service: homeassistant.turn_on
         entity_id: automation.power_back_on
+      - service: homeassistant.turn_on
+        entity_id: automation.someone_is_home
+      - service: homeassistant.turn_on
+        entity_id: automation.wink_feed

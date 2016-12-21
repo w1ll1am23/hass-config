@@ -11,7 +11,7 @@ http:
   api_password: !secret http_password
 
 logger:
-  default: info
+#  default: info
 
 updater:
 
@@ -21,9 +21,16 @@ logbook:
 
 history:
 
+recorder:
+    purge_days: 5
+    db_url: mysql://hass@localhost/homeassistant
+
 sun:
 
 apcupsd:
+
+fan:
+  - platform: demo
 
 wemo:
   static:
@@ -53,19 +60,15 @@ camera:
   name: CIN
 
 device_tracker:
+  - platform: trackr
+    username: !secret my_email
+    password: !secret trackr_password
   - platform: owntracks
     max_gps_accuracy: 200
   - platform: icloud
     username: !secret icloud_user
     password: !secret icloud
     account_name: melina
-
-#climate:
-#  platform: nest
-
-#nest:
-#  username: !secret nest_user
-#  password: !secret nest_password
 
 alarm_control_panel:
   platform: manual
@@ -139,7 +142,4 @@ light:
 
 feedreader:
   urls:
-    - https://github.com/blog.atom
     - http://status.winkapp.com/history.atom
-    - http://status.ifttt.com/history.atom
-    - https://home-assistant.io/atom.xml
