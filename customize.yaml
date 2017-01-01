@@ -34,6 +34,8 @@
 #############Sensors##################
 ######################################
 
+    sensor.broadlink_sensor_temperature:
+      friendly_name: living_room_temperature_2
     sensor.arest_sensor_door:
       hidden: true
     sensor.porkfolio_balance:
@@ -164,6 +166,10 @@
 ##############Script##################
 ######################################
 
+    script.alarm_away:
+      hidden: true
+    script.alarm_home:
+      hidden: true
     script.good_night_melina:
       icon: mdi:sleep
     script.power_strip_off:
@@ -187,8 +193,6 @@
     script.good_morning:
       hidden: true
     script.lock_door:
-      hidden: true
-    script.alarm:
       hidden: true
     script.lock_the_door:
       hidden: true

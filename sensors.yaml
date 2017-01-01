@@ -49,7 +49,7 @@
   - platform: template
     sensors:
       average_temp:
-        value_template: '{{ ((states.sensor.living_room_temperature.state | float +  states.sensor.living_room_temperature.state | float +  states.sensor.up_stairs_hallway_temperature.state | float + states.climate.thermostat.attributes.current_temperature | float + states.sensor.spotter_temperature.state | float) / 5) | round(2) }}' 
+        value_template: '{{ ((states.sensor.living_room_temperature.state | float +  states.sensor.living_room_temperature.state | float +  states.sensor.up_stairs_hallway_temperature.state | float + states.climate.thermostat.attributes.current_temperature | float + states.sensor.spotter_temperature.state | float + states.sensor.broadlink_sensor_temperature.state | float) / 6) | round(2) }}' 
       kitchen_door_battery:
         value_template: >
           {% if states.binary_sensor.kitchen_door %}
@@ -100,14 +100,6 @@
         unit_of_measurement: '%'
 
   #######################################
-  ########MQTT connection status#########
-  #######################################
-
-  - platform: mqtt
-    state_topic: "$SYS/broker/clients/active"
-    name: "Mosquitto active"
-
-  #######################################
   #######Weather Forecast Sensors########
   #######################################
 
@@ -124,10 +116,35 @@
       - alerts
     
   #######################################
-  #########UPS Sensors############
+  #############UPS Sensors###############
   #######################################
 
   - platform: apcupsd
     resources:
       - status
       - timeleft
+
+  #######################################
+  ##########Broadlink Sensor#############
+  #######################################
+
+  - platform: broadlink
+    update_interval: 60
+    host: 192.168.5.9
+    mac: 'B4:43:0D:EE:F7:A0'
+    monitored_conditions:
+      - temperature
+
+  #######################################
+  ##########Speedtest Sensors############
+  #######################################
+
+  - platform: speedtest
+    minute:
+      - 3
+      - 33
+    monitored_conditions:
+      - ping
+      - download
+      - upload
+

@@ -1,0 +1,5 @@
+*.db
+secrets.yaml
+zones.yaml
+known_devices.yaml
+*.log

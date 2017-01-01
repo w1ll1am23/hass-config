@@ -23,7 +23,7 @@ history:
 
 recorder:
     purge_days: 5
-    db_url: mysql://hass@localhost/homeassistant
+#    db_url: mysql://hass@localhost/homeassistant
 
 sun:
 
@@ -37,7 +37,7 @@ wemo:
     - 192.168.5.33
 
 mqtt:
-  broker: 192.168.5.4
+  broker: 192.168.5.5
   port: 1883
   client_id: HASS
   keepalive: 60
@@ -45,7 +45,7 @@ mqtt:
   password: !secret mqtt_password
 
 octoprint:
-  host: 192.168.5.36
+  host: 192.168.5.4
   api_key: !secret octoprint_api_key
 
 wink:
@@ -87,15 +87,15 @@ notify:
     username: !secret sender_email
     password: !secret sender_email_password
     recipient: !secret billys_number
-#  - platform: smtp
-#    name: sms_melina
-#    server: smtp.gmail.com
-#    port: 587
-#    sender: !secret sender_email
-#    starttls: 1
-#    username: !secret sender_email
-#    password: !secret sender_email_password
-#    recipient: !secret melinas_number
+  - platform: smtp
+    name: sms_melina
+    server: smtp.gmail.com
+    port: 587
+    sender: !secret sender_email
+    starttls: 1
+    username: !secret sender_email
+    password: !secret sender_email_password
+    recipient: !secret melinas_number
     
 zone: !include zones.yaml
 switch: !include switches.yaml

@@ -360,7 +360,38 @@
       data:
         message: >
           UVB output too low! Replace bulb {{ states('sensor.tank_uvb') }}
- 
+
+  - alias: 'Trigger alarm while armed home'
+    initial_state: false
+    trigger:
+      - platform: state
+        entity_id: binary_sensor.front_door
+        from: 'off'
+        to: 'on'
+      - platform: state
+        entity_id: binary_sensor.garage_entry_door
+        from: 'off'
+        to: 'on'
+      - platform: state
+        entity_id: binary_sensor.kitchen_door
+        from: 'off'
+        to: 'on'
+      - platform: state
+        entity_id: binary_sensor.down_stairs_bathroom_door
+        from: 'off'
+        to: 'on'
+      - platform: state
+        entity_id: binary_sensor.office_door
+        from: 'off'
+        to: 'on'
+    condition:
+        - condition: state
+          entity_id: alarm_control_panel.ha_alarm
+          state: armed_home
+    action:
+        service: homeassistant.turn_on
+        entity_id: script.alarm_home
+
   - alias: 'Trigger alarm while armed away'
     initial_state: false
     trigger:
@@ -398,7 +429,7 @@
           state: armed_away
     action:
         service: homeassistant.turn_on
-        entity_id: script.alarm
+        entity_id: script.alarm_away
 
   - alias: billy unlocked the door
     initial_state: false
@@ -1039,19 +1070,6 @@
       - service: notify.sms_melina
         data:
           message: 'Intruder detected!'
-
-  #- alias: pubnub_update
-  #  trigger:
-  #    - platform: time
-  #      minutes: 25
-  #      seconds: 30
-  #  condition:
-  #    - condition: state
-  #      entity_id: light.laundry
-  #      state: 'off'
-  #  action:
-  #    - service: homeassistant.turn_on
-  #      entity_id: script.pubnub_update
 
   - alias: lock_the_door_off
     initial_state: false

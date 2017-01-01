@@ -82,7 +82,7 @@
           name: Locked?
           message: is the front door locked?
 
-  alarm:
+  alarm_home:
     alias: alarm
     sequence:
       - service: homeassistant.turn_on
@@ -90,7 +90,18 @@
           entity_id: group.every_light
       - event: alarm_triggered
         event_data:
-          name: ALARM
+          name: ALARM_HOME
+          message: Intruder
+
+  alarm_away:
+    alias: alarm
+    sequence:
+      - service: homeassistant.turn_on
+        data:
+          entity_id: group.every_light
+      - event: alarm_triggered
+        event_data:
+          name: ALARM_AWAY
           message: Intruder
 
   lock_the_door:
@@ -213,17 +224,6 @@
           data:
             entity_id: switch.keurig
 
-  pubnub_update:
-    sequence:
-      - service: light.turn_on
-        data:
-          entity_id: light.laundry
-      - delay:
-          seconds: 20
-      - service: light.turn_off
-        data:
-          entity_id: light.laundry
-      
   hass_start:
     sequence:
       - delay:
@@ -335,6 +335,8 @@
       - service: homeassistant.turn_on
         entity_id: automation.trigger_alarm_while_armed_away
       - service: homeassistant.turn_on
+        entity_id: automation.trigger_alarm_while_armed_home
+      - service: homeassistant.turn_on
         entity_id: automation.turn_entry_and_living_room_on
       - service: homeassistant.turn_on
         entity_id: automation.no_one_is_home
@@ -368,3 +370,5 @@
         entity_id: automation.someone_is_home
       - service: homeassistant.turn_on
         entity_id: automation.wink_feed
+      - service: homeassistant.turn_on
+        entity_id: automation.garage_light_off_after_one_hour

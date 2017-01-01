@@ -1,3 +1,40 @@
+  - platform: broadlink
+    host: 192.168.5.9
+    mac: 'B4:43:0D:EE:F7:A0'
+    switches:
+      christmas_tree:
+        friendly_name: 'christmas tree'
+        command_on: 'shMyAAYTEggGExIHBhQGFAYUEggGEwYTEgcSBwYUEggGFBIHBhMGEwYTBhMGEwYTEggSCAa8AAAAAAAA'
+        command_off: 'sgYyAAYTEwcGExMHBhMHEwYTEwcGEwcTEwcTBwYUEgcGExMHBhQGEwYTBhMTBxMHBhMGEwa+AAAAAAAA'
+      cabinet_lights:
+        friendly_name: 'kitchen cabinet lights'
+        command_on: 'shEyAAYTEgcGExIHBhMGEwYTEgcGEwYTBhMSBwYTEgcGExIHEgcSBwYTBhMGEwYTEgcSBwa7AAAAAAAA'
+        command_off: 'shUyAAYTEgcGExIHBhMGEwYTEgcGEwYTBhMSBwYTEgcGExIHEgcSBwYTBhMSBxIHBxMGEwa7AAAAAAAA'
+      tv_power:
+        friendly_name: 'living room TV power'
+        command_on: 'JgBYAAABKJQSExITEzgSExITEhMSExITEjgTOBITEjgSOBI4EzgSOBITEhMSExI4ExITExITEhMSOBI4EjgTEhM4EjgSOBI4EgAFCAABJ0sSAAxGAAEoShMADQU='
+        command_off: 'JgBYAAABKJQSExITEzgSExITEhMSExITEjgTOBITEjgSOBI4EzgSOBITEhMSExI4ExITExITEhMSOBI4EjgTEhM4EjgSOBI4EgAFCAABJ0sSAAxGAAEoShMADQU='
+      soundbar_power:
+        friendly_name: 'living room soundbar power'
+        command_on: 'JgBQAAABJpITEhITEhISExITEhISExITEjcSNxI3EjcSNxI3EzcSNxISExISExITEhISExI3EhMSNxI3EjcSNxM3EjcSEhI3EgAE8QABK0gSAA0FAAAAAAAAAAA='
+        command_off: 'JgBQAAABJpITEhITEhISExITEhISExITEjcSNxI3EjcSNxI3EzcSNxISExISExITEhISExI3EhMSNxI3EjcSNxM3EjcSEhI3EgAE8QABK0gSAA0FAAAAAAAAAAA='
+      tv_play:
+        friendly_name: 'living room tv play'
+        command_on: 'JgBQAAABKpIUERUQFTUVEBURFBEUERQRFDYVNRUQFTYUNhQ2FDYVNRU2FDYUERQRFDYVNRURFBEUERQRFDYVNRUQFREUNhQ2FAAFBQABKkgVAA0FAAAAAAAAAAA='
+        command_off: 'JgBQAAABKpIUERUQFTUVEBURFBEUERQRFDYVNRUQFTYUNhQ2FDYVNRU2FDYUERQRFDYVNRURFBEUERQRFDYVNRUQFREUNhQ2FAAFBQABKkgVAA0FAAAAAAAAAAA='
+      tv_pause:
+        friendly_name: 'living room tv pause'
+        command_on: 'JgBYAAABKpIUERQRFTUVEBURFBEUERQRFDYVNRUQFTYUNhQ2FTUVNhQ2FDYUNhUQFTUVNhQRFBEUERUQFRAVNRURFBEUNhQ2FQAFBAABKkgVAAxDAAEqSBUADQU='
+        command_off: 'JgBYAAABKpIUERQRFTUVEBURFBEUERQRFDYVNRUQFTYUNhQ2FTUVNhQ2FDYUNhUQFTUVNhQRFBEUERUQFRAVNRURFBEUNhQ2FQAFBAABKkgVAAxDAAEqSBUADQU='
+      blanket:
+        friendly_name: 'blanket'
+        command_on: 'shEyAAYTEgcGExIHBhMGEwYTEgcHEwcTBxMTBxMHEwcHExIHBhMGEwYTBhQGEwYTEgcSBwa8AAAAAAAA'
+        command_off: 'shIyAAcTEwcHExMHBhMHEwYTEgcGEwYTBhMTBxMHEwcHExMHBxMGEwYTBxMSBxMHBhMGEwe7AAAAAAAA'
+      outside_christmas_lights:
+        friendly_name: 'outside christmas lights'
+        command_on: 'sgYyAAcSEwcHEhMHBxIHEgcSEwYHEwcSBxITBgcTEwYTBhMHBxMHEgcSBxMHEgcSEwYTBge7AAAAAAAA'
+        command_off: 'shUyAAcSEwcHExMHBxMHEwcTEwcHEwcTBxMTBwcSEwcTBxMHBxMHEwcSBxMTBxMHBxMGEwe7AAAAAAAA'
+
   - platform: arest
     resource: http://192.168.5.34
     name: Hallway ceiling fan
@@ -24,31 +61,35 @@
         command_state: /usr/bin/curl 192.168.5.28:3000
         value_template: '{{ false }}'
 
-  - platform: rpi_rf
-    gpio: 17
-    switches:
-        Kitchen Cabinet lights:
-          pulselength: 182
-          protocol: 1
-          code_on: 5313987
-          code_off: 5313996
-        outside christmas lights:
-          pulselength: 182
-          protocol: 1
-          code_on: 5314307
-          code_off: 5314316
-        Blanket:
-          pulselength: 182
-          protocol: 1
-          code_on: 5315843
-          code_off: 5315852
+################################
+#######rpi_rf codes############
+################################
+
+  #- platform: rpi_rf
+  #  gpio: 17
+  #  switches:
+        #Kitchen Cabinet lights:
+        #  pulselength: 182
+        #  protocol: 1
+        #  code_on: 5313987
+        #  code_off: 5313996
+        #outside christmas lights:
+        #  pulselength: 182
+        #  protocol: 1
+        #  code_on: 5314307
+        #  code_off: 5314316
+        #Blanket:
+        #  pulselength: 182
+        #  protocol: 1
+        #  code_on: 5315843
+        #  code_off: 5315852
         #Garage Light:
         #  pulselength: 182
         #  protocol: 1
         #  code_on: 5313843
         #  code_off: 531352
-        Christmas Tree:
-          pulselength: 182
-          protocol: 1
-          code_on: 5321987
-          code_off: 5321996
+        #Christmas Tree:
+        #  pulselength: 182
+        #  protocol: 1
+        #  code_on: 5321987
+        #  code_off: 5321996
