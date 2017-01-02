@@ -372,3 +372,5 @@
         entity_id: automation.wink_feed
       - service: homeassistant.turn_on
         entity_id: automation.garage_light_off_after_one_hour
+      - service: homeassistant.turn_on
+        entity_id: automation.alarm_arm

@@ -12,7 +12,7 @@
           minutes: 30
     action:
       service: homeassistant.turn_off
-      entity_id: light.garage_light
+      entity_id: group.garage_lights
 
   - alias: Turn outside lights off
     initial_state: false
@@ -234,21 +234,21 @@
       service: homeassistant.turn_on
       entity_id: group.bedroom_lights
 
-  - alias: garage light off
-    initial_state: false
-    trigger:
-      - platform: state
-        entity_id: binary_sensor.garage_entry_door
-        state: 'on'
-    condition:
-      - condition: state
-        entity_id: light.garage
-        state: 'on'
-        for:
-          seconds: 15
-    action:
-      service: homeassistant.turn_off
-      entity_id: light.garage
+  #- alias: garage light off
+  #  initial_state: false
+  #  trigger:
+  #    - platform: state
+  #      entity_id: binary_sensor.garage_entry_door
+  #      state: 'on'
+  #  condition:
+  #    - condition: state
+  #      entity_id: light.garage
+  #      state: 'on'
+  #      for:
+  #        seconds: 15
+  #  action:
+  #    service: homeassistant.turn_off
+  #    entity_id: light.garage
 
   - alias: Front door
     initial_state: false
@@ -270,8 +270,8 @@
       - condition: template
         value_template: '{{ states.sun.sun.attributes.elevation < 4.0 }}'
     action:
-      service: light.turn_on
-      entity_id: light.garage
+      service: homeassistant.turn_on
+      entity_id: switch.garage_lights
 
   - alias: Downstairs hall light
     initial_state: false
@@ -1009,6 +1009,15 @@
     action:
         service: homeassistant.turn_on
         entity_id: script.alarm_away
+
+  - alias: Alarm_arm
+    initial_state: false
+    trigger:
+      - platform: event
+        event_type: arm_away
+    action:
+        service: alarm_control_panel.alarm_arm_away
+        entity_id: alarm_control_panel.ha_alarm
 
   - alias: Alarm_notification
     initial_state: false

@@ -73,7 +73,7 @@ device_tracker:
 alarm_control_panel:
   platform: manual
   name: "HA Alarm"
-  code: !secret alarm_code
+  # code: !secret alarm_code
   pending_time: 60
   trigger_time: 120
       

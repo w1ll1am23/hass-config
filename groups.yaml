@@ -73,6 +73,7 @@
       - group.office_sensors
       - media_player.office
       - group.office_scripts
+      - group.m3d
 
   Hallway:
     name: Hallway
@@ -81,17 +82,16 @@
       - group.hallway_lights
       - group.hallway_thermostat
       - group.hallway_sensors
-      - group.m3d
   
   ######################################
   ############Light Groups##############
   ######################################
 
-  down_stairs_lights: light.living_room_lamp, light.shelf_lamp, switch.dining_room_fan, switch.christmas_tree, switch.kitchen_cabinet_lights, light.kitchen_sink_light, switch.entry_light
+  down_stairs_lights: light.living_room_lamp, light.shelf_lamp, switch.dining_room_fan, switch.kitchen_cabinet_lights, light.kitchen_sink_light, switch.entry_light
   Bedroom_lights: light.melinas_night_stand, light.billys_night_stand, light.bedroom_lamp
-  Living_room_lights: light.living_room_lamp, light.shelf_lamp, switch.dining_room_fan #, switch.christmas_tree
+  Living_room_lights: light.living_room_lamp, light.shelf_lamp, switch.dining_room_fan
   Kitchen_lights: light.kitchen_sink_light, switch.kitchen_cabinet_lights
-  Garage_lights: light.garage
+  Garage_lights: light.garage, switch.work_bench_lights
   Office_lights: switch.melinas_office_lamp, switch.billys_office_lamp, light.office_lamp
   Hallway_lights: switch.hallway_ceiling_fan_light, switch.hallway_ceiling_fan_fan, light.down_stairs_hallway
   entryway: switch.outside_lights, switch.entry_light, switch.outside_christmas_lights
@@ -127,7 +127,7 @@
   garage_switches: cover.garage_door, switch.start_car
   keurig: switch.keurig, binary_sensor.needs_water, binary_sensor.is_on
   office_scripts: script.power_strip_off, script.power_strip_on
-  christmas: switch.outside_christmas_lights #, switch.christmas_tree
+  # christmas: switch.outside_christmas_lights, switch.christmas_tree
 
   M3D:
     name: Micro3D
