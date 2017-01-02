@@ -361,76 +361,6 @@
         message: >
           UVB output too low! Replace bulb {{ states('sensor.tank_uvb') }}
 
-  - alias: 'Trigger alarm while armed home'
-    initial_state: false
-    trigger:
-      - platform: state
-        entity_id: binary_sensor.front_door
-        from: 'off'
-        to: 'on'
-      - platform: state
-        entity_id: binary_sensor.garage_entry_door
-        from: 'off'
-        to: 'on'
-      - platform: state
-        entity_id: binary_sensor.kitchen_door
-        from: 'off'
-        to: 'on'
-      - platform: state
-        entity_id: binary_sensor.down_stairs_bathroom_door
-        from: 'off'
-        to: 'on'
-      - platform: state
-        entity_id: binary_sensor.office_door
-        from: 'off'
-        to: 'on'
-    condition:
-        - condition: state
-          entity_id: alarm_control_panel.ha_alarm
-          state: armed_home
-    action:
-        service: homeassistant.turn_on
-        entity_id: script.alarm_home
-
-  - alias: 'Trigger alarm while armed away'
-    initial_state: false
-    trigger:
-      - platform: state
-        entity_id: binary_sensor.front_door
-        from: 'off'
-        to: 'on'
-      - platform: state
-        entity_id: binary_sensor.garage_entry_door
-        from: 'off'
-        to: 'on'
-      - platform: state
-        entity_id: binary_sensor.living_room_motion
-        from: 'off'
-        to: 'on'
-      - platform: state
-        entity_id: binary_sensor.up_stairs_hallway_motion
-        from: 'off'
-        to: 'on'
-      - platform: state
-        entity_id: binary_sensor.kitchen_door
-        from: 'off'
-        to: 'on'
-      - platform: state
-        entity_id: binary_sensor.down_stairs_bathroom_door
-        from: 'off'
-        to: 'on'
-      - platform: state
-        entity_id: binary_sensor.office_door
-        from: 'off'
-        to: 'on'
-    condition:
-        - condition: state
-          entity_id: alarm_control_panel.ha_alarm
-          state: armed_away
-    action:
-        service: homeassistant.turn_on
-        entity_id: script.alarm_away
-
   - alias: billy unlocked the door
     initial_state: false
     trigger:
@@ -444,6 +374,8 @@
         for:
           minutes: 15
     action:
+      - service: alarm_control_panel.alarm_disarm
+        entity_id: alarm_control_panel.ha_alarm
       - service: notify.sms_billy
         data:
           message: 'Billy unlocked the door'
@@ -464,9 +396,11 @@
         for:
           minutes: 15
     action:
-      service: notify.sms_billy
-      data:
-        message: 'Melina unlocked the door'
+      - service: alarm_control_panel.alarm_disarm
+        entity_id: alarm_control_panel.ha_alarm      
+      - service: notify.sms_billy
+        data:
+          message: 'Melina unlocked the door'
 
   - alias: gdottie unlocked the door
     initial_state: false
@@ -475,6 +409,8 @@
         entity_id: binary_sensor.gdottie
         state: 'on'
     action:
+      - service: alarm_control_panel.alarm_disarm
+        entity_id: alarm_control_panel.ha_alarm      
       - service: notify.sms_billy
         data:
           message: 'Grandma unlocked the door'
@@ -489,9 +425,11 @@
         entity_id: binary_sensor.parents
         state: 'on'
     action:
-      service: notify.sms_billy
-      data:
-        message: 'Mother unlocked the door'
+      - service: alarm_control_panel.alarm_disarm
+        entity_id: alarm_control_panel.ha_alarm      
+      - service: notify.sms_billy
+        data:
+          message: 'Mother unlocked the door'
 
 ################################################
 ##############Tasker Automations################
@@ -999,6 +937,97 @@
             operation_mode: 'heat'  
 
 ################################################
+###############Alarm Automations################
+################################################   
+
+  - alias: 'Trigger alarm while armed home'
+    initial_state: false
+    trigger:
+      - platform: state
+        entity_id: binary_sensor.front_door
+        from: 'off'
+        to: 'on'
+      - platform: state
+        entity_id: binary_sensor.garage_entry_door
+        from: 'off'
+        to: 'on'
+      - platform: state
+        entity_id: binary_sensor.kitchen_door
+        from: 'off'
+        to: 'on'
+      - platform: state
+        entity_id: binary_sensor.down_stairs_bathroom_door
+        from: 'off'
+        to: 'on'
+      - platform: state
+        entity_id: binary_sensor.office_door
+        from: 'off'
+        to: 'on'
+    condition:
+        - condition: state
+          entity_id: alarm_control_panel.ha_alarm
+          state: armed_home
+    action:
+        service: homeassistant.turn_on
+        entity_id: script.alarm_home
+
+  - alias: 'Trigger alarm while armed away'
+    initial_state: false
+    trigger:
+      - platform: state
+        entity_id: binary_sensor.front_door
+        from: 'off'
+        to: 'on'
+      - platform: state
+        entity_id: binary_sensor.garage_entry_door
+        from: 'off'
+        to: 'on'
+      - platform: state
+        entity_id: binary_sensor.living_room_motion
+        from: 'off'
+        to: 'on'
+      - platform: state
+        entity_id: binary_sensor.up_stairs_hallway_motion
+        from: 'off'
+        to: 'on'
+      - platform: state
+        entity_id: binary_sensor.kitchen_door
+        from: 'off'
+        to: 'on'
+      - platform: state
+        entity_id: binary_sensor.down_stairs_bathroom_door
+        from: 'off'
+        to: 'on'
+      - platform: state
+        entity_id: binary_sensor.office_door
+        from: 'off'
+        to: 'on'
+    condition:
+        - condition: state
+          entity_id: alarm_control_panel.ha_alarm
+          state: armed_away
+    action:
+        service: homeassistant.turn_on
+        entity_id: script.alarm_away
+
+  - alias: Alarm_notification
+    initial_state: false
+    trigger:
+      - platform: event
+        event_type: alarm_triggered
+    #condition:
+    #  - condition: state
+    #    entity_id: switch.siren
+    #    state: 'on'
+    action:
+      - service: notify.sms_billy
+        data:
+          message: 'Intruder detected!'
+      - service: notify.sms_melina
+        data:
+          message: 'Intruder detected!'
+
+################################################
 ###########Random Event Automations#############
 ################################################   
 
@@ -1023,7 +1052,6 @@
       - service: notify.sms_melina
         data:
           message: 'Front door failed to lock!'
-
 
   - alias: Battery low alert
     initial_state: false
@@ -1054,22 +1082,6 @@
           message: >
             Change the {{ trigger.entity_id.split('.')[1].replace('_battery', '').replace('_',' ') }} battery
 
-  - alias: Alarm_notification
-    initial_state: false
-    trigger:
-      - platform: event
-        event_type: alarm_triggered
-    #condition:
-    #  - condition: state
-    #    entity_id: switch.siren
-    #    state: 'on'
-    action:
-      - service: notify.sms_billy
-        data:
-          message: 'Intruder detected!'
-      - service: notify.sms_melina
-        data:
-          message: 'Intruder detected!'
 
   - alias: lock_the_door_off
     initial_state: false

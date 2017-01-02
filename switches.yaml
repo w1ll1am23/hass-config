@@ -2,14 +2,14 @@
     host: 192.168.5.9
     mac: 'B4:43:0D:EE:F7:A0'
     switches:
-      christmas_tree:
-        friendly_name: 'christmas tree'
-        command_on: 'shMyAAYTEggGExIHBhQGFAYUEggGEwYTEgcSBwYUEggGFBIHBhMGEwYTBhMGEwYTEggSCAa8AAAAAAAA'
-        command_off: 'sgYyAAYTEwcGExMHBhMHEwYTEwcGEwcTEwcTBwYUEgcGExMHBhQGEwYTBhMTBxMHBhMGEwa+AAAAAAAA'
-      cabinet_lights:
-        friendly_name: 'kitchen cabinet lights'
-        command_on: 'shEyAAYTEgcGExIHBhMGEwYTEgcGEwYTBhMSBwYTEgcGExIHEgcSBwYTBhMGEwYTEgcSBwa7AAAAAAAA'
-        command_off: 'shUyAAYTEgcGExIHBhMGEwYTEgcGEwYTBhMSBwYTEgcGExIHEgcSBwYTBhMSBxIHBxMGEwa7AAAAAAAA'
+      #christmas_tree:
+      #  friendly_name: 'christmas tree'
+      #  command_on: 'shMyAAYTEggGExIHBhQGFAYUEggGEwYTEgcSBwYUEggGFBIHBhMGEwYTBhMGEwYTEggSCAa8AAAAAAAA'
+      #  command_off: 'sgYyAAYTEwcGExMHBhMHEwYTEwcGEwcTEwcTBwYUEgcGExMHBhQGEwYTBhMTBxMHBhMGEwa+AAAAAAAA'
+      #cabinet_lights:
+      #  friendly_name: 'kitchen cabinet lights'
+      #  command_on: 'shEyAAYTEgcGExIHBhMGEwYTEgcGEwYTBhMSBwYTEgcGExIHEgcSBwYTBhMGEwYTEgcSBwa7AAAAAAAA'
+      #  command_off: 'shUyAAYTEgcGExIHBhMGEwYTEgcGEwYTBhMSBwYTEgcGExIHEgcSBwYTBhMSBxIHBxMGEwa7AAAAAAAA'
       tv_power:
         friendly_name: 'living room TV power'
         command_on: 'JgBYAAABKJQSExITEzgSExITEhMSExITEjgTOBITEjgSOBI4EzgSOBITEhMSExI4ExITExITEhMSOBI4EjgTEhM4EjgSOBI4EgAFCAABJ0sSAAxGAAEoShMADQU='
@@ -34,6 +34,22 @@
         friendly_name: 'outside christmas lights'
         command_on: 'sgYyAAcSEwcHEhMHBxIHEgcSEwYHEwcSBxITBgcTEwYTBhMHBxMHEgcSBxMHEgcSEwYTBge7AAAAAAAA'
         command_off: 'shUyAAcSEwcHExMHBxMHEwcTEwcHEwcTBxMTBwcSEwcTBxMHBxMHEwcSBxMTBxMHBxMGEwe7AAAAAAAA'
+      kitchen_cabinet_lights:
+        friendly_name: 'kitchen cabinet lights'
+        command_on: 'sgs0ACsPKw8rDysPKw8PKA4oKw8qDw8oKw8rDw8oDykrDysPDykPKA4pDygPKA8oDykrDw8AAZAAAAAA'
+        command_off: 'sgs0ACsPKw8rDysPKw8PKA4oKw8qDw8oKw8rDw8oDykrDysPDykPKA4pDygPKA8oDykrDw8AAZAAAAAA'        
+      cabinet_lights_25:
+        friendly_name: 'cabinet lights 25'
+        command_on: 'sgg0ACoPKw8qDyoPKw8PKA8oKw8rDw8pKg8qDw8oDygrDyoPDikOKA8pDikqDw8oDykqDw8AAZAAAAAA'
+        command_off: 'sgDoACoOKg8OJw8nDigOKA8nKg8qDioODwABkCoOKg8qDioOKg8OKA4nKw4qDw4nKw4qDg4oDigqDyoODigOKA4oDigOKCoOKg4qDw4AAZAqDioPKg4qDyoODigOKCoOKg8OKCoOKg8OJw8nKg8qDw4nDigOKA4oDigqDioOKw4OAAGQKg4qDyoOKg4rDg4oDicrDioPDigqDioODigOKCoOKg8OKA4oDicOKA4oKg8pDyoODgABkCoOKw4qDioPKg4OKA4oKg4rDg4oKg4qDg4oDigqDykPDigOKA4nDycOKCoPKg4qDw0ABdw='
+      cabinet_lights_brightness:
+        friendly_name: 'cabinet lights brightness'
+        command_on: 'sgc0ACoPKw8qDyoQKg8PKQ4oKhArDw8pKw8qDw8pDikqDyoPDygPKA8oDikOKSoPDykqDw4AAZAAAAAA'
+        command_off: 'sgY0ACoQKhAqDyoQKg8OKQ4pKg8qDw4pKg8qDw4pDygqDyoPDikOKQ4pDikPKSoPKg8OKQ4AAZAAAAAA'                
+      cabinet_lights_strobe:
+        friendly_name: 'cabinet lights strobe'
+        command_on: 'sgg0ACsPKw8rDysPKw8PKA8oKw8rDw8pKw8rDw8oDygrDysPDygPKA8oDygrDw8oKw8rDw8AAZAAAAAA'
+        command_off: 'sgY0ACsPKw8rDysPKw8PKA8oKw8rDw8oKw8rDw8oDygrDysPDygPKA8oDygPKCsPDygPKA8AAZAAAAAA'                        
 
   - platform: arest
     resource: http://192.168.5.34

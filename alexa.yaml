@@ -49,7 +49,6 @@
             I am sorry, I do not know.
           {%- endfor -%}
 
-
     DryerStatusIntent:
       speech: 
         type: plaintext
@@ -83,7 +82,6 @@
         type: plaintext
         text: >
           The current 3D print job is {{ states.sensor.octoprint_job_percentage.state  }} precent complete
-
 
     InternetStatusIntent:
       speech:
@@ -119,6 +117,26 @@
       speech:
         type: plaintext
         text: !include alexa_confirm.yaml
+
+    ArmAlarmHomeIntent:
+      action:
+        service: alarm_control_panel.alarm_arm_home
+        data_template:
+          entity_id: alarm_control_panel.ha_alarm
+      speech:
+        type: plaintext
+        text: >
+          Setting alarm to home in 1 minute.
+
+    ArmAlarmAwayIntent:
+      action:
+        service: alarm_control_panel.alarm_arm_away
+        data_template:
+          entity_id: alarm_control_panel.ha_alarm
+      speech:
+        type: plaintext
+        text: >
+          Setting alarm to away in 1 minute.
 
     #OfficeLightsOnIntent:
     #  action:

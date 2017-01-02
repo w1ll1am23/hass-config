@@ -42,6 +42,7 @@
       - group.kitchen_lights
       - group.kitchen_sensors
       - group.keurig
+      - group.under_cabinet_lights
   
   Garage:
     name: Garage
@@ -80,18 +81,20 @@
       - group.hallway_lights
       - group.hallway_thermostat
       - group.hallway_sensors
+      - group.m3d
   
   ######################################
   ############Light Groups##############
   ######################################
 
+  down_stairs_lights: light.living_room_lamp, light.shelf_lamp, switch.dining_room_fan, switch.christmas_tree, switch.kitchen_cabinet_lights, light.kitchen_sink_light, switch.entry_light
   Bedroom_lights: light.melinas_night_stand, light.billys_night_stand, light.bedroom_lamp
-  Living_room_lights: light.living_room_lamp, light.shelf_lamp, switch.dining_room_fan, switch.christmas_tree
-  Kitchen_lights: switch.kitchen_cabinet_lights, light.kitchen_sink_light
+  Living_room_lights: light.living_room_lamp, light.shelf_lamp, switch.dining_room_fan #, switch.christmas_tree
+  Kitchen_lights: light.kitchen_sink_light, switch.kitchen_cabinet_lights
   Garage_lights: light.garage
   Office_lights: switch.melinas_office_lamp, switch.billys_office_lamp, light.office_lamp
   Hallway_lights: switch.hallway_ceiling_fan_light, switch.hallway_ceiling_fan_fan, light.down_stairs_hallway
-  entryway: switch.outside_lights, switch.entry, switch.outside_christmas_lights
+  entryway: switch.outside_lights, switch.entry_light, switch.outside_christmas_lights
   every_light: switch.outside_lights, switch.hallway_ceiling_fan_light, switch.office_lamp, switch.kitchen_cabinet_lights, switch.bedroom_lamp, light.down_stairs_hallway, light.garage, light.living_room_lamp, light.billys_night_stand, light.office_lamp, light.laundry, switch.entry, switch.dining_room_fan, light.kitchen_sink_light, light.shelf_lamp, light.bedroom_lamp
   wink_lights: light.laundry, light.billys_night_stand, light.office_lamp, light.living_room_lamp, light.garage, light.down_stairs_hallway, light.shelf_lamp, light.bedroom_lamp
 
@@ -116,7 +119,7 @@
   ######################################
 
   Hallway_thermostat: climate.thermostat
-  Outside_switches: switch.outside_lights, lock.front_door, switch.entry
+  Outside_switches: switch.outside_lights, lock.front_door, switch.entry_light
   Living_room_switches: switch.blanket
   living_room_tv: switch.living_room_tv_power, switch.living_room_soundbar_power, switch.living_room_tv_play, switch.living_room_tv_pause
   switches: script.good_night_melina
@@ -124,7 +127,7 @@
   garage_switches: cover.garage_door, switch.start_car
   keurig: switch.keurig, binary_sensor.needs_water, binary_sensor.is_on
   office_scripts: script.power_strip_off, script.power_strip_on
-  christmas: switch.outside_christmas_lights, switch.christmas_tree
+  christmas: switch.outside_christmas_lights #, switch.christmas_tree
 
   M3D:
     name: Micro3D
@@ -133,3 +136,12 @@
       - binary_sensor.octoprint_printing
       - binary_sensor.octoprint_printing_error
       - sensor.octoprint_job_percentage
+
+  under_cabinet_lights:
+    name: Under cabinet lights
+    entities:
+      - switch.kitchen_cabinet_lights
+      - switch.cabinet_lights_25
+      - switch.cabinet_lights_brightness
+      - switch.cabinet_lights_strobe
+
