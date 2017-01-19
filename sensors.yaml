@@ -26,10 +26,10 @@
     monitored_variables:
       Water:
         name: Water
-        unit_of_measurement: '°C'
+        unit_of_measurement: '°F'
       Basking:
         name: Basking
-        unit_of_measurement: '°C'
+        unit_of_measurement: '°F'
       UVB:
         name: UVB
         unit_of_measurement: 'uW/cm2'
@@ -50,6 +50,7 @@
     sensors:
       average_temp:
         value_template: '{{ ((states.sensor.living_room_temperature.state | float +  states.sensor.living_room_temperature.state | float +  states.sensor.up_stairs_hallway_temperature.state | float + states.climate.thermostat.attributes.current_temperature | float + states.sensor.spotter_temperature.state | float + states.sensor.broadlink_sensor_temperature.state | float) / 6) | round(2) }}' 
+        unit_of_measurement: '°F'
       kitchen_door_battery:
         value_template: >
           {% if states.binary_sensor.kitchen_door %}

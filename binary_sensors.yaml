@@ -12,7 +12,7 @@
   - platform: template
     sensors:
       freezer_temp_threshold:
-        value_template: "{{ states('sensor.garage_freezer_temperature')|int >= 5 }}"
+        value_template: "{{ states('sensor.garage_freezer_temperature')|int >= 6 }}"
         entity_id: sensor.garage_freezer_temperature
 
   - platform: arest

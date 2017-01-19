@@ -1,55 +1,3 @@
-  office_on:
-    sequence:
-      - service: light.turn_on
-        data:
-          entity_id: light.office_lamp
-      - service: switch.turn_on
-        data:
-          entity_id: switch.billys_office_lamp
-      - delay:
-          seconds: 1
-      - service: switch.turn_on
-        data:
-          entity_id: switch.melinas_office_lamp
-
-  office_off:
-    sequence:
-      - service: light.turn_off
-        data:
-         entity_id: light.office_lamp
-      - service: switch.turn_off
-        data:
-          entity_id: switch.billys_office_lamp
-      - delay:
-          seconds: 1
-      - service: switch.turn_off
-        data:
-          entity_id: switch.melinas_office_lamp
-
-  power_strip_off:
-    alias: power_strip_off
-    sequence:
-      - service: switch.turn_off
-        data:
-          entity_id: switch.billys_office_lamp
-      - delay:
-          seconds: 2
-      - service: switch.turn_off
-        data:
-          entity_id: switch.melinas_office_lamp
-
-  power_strip_on:
-    alias: power_strip_on
-    sequence:
-      - service: switch.turn_on
-        data:
-          entity_id: switch.billys_office_lamp
-      - delay:
-          seconds: 2
-      - service: switch.turn_on
-        data:
-          entity_id: switch.melinas_office_lamp
-
   good_night_melina:
     alias: Good Night Melina
     sequence:
@@ -126,42 +74,42 @@
     sequence:
       - service: light.turn_on
         data:
-          entity_id: light.billys_night_stand
+          entity_id: light.melinas_night_stand
           color_temp: 365
           brightness: 255
       - service: light.turn_on
         data:
-          entity_id: light.melinas_night_stand
+          entity_id: light.billys_night_stand
       - service: homeassistant.turn_on
         data:
-          entity_id: switch.bedroom_lamp
+          entity_id: light.bedroom_lamp
 
   bedroom_lights_on_night:
     sequence:
       - service: light.turn_on
         data:
-          entity_id: light.billys_night_stand
+          entity_id: light.melinas_night_stand
           brightness: 150
           rgb_color: [255, 0, 0]
       - service: light.turn_on
         data:
-          entity_id: light.melinas_night_stand
+          entity_id: light.billys_night_stand
       - service: homeassistant.turn_on
         data:
-          entity_id: switch.bedroom_lamp
+          entity_id: light.bedroom_lamp
 
   melinas_light:
     sequence:
       - service: light.turn_on
         data:
-          entity_id: light.billys_night_stand
+          entity_id: light.melinas_night_stand
           brightness: 150
           rgb_color: [255, 0, 0]
       - delay:
           minutes: 3
       - service: light.turn_off
         data:
-          entity_id: light.billys_night_stand
+          entity_id: light.melinas_night_stand
 
   hall_light:
     sequence:
@@ -192,7 +140,7 @@
       - service: homeassistant.turn_off
         data:
           entity_id: switch.entry
-      
+
 ########################################
 ############Tasker Scripts##############
 ########################################
@@ -374,3 +322,9 @@
         entity_id: automation.garage_light_off_after_one_hour
       - service: homeassistant.turn_on
         entity_id: automation.alarm_arm
+      - service: homeassistant.turn_on
+        entity_id: automation.code_unlock_disable_alarm
+      - service: homeassistant.turn_on
+        entity_id: automation.office_lights_on_remote
+      - service: homeassistant.turn_on
+        entity_id: automation.office_lights_off_remote

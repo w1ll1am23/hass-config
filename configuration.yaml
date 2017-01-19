@@ -23,7 +23,7 @@ history:
 
 recorder:
     purge_days: 5
-#    db_url: mysql://hass@localhost/homeassistant
+    db_url: mysql://hass@localhost/homeassistant
 
 sun:
 
@@ -65,10 +65,10 @@ device_tracker:
     password: !secret trackr_password
   - platform: owntracks
     max_gps_accuracy: 200
-  - platform: icloud
-    username: !secret icloud_user
-    password: !secret icloud
-    account_name: melina
+#  - platform: icloud
+#    username: !secret icloud_user
+#    password: !secret icloud
+#    account_name: melina
 
 alarm_control_panel:
   platform: manual

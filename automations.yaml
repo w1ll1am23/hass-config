@@ -6,7 +6,7 @@
     initial_state: false
     trigger:
       - platform: state
-        entity_id: binary_sensor.garage_door
+        entity_id: binary_sensor.garage_door_opened
         to: 'on'
         for:
           minutes: 30
@@ -47,19 +47,37 @@
       service: homeassistant.turn_on
       entity_id: light.shelf_lamp
 
-  - alias: Turn on christmas lights at dusk
-    initial_state: false
-    trigger:
-      - platform: template
-        value_template: '{{ states.sun.sun.attributes.elevation < 3.0 }}'
-    action:
-      service: homeassistant.turn_on
-      entity_id: switch.outside_christmas_lights
-    
+  # - alias: Turn on christmas lights at dusk
+  #   initial_state: false
+  #   trigger:
+  #     - platform: template
+  #       value_template: '{{ states.sun.sun.attributes.elevation < 3.0 }}'
+  #   action:
+  #     service: homeassistant.turn_on
+  #     entity_id: switch.outside_christmas_lights
+
 
 ################################################
-##############Sensor Automations################
+##############Sensor Automations######################
 ################################################
+
+  - alias: office_lights_on_remote
+    initial_state: false
+    trigger:
+      platform: template
+      value_template: "{{ is_state_attr('binary_sensor.remote', 'button_on_pressed', True)}}"
+    action:
+      service: homeassistant.turn_on
+      entity_id: light.office_lamp
+
+  - alias: office_lights_off_remote
+    initial_state: false
+    trigger:
+      platform: template
+      value_template: "{{ is_state_attr('binary_sensor.remote', 'button_off_pressed', True)}}"
+    action:
+      service: homeassistant.turn_off
+      entity_id: light.office_lamp
 
   - alias: Dryer started
     initial_state: false
@@ -134,21 +152,6 @@
           message: >
             Power is back on!
 
-  - alias: wink hub offline
-    initial_state: false
-    trigger:
-      - platform: state
-        entity_id: binary_sensor.hub_hub
-        state: 'off'
-      - platform: state
-        entity_id: binary_sensor.hub_hub
-        state: 'unavailable'
-    action:
-      - service: notify.sms_billy
-        data:
-          message: >
-            Wink hub is offline
-
   - alias: check freezer
     initial_state: false
     trigger:
@@ -161,7 +164,7 @@
       - service: notify.sms_billy
         data:
           message: >
-            Check the freezer! {{ states('sensor.freezer_temperature') }}
+            Check the freezer! {{ states('sensor.garage_freezer_temperature') }}
       - service: notify.sms_melina
         data:
           message: >
@@ -171,7 +174,7 @@
     initial_state: false
     trigger:
       - platform: state
-        entity_id: binary_sensor.laundry_door
+        entity_id: binary_sensor.laundry_door_opened
         state: 'on'
     action:
       service: homeassistant.turn_on
@@ -181,7 +184,7 @@
     initial_state: false
     trigger:
       - platform: state
-        entity_id: binary_sensor.front_door
+        entity_id: binary_sensor.front_door_opened
         state: 'on'
     condition:
       - condition: template
@@ -194,7 +197,7 @@
     initial_state: false
     trigger:
       - platform: state
-        entity_id: binary_sensor.laundry_door
+        entity_id: binary_sensor.laundry_door_opened
         state: 'off'
     action:
       service: homeassistant.turn_off
@@ -211,24 +214,24 @@
       service: notify.sms_billy
       data:
         message: 'Printing done!'
-    
+
   - alias: office lights on when door opens
     initial_state: false
     trigger:
       - platform: state
-        entity_id: binary_sensor.office_door
+        entity_id: binary_sensor.office_door_opened
         state: 'on'
     action:
       - service: light.turn_on
         entity_id: light.office_lamp
       - service: homeassistant.turn_on
-        entity_id: script.power_strip_on
+        entity_id: switch.power_strip
 
   - alias: bedroom lights on when door opens
     initial_state: false
     trigger:
       - platform: state
-        entity_id: binary_sensor.bedroom_door
+        entity_id: binary_sensor.bedroom_door_opened
         state: 'on'
     action:
       service: homeassistant.turn_on
@@ -254,7 +257,7 @@
     initial_state: false
     trigger:
       - platform: state
-        entity_id: binary_sensor.front_door
+        entity_id: binary_sensor.front_door_opened
         state: 'off'
     action:
       service: homeassistant.turn_on
@@ -264,14 +267,14 @@
     initial_state: false
     trigger:
       - platform: state
-        entity_id: binary_sensor.garage_entry_door
+        entity_id: binary_sensor.garage_entry_door_opened
         state: 'on'
     condition:
       - condition: template
         value_template: '{{ states.sun.sun.attributes.elevation < 4.0 }}'
     action:
       service: homeassistant.turn_on
-      entity_id: switch.garage_lights
+      entity_id: group.garage_lights
 
   - alias: Downstairs hall light
     initial_state: false
@@ -300,7 +303,7 @@
     action:
       service: homeassistant.turn_on
       entity_id: script.melinas_light
-        
+
   - alias: up at night
     initial_state: false
     trigger:
@@ -374,15 +377,13 @@
         for:
           minutes: 15
     action:
-      - service: alarm_control_panel.alarm_disarm
-        entity_id: alarm_control_panel.ha_alarm
       - service: notify.sms_billy
         data:
           message: 'Billy unlocked the door'
       - service: notify.sms_melina
         data:
           message: 'Billy unlocked the door'
-    
+
   - alias: melina unlocked the door
     initial_state: false
     trigger:
@@ -396,8 +397,6 @@
         for:
           minutes: 15
     action:
-      - service: alarm_control_panel.alarm_disarm
-        entity_id: alarm_control_panel.ha_alarm      
       - service: notify.sms_billy
         data:
           message: 'Melina unlocked the door'
@@ -409,12 +408,10 @@
         entity_id: binary_sensor.gdottie
         state: 'on'
     action:
-      - service: alarm_control_panel.alarm_disarm
-        entity_id: alarm_control_panel.ha_alarm      
       - service: notify.sms_billy
         data:
           message: 'Grandma unlocked the door'
-      - service: notify.sms_billy
+      - service: notify.sms_melina
         data:
           message: 'Grandma unlocked the door'
 
@@ -425,15 +422,13 @@
         entity_id: binary_sensor.parents
         state: 'on'
     action:
-      - service: alarm_control_panel.alarm_disarm
-        entity_id: alarm_control_panel.ha_alarm      
       - service: notify.sms_billy
         data:
           message: 'Mother unlocked the door'
 
 ################################################
 ##############Tasker Automations################
-################################################    
+################################################
 
   - alias: Good night
     initial_state: false
@@ -443,8 +438,6 @@
     action:
       - service: homeassistant.turn_on
         entity_id: script.good_night
-      - service: homeassistant.turn_on
-        entity_id: script.power_strip_off
 
   - alias: Check doors are closed
     initial_state: false
@@ -563,8 +556,8 @@
     action:
       - service: light.turn_off
         entity_id: light.office_lamp
-      - service: homeassistant.turn_on
-        entity_id: script.power_strip_off
+      - service: homeassistant.turn_off
+        entity_id: switch.power_strip
 
   - alias: office_on
     initial_state: false
@@ -581,7 +574,7 @@
       - service: light.turn_on
         entity_id: light.office_lamp
       - service: homeassistant.turn_on
-        entity_id: script.power_strip_on
+        entity_id: switch.power_strip
 
   - alias: bedroom_off
     initial_state: false
@@ -612,7 +605,7 @@
           entity_id: group.bedroom_lights
           state: 'off'
         - condition: time
-          before: '21:00:00' 
+          before: '21:00:00'
     action:
       service: homeassistant.turn_on
       entity_id: script.bedroom_lights_on_day
@@ -631,7 +624,7 @@
           entity_id: group.bedroom_lights
           state: 'off'
         - condition: time
-          after: '21:00:00' 
+          after: '21:00:00'
     action:
       service: homeassistant.turn_on
       entity_id: script.bedroom_lights_on_night
@@ -872,10 +865,7 @@
         condition: and
         conditions:
           - condition: template
-            value_template: '{{ states.sun.sun.attributes.elevation < 1.0 }}'
-          - condition: state
-            entity_id: script.hass_start
-            state: 'off'
+            value_template: '{{ states.sun.sun.attributes.elevation < 2.0 }}'
     action:
         service: homeassistant.turn_on
         entity_id: group.entryway
@@ -903,7 +893,7 @@
         condition: and
         conditions:
           - condition: template
-            value_template: '{{ states.sun.sun.attributes.elevation < 3.0 }}'
+            value_template: '{{ states.sun.sun.attributes.elevation < 4.0 }}'
     action:
         service: homeassistant.turn_on
         entity_id: script.home_at_dusk
@@ -921,7 +911,7 @@
         - service: climate.set_operation_mode
           data:
             entitt_id: climate.home_downstairs_thermostat
-            operation_mode: 'eco'  
+            operation_mode: 'eco'
 
   - alias: someone is home
     initial_state: false
@@ -934,33 +924,25 @@
         - service: climate.set_operation_mode
           data:
             entitt_id: climate.home_downstairs_thermostat
-            operation_mode: 'heat'  
+            operation_mode: 'heat'
 
 ################################################
 ###############Alarm Automations################
-################################################   
+################################################
 
   - alias: 'Trigger alarm while armed home'
     initial_state: false
     trigger:
       - platform: state
-        entity_id: binary_sensor.front_door
+        entity_id: binary_sensor.front_door_opened
         from: 'off'
         to: 'on'
       - platform: state
-        entity_id: binary_sensor.garage_entry_door
+        entity_id: binary_sensor.garage_entry_door_opened
         from: 'off'
         to: 'on'
       - platform: state
-        entity_id: binary_sensor.kitchen_door
-        from: 'off'
-        to: 'on'
-      - platform: state
-        entity_id: binary_sensor.down_stairs_bathroom_door
-        from: 'off'
-        to: 'on'
-      - platform: state
-        entity_id: binary_sensor.office_door
+        entity_id: binary_sensor.kitchen_door_opened
         from: 'off'
         to: 'on'
     condition:
@@ -975,11 +957,11 @@
     initial_state: false
     trigger:
       - platform: state
-        entity_id: binary_sensor.front_door
+        entity_id: binary_sensor.front_door_opened
         from: 'off'
         to: 'on'
       - platform: state
-        entity_id: binary_sensor.garage_entry_door
+        entity_id: binary_sensor.garage_entry_door_opened
         from: 'off'
         to: 'on'
       - platform: state
@@ -991,15 +973,15 @@
         from: 'off'
         to: 'on'
       - platform: state
-        entity_id: binary_sensor.kitchen_door
+        entity_id: binary_sensor.kitchen_door_opened
         from: 'off'
         to: 'on'
       - platform: state
-        entity_id: binary_sensor.down_stairs_bathroom_door
+        entity_id: binary_sensor.down_stairs_bathroom_door_opened
         from: 'off'
         to: 'on'
       - platform: state
-        entity_id: binary_sensor.office_door
+        entity_id: binary_sensor.office_door_opened
         from: 'off'
         to: 'on'
     condition:
@@ -1036,9 +1018,28 @@
         data:
           message: 'Intruder detected!'
 
+  - alias: code unlock disable alarm
+    initial_state: false
+    trigger:
+      - platform: state
+        entity_id: binary_sensor.billy
+        state: 'on'
+      - platform: state
+        entity_id: binary_sensor.melina
+        state: 'on'
+      - platform: state
+        entity_id: binary_sensor.gdottie
+        state: 'on'
+      - platform: state
+        entity_id: binary_sensor.parents
+        state: 'on'
+    action:
+      - service: alarm_control_panel.alarm_disarm
+        entity_id: alarm_control_panel.ha_alarm
+
 ################################################
 ###########Random Event Automations#############
-################################################   
+################################################
 
   - alias: check for locked lock
     initial_state: false
@@ -1101,7 +1102,7 @@
         to: 'locked'
     condition:
       - condition: state
-        entity_id: binary_sensor.front_door
+        entity_id: binary_sensor.front_door_opened
         state: 'off'
     action:
       service: homeassistant.turn_off
@@ -1128,10 +1129,13 @@
         entity_id: lock.front_door
         state: 'unavailable'
       - platform: state
-        entity_id: binary_sensor.front_door
+        entity_id: binary_sensor.hub
         state: 'unavailable'
       - platform: state
-        entity_id: binary_sensor.grage_entry_door
+        entity_id: binary_sensor.front_door_opened
+        state: 'unavailable'
+      - platform: state
+        entity_id: binary_sensor.garage_entry_door_opened
         state: 'unavailable'
       - platform: state
         entity_id: sensor.tank_uvb
@@ -1181,7 +1185,7 @@
     initial_state: false
     trigger:
       - platform: template
-        value_template: "{{ is_state_attr('binary_sensor.hub_hub', 'update needed', True) }}"
+        value_template: "{{ is_state_attr('binary_sensor.hub', 'update needed', True) }}"
     action:
       service: notify.sms_billy
       data_template:

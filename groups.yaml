@@ -8,17 +8,17 @@
     entities:
       - camera.cin
       - group.switches
-      - group.weather 
+      - group.weather
       - group.bedroom_lights
 
   bedroom:
     name: Bedroom
     view: yes
-    entities: 
+    entities:
       - group.bedroom_sensors
       - group.bedroom_lights
       - media_player.bedroom
-  
+
   Living_room:
     name: Living Room
     view: yes
@@ -43,7 +43,7 @@
       - group.kitchen_sensors
       - group.keurig
       - group.under_cabinet_lights
-  
+
   Garage:
     name: Garage
     view: yes
@@ -57,14 +57,14 @@
     view: yes
     entities:
       - group.turtle_tank
-  
+
   Outside:
     name: Outside
     view: yes
     entities:
       - group.outside_switches
       - group.outside_sensors
-  
+
   Office:
     name: Office
     view: yes
@@ -72,7 +72,6 @@
       - group.office_lights
       - group.office_sensors
       - media_player.office
-      - group.office_scripts
       - group.m3d
 
   Hallway:
@@ -82,20 +81,20 @@
       - group.hallway_lights
       - group.hallway_thermostat
       - group.hallway_sensors
-  
+
   ######################################
   ############Light Groups##############
   ######################################
 
   down_stairs_lights: light.living_room_lamp, light.shelf_lamp, switch.dining_room_fan, switch.kitchen_cabinet_lights, light.kitchen_sink_light, switch.entry_light
-  Bedroom_lights: light.melinas_night_stand, light.billys_night_stand, light.bedroom_lamp
+  Bedroom_lights: light.melinas_night_stand, light.billys_night_stand, light.bedroom_lamp, light.closet
   Living_room_lights: light.living_room_lamp, light.shelf_lamp, switch.dining_room_fan
-  Kitchen_lights: light.kitchen_sink_light, switch.kitchen_cabinet_lights
+  Kitchen_lights: light.kitchen_sink_light, switch.kitchen_cabinet_lights, light.kitchen_light
   Garage_lights: light.garage, switch.work_bench_lights
-  Office_lights: switch.melinas_office_lamp, switch.billys_office_lamp, light.office_lamp
+  Office_lights: switch.melinas_office_lamp, switch.billys_office_lamp, light.office_lamp, switch.power_strip
   Hallway_lights: switch.hallway_ceiling_fan_light, switch.hallway_ceiling_fan_fan, light.down_stairs_hallway
   entryway: switch.outside_lights, switch.entry_light, switch.outside_christmas_lights
-  every_light: switch.outside_lights, switch.hallway_ceiling_fan_light, switch.office_lamp, switch.kitchen_cabinet_lights, switch.bedroom_lamp, light.down_stairs_hallway, light.garage, light.living_room_lamp, light.billys_night_stand, light.office_lamp, light.laundry, switch.entry, switch.dining_room_fan, light.kitchen_sink_light, light.shelf_lamp, light.bedroom_lamp
+  every_light: switch.outside_lights, switch.hallway_ceiling_fan_light, switch.office_lamp, switch.bedroom_lamp, light.down_stairs_hallway, light.garage, light.living_room_lamp, light.billys_night_stand, light.laundry, switch.entry, switch.dining_room_fan, light.kitchen_sink_light, light.shelf_lamp, light.bedroom_lamp, light.kitchen_light
   wink_lights: light.laundry, light.billys_night_stand, light.office_lamp, light.living_room_lamp, light.garage, light.down_stairs_hallway, light.shelf_lamp, light.bedroom_lamp
 
   ######################################
@@ -103,16 +102,16 @@
   ######################################
 
   Hallway_sensors: switch.siren, binary_sensor.up_stairs_hallway_motion, binary_sensor.down_stairs_bathroom_door, sensor.up_stairs_hallway_temperature
-  Security: switch.siren, binary_sensor.living_room_motion, binary_sensor.front_door, binary_sensor.garage_entry_door, binary_sensor.up_stairs_hallway_motion, binary_sensor.kitchen_door, binary_sensor.down_stairs_bathroom_door, binary_sensor.office_door, binary_sensor.bedroom_door
+  Security: switch.siren, binary_sensor.living_room_motion, binary_sensor.front_door_opened, binary_sensor.garage_entry_door_opened, binary_sensor.up_stairs_hallway_motion, binary_sensor.kitchen_door_opened, binary_sensor.down_stairs_bathroom_door_opened, binary_sensor.office_door_opened, binary_sensor.bedroom_door_opened
   Weather: sun.sun, sensor.hallway_humidity_2, sensor.hallway_temperature, sensor.dark_sky_precip_probability, sensor.dark_sky_summary, sensor.dark_sky_daily_summary, sensor.pws_alerts
-  Office_sensors: binary_sensor.office_door, binary_sensor.ups_online_status, sensor.speedtest_download, sensor.speedtest_upload, sensor.speedtest_ping, sensor.ups_status, sensor.ups_time_left
-  Garage_sensors: binary_sensor.garage_entry_door, sensor.garage_freezer_temperature
-  Outside_sensors: binary_sensor.front_door
+  Office_sensors: binary_sensor.office_door_opened, binary_sensor.ups_online_status, sensor.speedtest_download, sensor.speedtest_upload, sensor.speedtest_ping, sensor.ups_status, sensor.ups_time_left
+  Garage_sensors: binary_sensor.garage_entry_door_opened, sensor.garage_freezer_temperature
+  Outside_sensors: binary_sensor.front_door_opened
   Turtle_tank: sensor.turtle_tank_water, sensor.turtle_tank_basking, sensor.turtle_tank_uvb
-  Kitchen_sensors: sensor.egg_minder, binary_sensor.kitchen_door, binary_sensor.dishwasher_liquid_detected
-  Bedroom_sensors: sensor.bedroom_temperature, binary_sensor.bedroom_door, binary_sensor.bedroom_motion, sensor.porkfolio_balance
+  Kitchen_sensors: sensor.egg_minder, binary_sensor.kitchen_door_opened, binary_sensor.dishwasher_liquid_detected
+  Bedroom_sensors: sensor.bedroom_temperature, binary_sensor.bedroom_door_opened, binary_sensor.bedroom_motion, sensor.porkfolio_balance
   Living_room_sensors: binary_sensor.living_room_motion, sensor.living_room_temperature, sensor.broadlink_sensor_temperature
-  external_doors: binary_sensor.front_door, binary_sensor.garage_entry_door, binary_sensor.kitchen_door
+  external_doors: binary_sensor.front_door_opened, binary_sensor.garage_entry_door_opened, binary_sensor.kitchen_door_opened
 
   ######################################
   ############Random Groups#############
@@ -123,10 +122,9 @@
   Living_room_switches: switch.blanket
   living_room_tv: switch.living_room_tv_power, switch.living_room_soundbar_power, switch.living_room_tv_play, switch.living_room_tv_pause
   switches: script.good_night_melina
-  laundry_room: light.laundry, binary_sensor.spotter_vibration, binary_sensor.laundry_door, input_boolean.dryer_switch
+  laundry_room: light.laundry, binary_sensor.spotter_vibration, binary_sensor.laundry_door_opened, input_boolean.dryer_switch
   garage_switches: cover.garage_door, switch.start_car
   keurig: switch.keurig, binary_sensor.needs_water, binary_sensor.is_on
-  office_scripts: script.power_strip_off, script.power_strip_on
   # christmas: switch.outside_christmas_lights, switch.christmas_tree
 
   M3D:
