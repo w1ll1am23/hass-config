@@ -8,10 +8,10 @@
         command_on: 'shMyAAYTEggGExIHBhQGFAYUEggGEwYTEgcSBwYUEggGFBIHBhMGEwYTBhMGEwYTEggSCAa8AAAAAAAA'
         command_off: 'sgYyAAYTEwcGExMHBhMHEwYTEwcGEwcTEwcTBwYUEgcGExMHBhQGEwYTBhMTBxMHBhMGEwa+AAAAAAAA'
       # 0320-2
-      #cabinet_lights:
-      #  friendly_name: 'kitchen cabinet lights'
-      #  command_on: 'shEyAAYTEgcGExIHBhMGEwYTEgcGEwYTBhMSBwYTEgcGExIHEgcSBwYTBhMGEwYTEgcSBwa7AAAAAAAA'
-      #  command_off: 'shUyAAYTEgcGExIHBhMGEwYTEgcGEwYTBhMSBwYTEgcGExIHEgcSBwYTBhMSBxIHBxMGEwa7AAAAAAAA'
+      printer_lights:
+        friendly_name: 'printer light'
+        command_on: 'shEyAAYTEgcGExIHBhMGEwYTEgcGEwYTBhMSBwYTEgcGExIHEgcSBwYTBhMGEwYTEgcSBwa7AAAAAAAA'
+        command_off: 'shUyAAYTEgcGExIHBhMGEwYTEgcGEwYTBhMSBwYTEgcGExIHEgcSBwYTBhMSBxIHBxMGEwa7AAAAAAAA'
       tv_power:
         friendly_name: 'living room TV power'
         command_on: 'JgBYAAABKJQSExITEzgSExITEhMSExITEjgTOBITEjgSOBI4EzgSOBITEhMSExI4ExITExITEhMSOBI4EjgTEhM4EjgSOBI4EgAFCAABJ0sSAAxGAAEoShMADQU='
@@ -28,11 +28,11 @@
         friendly_name: 'living room tv pause'
         command_on: 'JgBYAAABKpIUERQRFTUVEBURFBEUERQRFDYVNRUQFTYUNhQ2FTUVNhQ2FDYUNhUQFTUVNhQRFBEUERUQFRAVNRURFBEUNhQ2FQAFBAABKkgVAAxDAAEqSBUADQU='
         command_off: 'JgBYAAABKpIUERQRFTUVEBURFBEUERQRFDYVNRUQFTYUNhQ2FTUVNhQ2FDYUNhUQFTUVNhQRFBEUERUQFRAVNRURFBEUNhQ2FQAFBAABKkgVAAxDAAEqSBUADQU='
-      blanket:
-        friendly_name: 'blanket'
+      kettle:
+        friendly_name: 'kettle'
         command_on: 'shEyAAYTEgcGExIHBhMGEwYTEgcHEwcTBxMTBxMHEwcHExIHBhMGEwYTBhQGEwYTEgcSBwa8AAAAAAAA'
         command_off: 'shIyAAcTEwcHExMHBhMHEwYTEgcGEwYTBhMTBxMHEwcHExMHBxMGEwYTBxMSBxMHBhMGEwe7AAAAAAAA'
-      # 0320-3  
+      # 0320-3
       #outside_christmas_lights:
       #  friendly_name: 'outside christmas lights'
       #  command_on: 'sgYyAAcSEwcHEhMHBxIHEgcSEwYHEwcSBxITBgcTEwYTBhMHBxMHEgcSBxMHEgcSEwYTBge7AAAAAAAA'
@@ -40,7 +40,7 @@
       kitchen_cabinet_lights:
         friendly_name: 'kitchen cabinet lights'
         command_on: 'sgs0ACsPKw8rDysPKw8PKA4oKw8qDw8oKw8rDw8oDykrDysPDykPKA4pDygPKA8oDykrDw8AAZAAAAAA'
-        command_off: 'sgs0ACsPKw8rDysPKw8PKA4oKw8qDw8oKw8rDw8oDykrDysPDykPKA4pDygPKA8oDykrDw8AAZAAAAAA'        
+        command_off: 'sgs0ACsPKw8rDysPKw8PKA4oKw8qDw8oKw8rDw8oDykrDysPDykPKA4pDygPKA8oDykrDw8AAZAAAAAA'
       cabinet_lights_25:
         friendly_name: 'cabinet lights 25'
         command_on: 'sgg0ACoPKw8qDyoPKw8PKA8oKw8rDw8pKg8qDw8oDygrDyoPDikOKA8pDikqDw8oDykqDw8AAZAAAAAA'
@@ -48,11 +48,11 @@
       cabinet_lights_brightness:
         friendly_name: 'cabinet lights brightness'
         command_on: 'sgc0ACoPKw8qDyoQKg8PKQ4oKhArDw8pKw8qDw8pDikqDyoPDygPKA8oDikOKSoPDykqDw4AAZAAAAAA'
-        command_off: 'sgY0ACoQKhAqDyoQKg8OKQ4pKg8qDw4pKg8qDw4pDygqDyoPDikOKQ4pDikPKSoPKg8OKQ4AAZAAAAAA'                
+        command_off: 'sgY0ACoQKhAqDyoQKg8OKQ4pKg8qDw4pKg8qDw4pDygqDyoPDikOKQ4pDikPKSoPKg8OKQ4AAZAAAAAA'
       cabinet_lights_strobe:
         friendly_name: 'cabinet lights strobe'
         command_on: 'sgg0ACsPKw8rDysPKw8PKA8oKw8rDw8pKw8rDw8oDygrDysPDygPKA8oDygrDw8oKw8rDw8AAZAAAAAA'
-        command_off: 'sgY0ACsPKw8rDysPKw8PKA8oKw8rDw8oKw8rDw8oDygrDysPDygPKA8oDygPKCsPDygPKA8AAZAAAAAA'                        
+        command_off: 'sgY0ACsPKw8rDysPKw8PKA8oKw8rDw8oKw8rDw8oDygrDysPDygPKA8oDygPKCsPDygPKA8AAZAAAAAA'
 
   - platform: arest
     resource: http://192.168.5.34
@@ -78,6 +78,23 @@
         command_on: /usr/bin/curl 192.168.5.28:3000/startCar
         command_off: /usr/bin/curl 192.168.5.28:3000
         command_state: /usr/bin/curl 192.168.5.28:3000
+        value_template: '{{ false }}'
+
+  - platform: command_line
+    switches:
+      camera:
+        friendly_name: camera
+        command_on: /home/w1ll1am/.virtualenvs/hass_dev/bin/python3 /home/w1ll1am/.virtualenvs/hass_dev/config/vstarcontroller.py --host 192.168.5.51 --password 1218two008 --preset 0
+        command_off: /home/w1ll1am/.virtualenvs/hass_dev/bin/python3 /home/w1ll1am/.virtualenvs/hass_dev/config/vstarcontroller.py --host 192.168.5.51 --password 1218two008 --preset 1
+      snapshot:
+        friendly_name: snapshot
+        command_on: /home/w1ll1am/.virtualenvs/hass_dev/bin/python3 /home/w1ll1am/.virtualenvs/hass_dev/config/vstarcontroller.py --host 192.168.5.51 --password 1218two008 --snap --path /home/w1ll1am/.virtualenvs/hass_dev/camera_images/
+        command_off: /usr/bin/echo blah > /dev/null
+        value_template: '{{ false }}'
+      door:
+        friendly_name: camera to door
+        command_on: /home/w1ll1am/.virtualenvs/hass_dev/bin/python3 /home/w1ll1am/.virtualenvs/hass_dev/config/vstarcontroller.py --host 192.168.5.51 --password 1218two008 --preset 2
+        command_off: /home/w1ll1am/.virtualenvs/hass_dev/bin/python3 /home/w1ll1am/.virtualenvs/hass_dev/config/vstarcontroller.py --host 192.168.5.51 --password 1218two008 --preset 0
         value_template: '{{ false }}'
 
 ################################

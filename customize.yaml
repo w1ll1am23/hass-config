@@ -2,7 +2,20 @@
 ##########Binary Sensors##############
 ######################################
 
-    
+    binary_sensor.wink_relays_sensor_presence:
+      hidden: true
+    binary_sensor.wink_relays_top_button:
+      hidden: true
+    binary_sensor.wink_relay_buttom_button:
+      hidden: true
+    binary_sensor.remote:
+      hidden: true
+    binary_sensor.gang:
+      hidden: true    
+    binary_sensor.wink_relay:
+      hidden: true
+    binary_sensor.hub:
+      hidden: true
     binary_sensor.is_on:
       hidden: true
     binary_sensor.dishwasher_liquid_detected:
@@ -34,9 +47,11 @@
 #############Sensors##################
 ######################################
 
+    sensor.wink_relay_sensor_proximity:
+      hidden: true
     sensor.broadlink_sensor_temperature:
       friendly_name: living_room_temperature_2
-    sensor.arest_sensor_door:
+    sensor.arest_sensor_garage:
       hidden: true
     sensor.porkfolio_balance:
       icon: mdi:pig

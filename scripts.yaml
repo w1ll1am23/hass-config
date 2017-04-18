@@ -154,6 +154,9 @@
         - service: homeassistant.turn_off
           data:
             entity_id: group.every_light
+        - service: homeassistant.turn_off
+          data:
+            entity_id: switch.power_strip
         - delay:
             minutes: 2
         - event: check_for_locked_lock
@@ -328,3 +331,13 @@
         entity_id: automation.office_lights_on_remote
       - service: homeassistant.turn_on
         entity_id: automation.office_lights_off_remote
+      - service: homeassistant.turn_on
+        entity_id: automation.ruby_is_home
+      - service: homeassistant.turn_on
+        entity_id: automation.ruby_is_away
+      - service: homeassistant.turn_on
+        entity_id: automation.hallway_motion_at_night
+      - service: homeassistant.turn_on
+        entity_id: automation.all_off_downstairs
+      - service: homeassistant.turn_on
+        entity_id: automation.closet_light_off_after_ten_minutes

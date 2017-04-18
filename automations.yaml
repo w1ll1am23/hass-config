@@ -3,10 +3,10 @@
 ################################################
 
   - alias: garage light off after one hour
-    initial_state: false
+    initial_state: False
     trigger:
       - platform: state
-        entity_id: binary_sensor.garage_door_opened
+        entity_id: group.garage_lights
         to: 'on'
         for:
           minutes: 30
@@ -14,8 +14,20 @@
       service: homeassistant.turn_off
       entity_id: group.garage_lights
 
+  - alias: closet_light_off_after_ten_minutes
+    initial_state: False
+    trigger:
+      - platform: state
+        entity_id: light.closet
+        to: 'on'
+        for:
+          minutes: 10
+    action:
+      service: homeassistant.turn_off
+      entity_id: light.closet
+
   - alias: Turn outside lights off
-    initial_state: false
+    initial_state: False
     trigger:
       - platform: sun
         event: sunrise
@@ -30,7 +42,7 @@
       entity_id: switch.outside_lights
 
   - alias: Turn on living room lamp at dusk
-    initial_state: false
+    initial_state: False
     trigger:
       - platform: template
         value_template: '{{ states.sun.sun.attributes.elevation < 3.0 }}'
@@ -41,14 +53,14 @@
             entity_id: device_tracker.w1ll1am_a0001
             state: home
           - condition: state
-            entity_id: device_tracker.melina
+            entity_id: device_tracker.melinas_iphone
             state: home
     action:
       service: homeassistant.turn_on
       entity_id: light.shelf_lamp
 
   # - alias: Turn on christmas lights at dusk
-  #   initial_state: false
+
   #   trigger:
   #     - platform: template
   #       value_template: '{{ states.sun.sun.attributes.elevation < 3.0 }}'
@@ -61,26 +73,61 @@
 ##############Sensor Automations######################
 ################################################
 
+  - alias: hallway_motion_at_night
+    initial_state: False
+    trigger:
+      - platform: state
+        entity_id: binary_sensor.up_stairs_hallway_motion
+        state: 'on'
+    condition:
+      condition: and
+      conditions:
+        - condition: time
+          after: '20:00:00'
+        - condition: time
+          before: '22:30:00'
+        - condition: state
+          entity_id: group.bedroom_lights
+          state: 'off'
+    action:
+      service: homeassistant.turn_on
+      entity_id: light.bedroom_lamp
+
+  - alias: all_off_downstairs
+    initial_state: False
+    trigger:
+      platform: state
+      entity_id: binary_sensor.wink_relays_bottom_button
+      state: 'on'
+    action:
+      - service: homeassistant.turn_off
+        entity_id: group.down_stairs_lights
+
+
   - alias: office_lights_on_remote
-    initial_state: false
+    initial_state: False
     trigger:
       platform: template
       value_template: "{{ is_state_attr('binary_sensor.remote', 'button_on_pressed', True)}}"
     action:
-      service: homeassistant.turn_on
-      entity_id: light.office_lamp
+      - service: homeassistant.turn_on
+        entity_id: light.office_lamp
+      - service: homeassistant.turn_on
+        entity_id: switch.power_strip
 
   - alias: office_lights_off_remote
-    initial_state: false
+    initial_state: False
     trigger:
       platform: template
       value_template: "{{ is_state_attr('binary_sensor.remote', 'button_off_pressed', True)}}"
     action:
-      service: homeassistant.turn_off
-      entity_id: light.office_lamp
+      - service: homeassistant.turn_off
+        entity_id: light.office_lamp
+      - service: homeassistant.turn_off
+        entity_id: switch.power_strip
 
   - alias: Dryer started
-    initial_state: false
+    initial_state: False
     trigger:
       platform: state
       entity_id: binary_sensor.spotter_vibration
@@ -92,7 +139,7 @@
       entity_id: input_boolean.dryer_switch
 
   - alias: dryer_done
-    initial_state: false
+    initial_state: False
     trigger:
       - platform: state
         entity_id: binary_sensor.spotter_vibration
@@ -112,7 +159,7 @@
             Dryer is done!
 
   - alias: check dishwasher
-    initial_state: false
+    initial_state: False
     trigger:
       - platform: state
         entity_id: binary_sensor.dishwasher_liquid_detected
@@ -128,7 +175,7 @@
             The dishwasher is leaking!!!
 
   - alias: power is out
-    initial_state: false
+    initial_state: False
     trigger:
       - platform: state
         entity_id: binary_sensor.ups_online_status
@@ -140,7 +187,7 @@
             Power is out, running on battery.
 
   - alias: power back on
-    initial_state: false
+    initial_state: False
     trigger:
       - platform: state
         entity_id: binary_sensor.ups_online_status
@@ -153,7 +200,7 @@
             Power is back on!
 
   - alias: check freezer
-    initial_state: false
+    initial_state: False
     trigger:
       - platform: state
         entity_id: binary_sensor.freezer_temp_threshold
@@ -171,7 +218,7 @@
             Check the freezer! {{ states('sensor.freezer_temperature') }}
 
   - alias: laundry light on when door opens
-    initial_state: false
+    initial_state: False
     trigger:
       - platform: state
         entity_id: binary_sensor.laundry_door_opened
@@ -181,7 +228,7 @@
       entity_id: light.laundry
 
   - alias: outside lights on when door opens
-    initial_state: false
+    initial_state: False
     trigger:
       - platform: state
         entity_id: binary_sensor.front_door_opened
@@ -194,7 +241,7 @@
       entity_id: switch.outside_lights
 
   - alias: laundry light off when door closes
-    initial_state: false
+    initial_state: False
     trigger:
       - platform: state
         entity_id: binary_sensor.laundry_door_opened
@@ -204,7 +251,7 @@
       entity_id: light.laundry
 
   - alias: Printing done
-    initial_state: false
+    initial_state: False
     trigger:
       - platform: state
         entity_id: binary_sensor.octoprint_printing
@@ -216,7 +263,7 @@
         message: 'Printing done!'
 
   - alias: office lights on when door opens
-    initial_state: false
+    initial_state: False
     trigger:
       - platform: state
         entity_id: binary_sensor.office_door_opened
@@ -228,7 +275,7 @@
         entity_id: switch.power_strip
 
   - alias: bedroom lights on when door opens
-    initial_state: false
+    initial_state: False
     trigger:
       - platform: state
         entity_id: binary_sensor.bedroom_door_opened
@@ -238,7 +285,7 @@
       entity_id: group.bedroom_lights
 
   #- alias: garage light off
-  #  initial_state: false
+
   #  trigger:
   #    - platform: state
   #      entity_id: binary_sensor.garage_entry_door
@@ -254,7 +301,7 @@
   #    entity_id: light.garage
 
   - alias: Front door
-    initial_state: false
+    initial_state: False
     trigger:
       - platform: state
         entity_id: binary_sensor.front_door_opened
@@ -264,7 +311,7 @@
       entity_id: script.lock_the_door
 
   - alias: garage light on if door open
-    initial_state: false
+    initial_state: False
     trigger:
       - platform: state
         entity_id: binary_sensor.garage_entry_door_opened
@@ -277,7 +324,7 @@
       entity_id: group.garage_lights
 
   - alias: Downstairs hall light
-    initial_state: false
+    initial_state: False
     trigger:
       - platform: state
         entity_id: light.down_stairs_hallway
@@ -287,7 +334,7 @@
       entity_id: script.hall_light
 
   - alias: up in morning
-    initial_state: false
+    initial_state: False
     trigger:
       - platform: state
         entity_id: binary_sensor.bedroom_motion
@@ -296,7 +343,7 @@
       condition: and
       conditions:
         - condition: state
-          entity_id: light.melinas_night_stand
+          entity_id: light.melinas_nightstand
           state: 'off'
         - condition: time
           before: '07:00:00'
@@ -305,7 +352,7 @@
       entity_id: script.melinas_light
 
   - alias: up at night
-    initial_state: false
+    initial_state: False
     trigger:
       - platform: state
         entity_id: binary_sensor.bedroom_motion
@@ -323,7 +370,7 @@
       entity_id: script.melinas_light
 
   - alias: water_too_cold
-    initial_state: false
+    initial_state: False
     trigger:
       - platform: numeric_state
         entity_id: sensor.tank_water
@@ -339,7 +386,7 @@
             Tank water too cold! {{ states('sensor.tank_water') }}
 
   - alias: check_bulbs
-    initial_state: false
+    initial_state: False
     trigger:
       - platform: state
         entity_id: binary_sensor.turtle_tank_basking_threshold
@@ -353,7 +400,7 @@
             Check basking bulbs! {{ states('sensor.tank_basking') }}
 
   - alias: bulb_needs_changed
-    initial_state: false
+    initial_state: False
     trigger:
       - platform: numeric_state
         entity_id: sensor.tank_uvb
@@ -365,7 +412,7 @@
           UVB output too low! Replace bulb {{ states('sensor.tank_uvb') }}
 
   - alias: billy unlocked the door
-    initial_state: false
+    initial_state: False
     trigger:
       - platform: state
         entity_id: binary_sensor.billy
@@ -385,7 +432,7 @@
           message: 'Billy unlocked the door'
 
   - alias: melina unlocked the door
-    initial_state: false
+    initial_state: False
     trigger:
       - platform: state
         entity_id: binary_sensor.melina
@@ -402,7 +449,7 @@
           message: 'Melina unlocked the door'
 
   - alias: gdottie unlocked the door
-    initial_state: false
+    initial_state: False
     trigger:
       - platform: state
         entity_id: binary_sensor.gdottie
@@ -416,7 +463,7 @@
           message: 'Grandma unlocked the door'
 
   - alias: parents unlocked the door
-    initial_state: false
+    initial_state: False
     trigger:
       - platform: state
         entity_id: binary_sensor.parents
@@ -431,7 +478,7 @@
 ################################################
 
   - alias: Good night
-    initial_state: false
+    initial_state: False
     trigger:
       - platform: event
         event_type: good_night
@@ -440,7 +487,7 @@
         entity_id: script.good_night
 
   - alias: Check doors are closed
-    initial_state: false
+    initial_state: False
     trigger:
       - platform: event
         event_type: good_night
@@ -459,7 +506,7 @@
           message: 'There is a door open.'
 
   - alias: Good morning
-    initial_state: false
+    initial_state: False
     trigger:
       - platform: event
         event_type: good_morning
@@ -472,7 +519,7 @@
 ################################################
 
   - alias: kitchen_sink_off
-    initial_state: false
+    initial_state: False
     trigger:
       - platform: event
         event_type: toggle_kitchen_sink_light
@@ -485,7 +532,7 @@
       entity_id: light.kitchen_sink_light
 
   - alias: kitchen_sink_on
-    initial_state: false
+    initial_state: False
     trigger:
       - platform: event
         event_type: toggle_kitchen_sink_light
@@ -498,7 +545,7 @@
       entity_id: light.kitchen_sink_light
 
   - alias: hallway_off
-    initial_state: false
+    initial_state: False
     trigger:
       - platform: event
         event_type: toggle_hallway_light
@@ -513,7 +560,7 @@
       entity_id: switch.hallway_ceiling_fan_light
 
   - alias: outside_off
-    initial_state: false
+    initial_state: False
     trigger:
       - platform: event
         event_type: toggle_outside_lights
@@ -528,7 +575,7 @@
       entity_id: group.entryway
 
   - alias: outside_on
-    initial_state: false
+    initial_state: False
     trigger:
       - platform: event
         event_type: toggle_outside_lights
@@ -543,7 +590,7 @@
       entity_id: group.entryway
 
   - alias: office_off
-    initial_state: false
+    initial_state: False
     trigger:
       - platform: event
         event_type: toggle_office_light
@@ -560,7 +607,7 @@
         entity_id: switch.power_strip
 
   - alias: office_on
-    initial_state: false
+    initial_state: False
     trigger:
       - platform: event
         event_type: toggle_office_light
@@ -577,7 +624,7 @@
         entity_id: switch.power_strip
 
   - alias: bedroom_off
-    initial_state: false
+    initial_state: False
     trigger:
       - platform: event
         event_type: toggle_bedroom_light
@@ -592,7 +639,7 @@
       entity_id: group.bedroom_lights
 
   - alias: bedroom_on_day
-    initial_state: false
+    initial_state: False
     trigger:
       - platform: event
         event_type: toggle_bedroom_light
@@ -611,7 +658,7 @@
       entity_id: script.bedroom_lights_on_day
 
   - alias: bedroom_on_night
-    initial_state: false
+    initial_state: False
     trigger:
       - platform: event
         event_type: toggle_bedroom_light
@@ -630,7 +677,7 @@
       entity_id: script.bedroom_lights_on_night
 
   - alias: kitchen_off
-    initial_state: false
+    initial_state: False
     trigger:
       - platform: event
         event_type: toggle_kitchen_cabinet_lights
@@ -645,7 +692,7 @@
       entity_id: switch.kitchen_cabinet_lights
 
   - alias: kitchen_on
-    initial_state: false
+    initial_state: False
     trigger:
       - platform: event
         event_type: toggle_kitchen_cabinet_lights
@@ -660,7 +707,7 @@
       entity_id: switch.kitchen_cabinet_lights
 
   - alias: downstairs hallway off
-    initial_state: false
+    initial_state: False
     trigger:
       - platform: event
         event_type: toggle_hallway_light
@@ -675,7 +722,7 @@
       entity_id: light.down_stairs_hallway
 
   - alias: hallway_on
-    initial_state: false
+    initial_state: False
     trigger:
       - platform: event
         event_type: toggle_hallway_light
@@ -695,7 +742,7 @@
       entity_id: switch.hallway_ceiling_fan_light
 
   - alias: living_room_off
-    initial_state: false
+    initial_state: False
     trigger:
       - platform: event
         event_type: toggle_living_room_light
@@ -710,7 +757,7 @@
       entity_id: light.living_room_lamp
 
   - alias: living_room_on
-    initial_state: false
+    initial_state: False
     trigger:
       - platform: event
         event_type: toggle_living_room_light
@@ -725,52 +772,54 @@
       entity_id: light.living_room_lamp
 
   - alias: melinas_night_stand_on
-    initial_state: false
+    initial_state: False
     trigger:
       - platform: event
-        event_type: toggle_melinas_night_stand
+        event_type: toggle_melinas_nightstand
     condition:
       - condition: state
-        entity_id: light.melinas_night_stand
+        entity_id: light.melinas_nightstand
         state: 'off'
     action:
       service: light.turn_on
-      entity_id: light.melinas_night_stand
+      entity_id: light.melinas_nightstand
 
   - alias: melinas_night_stand_off
-    initial_state: false
+    initial_state: False
     trigger:
       - platform: event
-        event_type: toggle_melinas_night_stand
+        event_type: toggle_melinas_nightstand
     condition:
       - condition: state
-        entity_id: light.melinas_night_stand
+        entity_id: light.melinas_nightstand
         state: 'on'
     action:
       service: light.turn_off
-      entity_id: light.melinas_night_stand
+      entity_id: light.melinas_nightstand
 
 ################################################
 #########Device Tracker Automations#############
 ################################################
 
   - alias: left_home
-    initial_state: false
+    initial_state: False
     trigger:
       - platform: state
         entity_id: device_tracker.w1ll1am_a0001
         from: 'home'
         to: 'not_home'
       - platform: state
-        entity_id: device_tracker.melina
+        entity_id: device_tracker.melinas_iphone
         from: 'home'
         to: 'not_home'
     action:
-      service: homeassistant.turn_on
-      entity_id: script.lock_the_door
+      - service: homeassistant.turn_on
+        entity_id: script.lock_the_door
+      - service: homeassistant.turn_off
+        entity_id: light.billys_nightstand
 
   - alias: billy_at_ktown
-    initial_state: false
+    initial_state: False
     trigger:
       - platform: state
         entity_id: device_tracker.w1ll1am_a0001
@@ -789,10 +838,10 @@
           {%endif %}
 
   - alias: melina_at_ktown
-    initial_state: false
+    initial_state: False
     trigger:
       - platform: state
-        entity_id: device_tracker.melina
+        entity_id: device_tracker.melinas_iphone
         from: 'not_home'
         to: 'Ktown'
     condition:
@@ -808,10 +857,10 @@
           {%endif %}
 
   - alias: melina_is_home
-    initial_state: false
+    initial_state: False
     trigger:
       - platform: state
-        entity_id: device_tracker.melina
+        entity_id: device_tracker.melinas_iphone
         from: 'not_home'
         to: 'home'
     condition:
@@ -823,8 +872,40 @@
         data:
           message: 'Melina is home'
 
+  - alias: ruby_is_home
+    initial_state: False
+    trigger:
+      - platform: state
+        entity_id: device_tracker.ruby
+        from: 'not_home'
+        to: 'home'
+    condition:
+      condition: state
+      entity_id: script.hass_start
+      state: 'off'
+    action:
+      - service: notify.sms_billy
+        data:
+          message: 'Ruby is home'
+
+  - alias: ruby_is_away
+    initial_state: False
+    trigger:
+      - platform: state
+        entity_id: device_tracker.ruby
+        from: 'home'
+        to: 'not_home'
+    condition:
+      condition: state
+      entity_id: script.hass_start
+      state: 'off'
+    action:
+      - service: notify.sms_billy
+        data:
+          message: 'Ruby is away'
+
   - alias: billy_is_home
-    initial_state: false
+    initial_state: False
     trigger:
       - platform: state
         entity_id: device_tracker.w1ll1am_a0001
@@ -843,10 +924,10 @@
           message: 'Billy is home'
 
   - alias: Turn outside lights on
-    initial_state: false
+    initial_state: False
     trigger:
       - platform: state
-        entity_id: device_tracker.melina
+        entity_id: device_tracker.melinas_iphone
         from: 'not_home'
         to: 'home'
       - platform: state
@@ -871,10 +952,10 @@
         entity_id: group.entryway
 
   - alias: Turn entry and living room on
-    initial_state: false
+    initial_state: False
     trigger:
       - platform: state
-        entity_id: device_tracker.melina
+        entity_id: device_tracker.melinas_iphone
         from: 'not_home'
         to: 'home'
       - platform: state
@@ -899,7 +980,7 @@
         entity_id: script.home_at_dusk
 
   - alias: No one is home
-    initial_state: false
+    initial_state: False
     trigger:
       - platform: state
         entity_id: group.all_device
@@ -914,7 +995,7 @@
             operation_mode: 'eco'
 
   - alias: someone is home
-    initial_state: false
+    initial_state: False
     trigger:
       - platform: state
         entity_id: group.all_device
@@ -931,7 +1012,7 @@
 ################################################
 
   - alias: 'Trigger alarm while armed home'
-    initial_state: false
+    initial_state: False
     trigger:
       - platform: state
         entity_id: binary_sensor.front_door_opened
@@ -954,7 +1035,7 @@
         entity_id: script.alarm_home
 
   - alias: 'Trigger alarm while armed away'
-    initial_state: false
+    initial_state: False
     trigger:
       - platform: state
         entity_id: binary_sensor.front_door_opened
@@ -993,7 +1074,7 @@
         entity_id: script.alarm_away
 
   - alias: Alarm_arm
-    initial_state: false
+    initial_state: False
     trigger:
       - platform: event
         event_type: arm_away
@@ -1002,7 +1083,7 @@
         entity_id: alarm_control_panel.ha_alarm
 
   - alias: Alarm_notification
-    initial_state: false
+    initial_state: False
     trigger:
       - platform: event
         event_type: alarm_triggered
@@ -1019,7 +1100,7 @@
           message: 'Intruder detected!'
 
   - alias: code unlock disable alarm
-    initial_state: false
+    initial_state: False
     trigger:
       - platform: state
         entity_id: binary_sensor.billy
@@ -1042,7 +1123,7 @@
 ################################################
 
   - alias: check for locked lock
-    initial_state: false
+    initial_state: False
     trigger:
       - platform: event
         event_type: check_for_locked_lock
@@ -1064,7 +1145,7 @@
           message: 'Front door failed to lock!'
 
   - alias: Battery low alert
-    initial_state: false
+    initial_state: False
     trigger:
       - platform: numeric_state
         entity_id: sensor.lock_battery
@@ -1094,7 +1175,7 @@
 
 
   - alias: lock_the_door_off
-    initial_state: false
+    initial_state: False
     trigger:
       - platform: state
         entity_id: lock.front_door
@@ -1120,7 +1201,7 @@
           message: "Home Assistant started"
 
   - alias: Offline
-    initial_state: false
+    initial_state: False
     trigger:
       - platform: state
         entity_id: binary_sensor.water_liquid_detected
@@ -1166,7 +1247,7 @@
           {{ trigger.entity_id.split('.')[1] }} is offline.
 
   - alias: Going to bed
-    initial_state: false
+    initial_state: False
     trigger:
       - platform: state
         entity_id: switch.kitchen_cabinet_lights
@@ -1182,7 +1263,7 @@
       entity_id: switch.hallway_ceiling_fan_light
 
   - alias: hub update
-    initial_state: false
+    initial_state: False
     trigger:
       - platform: template
         value_template: "{{ is_state_attr('binary_sensor.hub', 'update needed', True) }}"
@@ -1193,7 +1274,7 @@
           There is a Wink hub update available!
 
   - alias: wink feed
-    initial_state: false
+    initial_state: False
     trigger:
       - platform: event
         event_type: feedreader

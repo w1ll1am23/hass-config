@@ -86,16 +86,16 @@
   ############Light Groups##############
   ######################################
 
-  down_stairs_lights: light.living_room_lamp, light.shelf_lamp, switch.dining_room_fan, switch.kitchen_cabinet_lights, light.kitchen_sink_light, switch.entry_light
-  Bedroom_lights: light.melinas_night_stand, light.billys_night_stand, light.bedroom_lamp, light.closet
+  down_stairs_lights: light.living_room_lamp, light.shelf_lamp, switch.dining_room_fan, switch.kitchen_cabinet_lights, light.kitchen_sink_light, switch.entry_light, light.kitchen_light
+  Bedroom_lights: light.melinas_nightstand, light.billys_nightstand, light.bedroom_lamp, light.closet
   Living_room_lights: light.living_room_lamp, light.shelf_lamp, switch.dining_room_fan
   Kitchen_lights: light.kitchen_sink_light, switch.kitchen_cabinet_lights, light.kitchen_light
   Garage_lights: light.garage, switch.work_bench_lights
   Office_lights: switch.melinas_office_lamp, switch.billys_office_lamp, light.office_lamp, switch.power_strip
   Hallway_lights: switch.hallway_ceiling_fan_light, switch.hallway_ceiling_fan_fan, light.down_stairs_hallway
   entryway: switch.outside_lights, switch.entry_light, switch.outside_christmas_lights
-  every_light: switch.outside_lights, switch.hallway_ceiling_fan_light, switch.office_lamp, switch.bedroom_lamp, light.down_stairs_hallway, light.garage, light.living_room_lamp, light.billys_night_stand, light.laundry, switch.entry, switch.dining_room_fan, light.kitchen_sink_light, light.shelf_lamp, light.bedroom_lamp, light.kitchen_light
-  wink_lights: light.laundry, light.billys_night_stand, light.office_lamp, light.living_room_lamp, light.garage, light.down_stairs_hallway, light.shelf_lamp, light.bedroom_lamp
+  every_light: switch.outside_lights, switch.hallway_ceiling_fan_light, switch.office_lamp, switch.bedroom_lamp, light.down_stairs_hallway, light.garage, light.living_room_lamp, light.billys_nightstand, light.laundry, switch.entry_light, switch.dining_room_fan, light.kitchen_sink_light, light.shelf_lamp, light.bedroom_lamp, light.kitchen_light, switch.power_strip, light.office_lamp
+  wink_lights: light.laundry, light.billys_nightstand, light.office_lamp, light.living_room_lamp, light.garage, light.down_stairs_hallway, light.shelf_lamp, light.bedroom_lamp
 
   ######################################
   ############Sensor Groups#############
@@ -110,7 +110,7 @@
   Turtle_tank: sensor.turtle_tank_water, sensor.turtle_tank_basking, sensor.turtle_tank_uvb
   Kitchen_sensors: sensor.egg_minder, binary_sensor.kitchen_door_opened, binary_sensor.dishwasher_liquid_detected
   Bedroom_sensors: sensor.bedroom_temperature, binary_sensor.bedroom_door_opened, binary_sensor.bedroom_motion, sensor.porkfolio_balance
-  Living_room_sensors: binary_sensor.living_room_motion, sensor.living_room_temperature, sensor.broadlink_sensor_temperature
+  Living_room_sensors: binary_sensor.living_room_motion, sensor.living_room_temperature, sensor.broadlink_sensor_temperature, sensor.wink_relay_sensor_humidity, sensor.wink_relay_sensor_temperature
   external_doors: binary_sensor.front_door_opened, binary_sensor.garage_entry_door_opened, binary_sensor.kitchen_door_opened
 
   ######################################
@@ -124,7 +124,7 @@
   switches: script.good_night_melina
   laundry_room: light.laundry, binary_sensor.spotter_vibration, binary_sensor.laundry_door_opened, input_boolean.dryer_switch
   garage_switches: cover.garage_door, switch.start_car
-  keurig: switch.keurig, binary_sensor.needs_water, binary_sensor.is_on
+  keurig: switch.keurig, binary_sensor.needs_water, binary_sensor.is_on, switch.kettle
   # christmas: switch.outside_christmas_lights, switch.christmas_tree
 
   M3D:

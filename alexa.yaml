@@ -50,7 +50,7 @@
           {%- endfor -%}
 
     DryerStatusIntent:
-      speech: 
+      speech:
         type: plaintext
         text: >
           {%- if states.binary_sensor.spotter_vibration.state == 'on' -%}
@@ -93,7 +93,7 @@
       action:
         service: light.turn_on
         data_template:
-          entity_id: light.{{ Light | replace(" ", "_") }}
+          entity_id: light.{{ Light.lower().replace(" ", "_").replace("molina", "melina").replace("'", "") }}
           color_name: "{{ Color }}"
       speech:
         type: plaintext
@@ -155,7 +155,7 @@
     #  speech:
     #    type: plaintext
     #    text: !include alexa_confirm.yaml
-        
+
     GoodNightIntent:
       action:
         service: homeassistant.turn_on
@@ -173,7 +173,7 @@
       speech:
         type: plaintext
         text: Sure thing Melina
-      
+
     GroupOnIntent:
       action:
         service: homeassistant.turn_on
@@ -214,7 +214,7 @@
       action:
         service: homeassistant.turn_on
         data_template:
-          entity_id: light.{{ Light.lower().replace(" ", "_") }}
+          entity_id: light.{{ Light.lower().replace(" ", "_").replace("molina", "melina").replace("'", "") }}
       speech:
         type: plaintext
         text: !include alexa_confirm.yaml
@@ -223,7 +223,17 @@
       action:
         service: homeassistant.turn_off
         data_template:
-          entity_id: light.{{ Light.lower().replace(" ", "_") }}
+          entity_id: light.{{ Light.lower().replace(" ", "_").replace("molina", "melina").replace("'", "") }}
       speech:
         type: plaintext
         text: !include alexa_confirm.yaml
+
+    CameraOffIntent:
+      action:
+        service: homeassistant.turn_off
+        data_template:
+          entity_id: switch.camera
+      speech:
+        type: plaintext
+        text: >
+          Moving camera to off position

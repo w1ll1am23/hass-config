@@ -149,3 +149,13 @@
       - download
       - upload
 
+  #######################################
+  #############Plex Sensors##############
+  #######################################
+
+  - platform: plex
+    host: 127.0.0.1
+    port: 32400
+    username: w1ll1am23
+    password: BGBbtNMs!sl*34dhp7of
+    

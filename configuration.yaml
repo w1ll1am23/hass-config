@@ -1,17 +1,17 @@
 homeassistant:
   name: Home
   latitude: !secret latitude
-  longitude: !secret longitude 
+  longitude: !secret longitude
   elevation: 247
   unit_system: imperial
   time_zone: America/Louisville
   customize: !include customize.yaml
-  
+
 http:
   api_password: !secret http_password
 
 logger:
-#  default: info
+  default: info
 
 updater:
 
@@ -23,14 +23,13 @@ history:
 
 recorder:
     purge_days: 5
-    db_url: mysql://hass@localhost/homeassistant
+#    db_url: mysql://hass@localhost/homeassistant
 
 sun:
 
-apcupsd:
+ios:
 
-fan:
-  - platform: demo
+apcupsd:
 
 wemo:
   static:
@@ -49,15 +48,21 @@ octoprint:
   api_key: !secret octoprint_api_key
 
 wink:
+  #access_token: 1EdsDkQn-2SYvbXfooDlsUh8t3QCY6f9
   email: !secret wink_user
-  password: !secret wink_password
-  client_id: !secret wink_client_id 
-  client_secret: !secret wink_client_secret 
+  password:  !secret wink_password
+  client_id: !secret wink_client_id
+  client_secret: !secret wink_client_secret
 
 camera:
-  platform: generic
-  still_image_url: https://radblast.wunderground.com/cgi-bin/radar/WUNIDS_map?station=ILN&brand=wui&num=10&delay=15&type=N0R&frame=0&scale=1.000&noclutter=0&showstorms=0&mapx=400&mapy=240&centerx=400&centery=240&transx=0&transy=0&showlabels=1&severe=0&rainsnow=0&lightning=0&smooth=1&rand=24474020&lat=0&lon=0&label=you
-  name: CIN
+  - platform: generic
+    still_image_url: https://radblast.wunderground.com/cgi-bin/radar/WUNIDS_map?station=ILN&brand=wui&num=10&delay=15&type=N0R&frame=0&scale=1.000&noclutter=0&showstorms=0&mapx=400&mapy=240&centerx=400&centery=240&transx=0&transy=0&showlabels=1&severe=0&rainsnow=0&lightning=0&smooth=1&rand=24474020&lat=0&lon=0&label=you
+    name: CIN
+  - platform: mjpeg
+    mjpeg_url: http://192.168.5.51:81/videostream.cgi?user=admin&pwd=1218two008
+  #- platform: ffmpeg
+   # input: http://192.168.5.4:8080?action=stream
+    # extra_arguments: -vf "transpose=2,transpose=2"
 
 device_tracker:
   - platform: trackr
@@ -71,12 +76,15 @@ device_tracker:
 #    account_name: melina
 
 alarm_control_panel:
-  platform: manual
-  name: "HA Alarm"
-  # code: !secret alarm_code
-  pending_time: 60
-  trigger_time: 120
-      
+  #- platform: simplisafe
+  #  username: drsfosterky@gmail.com
+  #  password: 0HxZ3a2X3jwZ
+  - platform: manual
+    name: "HA Alarm"
+    # code: !secret alarm_code
+    pending_time: 60
+    trigger_time: 120
+
 notify:
   - platform: smtp
     name: sms_billy
@@ -96,14 +104,14 @@ notify:
     username: !secret sender_email
     password: !secret sender_email_password
     recipient: !secret melinas_number
-    
+
 zone: !include zones.yaml
 switch: !include switches.yaml
 sensor: !include sensors.yaml
 binary_sensor: !include binary_sensors.yaml
 automation: !include automations.yaml
 script: !include scripts.yaml
-group: !include groups.yaml   
+group: !include groups.yaml
 media_player: !include media_player.yaml
 alexa: !include alexa.yaml
 
@@ -126,7 +134,7 @@ cover:
         command_stop: /usr/bin/curl 192.168.5.28:3000/toggleDoor
         command_state: /usr/bin/curl 192.168.5.28:3000
         value_template: >
-          {%- if is_state("sensor.arest_sensor_door", "Closed") -%}
+          {%- if is_state("sensor.arest_sensor_garage", "Closed") -%}
           0
           {%- else -%}
           100
