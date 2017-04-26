@@ -389,7 +389,7 @@
     initial_state: False
     trigger:
       - platform: state
-        entity_id: binary_sensor.turtle_tank_basking_threshold
+        entity_id: binary_sensor.tank_basking_threshold
         state: 'on'
         for:
           minutes: 45
@@ -397,7 +397,7 @@
       - service: notify.sms_billy
         data:
           message: >
-            Check basking bulbs! {{ states('sensor.tank_basking') }}
+            Check basking bulbs! {{ states('sensor.turtle_tank_basking') }}
 
   - alias: bulb_needs_changed
     initial_state: False
@@ -1282,3 +1282,21 @@
       service: notify.sms_billy
       data_template:
         message: "{{ trigger.event.data.title }}"
+
+  - alias: light test
+    trigger:
+      platform: time
+      minutes: 30
+      seconds: 00
+    action:
+      - service: light.turn_on
+        data:
+          entity_id: light.laundry
+      - delay: 00:00:20
+      - service: notify.sms_billy
+        data:
+          message: "Light is {{ states.light.laundry.state }}"
+      - delay: 00:00:10
+      - service: light.turn_off
+        data:
+          entity_id: light.laundry

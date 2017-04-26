@@ -49,7 +49,7 @@
   - platform: template
     sensors:
       average_temp:
-        value_template: '{{ ((states.sensor.living_room_temperature.state | float +  states.sensor.living_room_temperature.state | float +  states.sensor.up_stairs_hallway_temperature.state | float + states.climate.thermostat.attributes.current_temperature | float + states.sensor.spotter_temperature.state | float + states.sensor.broadlink_sensor_temperature.state | float) / 6) | round(2) }}' 
+        value_template: '{{ ((states.sensor.living_room_temperature.state | float +  states.sensor.living_room_temperature.state | float +  states.sensor.up_stairs_hallway_temperature.state | float + states.climate.thermostat.attributes.current_temperature | float + states.sensor.spotter_temperature.state | float + states.sensor.broadlink_sensor_temperature.state | float) / 6) | round(2) }}'
         unit_of_measurement: '°F'
       kitchen_door_battery:
         value_template: >
@@ -115,7 +115,7 @@
     api_key: !secret wunderground_key
     monitored_conditions:
       - alerts
-    
+
   #######################################
   #############UPS Sensors###############
   #######################################
@@ -156,6 +156,6 @@
   - platform: plex
     host: 127.0.0.1
     port: 32400
-    username: w1ll1am23
-    password: BGBbtNMs!sl*34dhp7of
-    
+    username: !secret plex_user
+    password: !secret plex_pass
+

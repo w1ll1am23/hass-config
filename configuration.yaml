@@ -48,7 +48,6 @@ octoprint:
   api_key: !secret octoprint_api_key
 
 wink:
-  #access_token: 1EdsDkQn-2SYvbXfooDlsUh8t3QCY6f9
   email: !secret wink_user
   password:  !secret wink_password
   client_id: !secret wink_client_id
@@ -59,10 +58,7 @@ camera:
     still_image_url: https://radblast.wunderground.com/cgi-bin/radar/WUNIDS_map?station=ILN&brand=wui&num=10&delay=15&type=N0R&frame=0&scale=1.000&noclutter=0&showstorms=0&mapx=400&mapy=240&centerx=400&centery=240&transx=0&transy=0&showlabels=1&severe=0&rainsnow=0&lightning=0&smooth=1&rand=24474020&lat=0&lon=0&label=you
     name: CIN
   - platform: mjpeg
-    mjpeg_url: http://192.168.5.51:81/videostream.cgi?user=admin&pwd=1218two008
-  #- platform: ffmpeg
-   # input: http://192.168.5.4:8080?action=stream
-    # extra_arguments: -vf "transpose=2,transpose=2"
+    mjpeg_url: !secret camera_url 
 
 device_tracker:
   - platform: trackr
@@ -70,15 +66,8 @@ device_tracker:
     password: !secret trackr_password
   - platform: owntracks
     max_gps_accuracy: 200
-#  - platform: icloud
-#    username: !secret icloud_user
-#    password: !secret icloud
-#    account_name: melina
 
 alarm_control_panel:
-  #- platform: simplisafe
-  #  username: drsfosterky@gmail.com
-  #  password: 0HxZ3a2X3jwZ
   - platform: manual
     name: "HA Alarm"
     # code: !secret alarm_code
