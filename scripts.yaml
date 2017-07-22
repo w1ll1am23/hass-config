@@ -98,18 +98,18 @@
         data:
           entity_id: light.bedroom_lamp
 
-  melinas_light:
+  under_bed_light:
     sequence:
       - service: light.turn_on
         data:
-          entity_id: light.melinas_night_stand
+          entity_id: light.under_bed_light
           brightness: 150
           rgb_color: [255, 0, 0]
       - delay:
           minutes: 3
       - service: light.turn_off
         data:
-          entity_id: light.melinas_night_stand
+          entity_id: light.under_bed_light
 
   hall_light:
     sequence:
@@ -180,164 +180,19 @@
       - delay:
           minutes: 2
       - service: homeassistant.turn_on
-        entity_id: automation.alarm_notification
-      - service: homeassistant.turn_on
-        entity_id: automation.battery_low_alert
-      - service: homeassistant.turn_on
-        entity_id: automation.bedroom_lights_on_when_door_opens
-      - service: homeassistant.turn_on
-        entity_id: automation.bedroom_off
-      - service: homeassistant.turn_on
-        entity_id: automation.bedroom_on_day
-      - service: homeassistant.turn_on
-        entity_id: automation.bedroom_on_night
-      - service: homeassistant.turn_on
-        entity_id: automation.billy_at_ktown
-      - service: homeassistant.turn_on
-        entity_id: automation.billy_is_home
-      - service: homeassistant.turn_on
-        entity_id: automation.billy_unlocked_the_door
-      - service: homeassistant.turn_on
-        entity_id: automation.bulb_needs_changed
-      - service: homeassistant.turn_on
-        entity_id: automation.check_bulbs
-      - service: homeassistant.turn_on
-        entity_id: automation.check_dishwasher
-      - service: homeassistant.turn_on
-        entity_id: automation.check_doors_are_closed
-      - service: homeassistant.turn_on
-        entity_id: automation.check_for_locked_lock
-      - service: homeassistant.turn_on
-        entity_id: automation.check_freezer
-      - service: homeassistant.turn_on
-        entity_id: automation.downstairs_hall_light
-      - service: homeassistant.turn_on
-        entity_id: automation.downstairs_hallway_off
-      - service: homeassistant.turn_on
-        entity_id: automation.dryer_done
-      - service: homeassistant.turn_on
-        entity_id: automation.dryer_started
-      - service: homeassistant.turn_on
-        entity_id: automation.front_door
-      - service: homeassistant.turn_on
-        entity_id: automation.garage_light_off
-      - service: homeassistant.turn_on
-        entity_id: automation.garage_light_on_if_door_open
-      - service: homeassistant.turn_on
-        entity_id: automation.gdottie_unlocked_the_door
-      - service: homeassistant.turn_on
-        entity_id: automation.going_to_bed
-      - service: homeassistant.turn_on
-        entity_id: automation.good_morning
-      - service: homeassistant.turn_on
-        entity_id: automation.good_night
-      - service: homeassistant.turn_on
-        entity_id: automation.hallway_off
-      - service: homeassistant.turn_on
-        entity_id: automation.hallway_on
-      - service: homeassistant.turn_on
-        entity_id: automation.kitchen_off
-      - service: homeassistant.turn_on
-        entity_id: automation.kitchen_on
-      - service: homeassistant.turn_on
-        entity_id: automation.kitchen_sink_off
-      - service: homeassistant.turn_on
-        entity_id: automation.kitchen_sink_on
-      - service: homeassistant.turn_on
-        entity_id: automation.laundry_light_off_when_door_closes
-      - service: homeassistant.turn_on
-        entity_id: automation.laundry_light_on_when_door_opens
-      - service: homeassistant.turn_on
-        entity_id: automation.left_home
-      - service: homeassistant.turn_on
-        entity_id: automation.living_room_off
-      - service: homeassistant.turn_on
-        entity_id: automation.living_room_on
-      - service: homeassistant.turn_on
-        entity_id: automation.lock_the_door_off
-      - service: homeassistant.turn_on
-        entity_id: automation.melina_at_ktown
-      - service: homeassistant.turn_on
         entity_id: automation.melina_is_home
-      - service: homeassistant.turn_on
-        entity_id: automation.melina_unlocked_the_door
-      - service: homeassistant.turn_on
-        entity_id: automation.melinas_night_stand_off
-      - service: homeassistant.turn_on
-        entity_id: automation.melinas_night_stand_on
-      - service: homeassistant.turn_on
-        entity_id: automation.office_lights_on_when_door_opens
-      - service: homeassistant.turn_on
-        entity_id: automation.office_off
-      - service: homeassistant.turn_on
-        entity_id: automation.office_on
-      - service: homeassistant.turn_on
-        entity_id: automation.offline
-      - service: homeassistant.turn_on
-        entity_id: automation.outside_lights_on_when_door_opens
-      - service: homeassistant.turn_on
-        entity_id: automation.outside_off
-      - service: homeassistant.turn_on
-        entity_id: automation.outside_on
-      - service: homeassistant.turn_on
-        entity_id: automation.parents_unlocked_the_door
-      - service: homeassistant.turn_on
-        entity_id: automation.printing_done
-      - service: homeassistant.turn_on
-        entity_id: automation.trigger_alarm_while_armed_away
-      - service: homeassistant.turn_on
-        entity_id: automation.trigger_alarm_while_armed_home
-      - service: homeassistant.turn_on
-        entity_id: automation.turn_entry_and_living_room_on
-      - service: homeassistant.turn_on
-        entity_id: automation.no_one_is_home
       - service: homeassistant.turn_on
         entity_id: automation.turn_on_living_room_lamp_at_dusk
       - service: homeassistant.turn_on
-        entity_id: automation.turn_outside_lights_off
+        entity_id: automation.turn_outside_lights_on_when_someone_is_home
       - service: homeassistant.turn_on
-        entity_id: automation.turn_outside_lights_on
+        entity_id: automation.turn_entry_and_living_room_on_when_someone_gets_home
       - service: homeassistant.turn_on
-        entity_id: automation.up_at_night
+        entity_id: automation.notify_that_billy_is_home
       - service: homeassistant.turn_on
-        entity_id: automation.up_in_morning
+        entity_id: automation.melina_at_ktown
       - service: homeassistant.turn_on
-        entity_id: automation.water_too_cold
+        entity_id: automation.left_home
       - service: homeassistant.turn_on
-        entity_id: automation.wink_troubles
-      - service: homeassistant.turn_on
-        entity_id: automation.power_is_out
-      - service: homeassistant.turn_on
-        entity_id: automation.power_is_back_on
-      - service: homeassistant.turn_on
-        entity_id: automation.wink_hub_offline
-      - service: homeassistant.turn_on
-        entity_id: automation.hub_update
-      - service: homeassistant.turn_on
-        entity_id: automation.turn_on_christmas_lights_at_dusk
-      - service: homeassistant.turn_on
-        entity_id: automation.power_back_on
-      - service: homeassistant.turn_on
-        entity_id: automation.someone_is_home
-      - service: homeassistant.turn_on
-        entity_id: automation.wink_feed
-      - service: homeassistant.turn_on
-        entity_id: automation.garage_light_off_after_one_hour
-      - service: homeassistant.turn_on
-        entity_id: automation.alarm_arm
-      - service: homeassistant.turn_on
-        entity_id: automation.code_unlock_disable_alarm
-      - service: homeassistant.turn_on
-        entity_id: automation.office_lights_on_remote
-      - service: homeassistant.turn_on
-        entity_id: automation.office_lights_off_remote
-      - service: homeassistant.turn_on
-        entity_id: automation.ruby_is_home
-      - service: homeassistant.turn_on
-        entity_id: automation.ruby_is_away
-      - service: homeassistant.turn_on
-        entity_id: automation.hallway_motion_at_night
-      - service: homeassistant.turn_on
-        entity_id: automation.all_off_downstairs
-      - service: homeassistant.turn_on
-        entity_id: automation.closet_light_off_after_ten_minutes
+        entity_id: automation.billy_at_ktown
+

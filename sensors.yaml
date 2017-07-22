@@ -26,10 +26,11 @@
     monitored_variables:
       Water:
         name: Water
-        unit_of_measurement: '°F'
+        unit_of_measurement: '°C'
+
       Basking:
         name: Basking
-        unit_of_measurement: '°F'
+        unit_of_measurement: '°C'
       UVB:
         name: UVB
         unit_of_measurement: 'uW/cm2'
@@ -49,56 +50,8 @@
   - platform: template
     sensors:
       average_temp:
-        value_template: '{{ ((states.sensor.living_room_temperature.state | float +  states.sensor.living_room_temperature.state | float +  states.sensor.up_stairs_hallway_temperature.state | float + states.climate.thermostat.attributes.current_temperature | float + states.sensor.spotter_temperature.state | float + states.sensor.broadlink_sensor_temperature.state | float) / 6) | round(2) }}'
+        value_template: '{{ ((states.sensor.living_room_temperature.state | float +  states.sensor.living_room_temperature.state | float +  states.sensor.up_stairs_hallway_temperature.state | float + states.climate.thermostat.attributes.current_temperature | float + states.sensor.spotter_temperature.state | float + states.sensor.broadlink_sensor_temperature.state | float + states.sensor.office_temperature.state | float + states.sensor.bedroom_temperature_2.state | float ) / 8 )  | round(2) }}'
         unit_of_measurement: '°F'
-      kitchen_door_battery:
-        value_template: >
-          {% if states.binary_sensor.kitchen_door %}
-            {{ states.binary_sensor.kitchen_door.attributes.battery_level }}
-          {% else %}
-            None
-          {% endif %}
-        unit_of_measurement: '%'
-      front_door_battery:
-        value_template: >
-          {% if states.binary_sensor.front_door %}
-            {{ states.binary_sensor.front_door.attributes.battery_level }}
-          {% else %}
-            None
-          {% endif %}
-        unit_of_measurement: '%'
-      garage_entry_door_battery:
-        value_template: >
-          {% if states.binary_sensor.garage_entry_door %}
-            {{ states.binary_sensor.garage_entry_door.attributes.battery_level }}
-          {% else %}
-            None
-          {% endif %}
-        unit_of_measurement: '%'
-      lock_battery:
-        value_template: >
-          {% if states.lock.front_door %}
-            {{ states.lock.front_door.attributes.battery_level }}
-          {% else %}
-            None
-          {% endif %}
-        unit_of_measurement: '%'
-      siren_battery:
-        value_template: >
-          {% if states.switch.siren %}
-            {{ states.switch.siren.attributes.battery_level }}
-          {% else %}
-            None
-          {% endif %}
-        unit_of_measurement: '%'
-      eggtray_battery:
-        value_template: >
-          {% if states.sensor.egg_minder %}
-            {{ states.sensor.egg_minder.attributes.battery_level }}
-          {% else %}
-            None
-          {% endif %}
-        unit_of_measurement: '%'
 
   #######################################
   #######Weather Forecast Sensors########
@@ -159,3 +112,31 @@
     username: !secret plex_user
     password: !secret plex_pass
 
+
+  #######################################
+  #############Multi Sensors#############
+  #######################################
+
+  - platform: mqtt
+    state_topic: "sensors/sensornode1"
+    name: "Office Humidity"
+    unit_of_measurement: "%"
+    value_template: '{{ value_json.humidity | round(1) }}'
+
+  - platform: mqtt
+    state_topic: "sensors/sensornode1"
+    name: "Office Temperature"
+    unit_of_measurement: "°F"
+    value_template: '{{ value_json.temperature | round(1) }}'
+
+  - platform: mqtt
+    state_topic: "fan/"
+    name: "Bedroom Humidity"
+    unit_of_measurement: "%"
+    value_template: '{{ value_json.humidity | round(1) }}'
+
+  - platform: mqtt
+    state_topic: "fan/"
+    name: "Bedroom Temperature"
+    unit_of_measurement: "°F"
+    value_template: '{{ value_json.temperature | round(1) }}'

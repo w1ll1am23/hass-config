@@ -1,3 +1,6 @@
+  - platform: workday
+    country: US
+
   - platform: octoprint
     monitored_conditions:
       - Printing
@@ -5,8 +8,14 @@
 
   - platform: template
     sensors:
+      office_temp_threshold:
+        value_template: "{{ states('sensor.office_temperature')|int >= 77 }}"
+        entity_id: sensor.office_temperature
+
+  - platform: template
+    sensors:
       tank_basking_threshold:
-        value_template: "{{ states('sensor.turtle_tank_basking')|int <= 30 }}"
+        value_template: "{{ states('sensor.turtle_tank_basking')|int <= 27 }}"
         entity_id: sensor.turtle_tank_basking
 
   - platform: template
@@ -19,7 +28,7 @@
     resource: http://192.168.5.48
     pin: 5
     name: needs water
-    sensor_class: moisture
+    device_class: moisture
 
   - platform: arest
     resource: http://192.168.5.48
@@ -27,3 +36,19 @@
     name: 'is on'
 
   - platform: apcupsd
+
+  - platform: mqtt
+    state_topic: "sensors/sensornode1"
+    name: "Office motion"
+    value_template: '{{ value_json.motion }}'
+    payload_on: "motion detected"
+    payload_off: "standby"
+    device_class: "motion"
+
+  - platform: mqtt
+    state_topic: "fan/"
+    name: "Bedroom motion 2"
+    value_template: '{{ value_json.motion }}'
+    payload_on: "motion detected"
+    payload_off: "standby"
+    device_class: "motion"

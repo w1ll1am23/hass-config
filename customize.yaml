@@ -1,7 +1,11 @@
 ######################################
-##########Binary Sensors##############
+##########Binary Sensors###################
 ######################################
 
+    binary_sensor.workday_sensor:
+      hidden: true
+    binary_sensor.office_temp_threshold:
+      hidden: true
     binary_sensor.wink_relay_sensor_presence:
       hidden: true
     binary_sensor.wink_relays_top_button:
@@ -11,7 +15,9 @@
     binary_sensor.remote:
       hidden: true
     binary_sensor.gang:
-      hidden: true    
+      hidden: true
+    binary_sensor.gang_2:
+      hidden: true
     binary_sensor.wink_relay:
       hidden: true
     binary_sensor.hub:
@@ -44,12 +50,16 @@
       icon: mdi:printer-3d
 
 ######################################
-#############Sensors##################
+#############Sensors####################
 ######################################
 
-    sensor.melinas_iphon_battery_level:
+    sensor.iphone_battery_level:
       hidden: true
-    sensor.melinas_iphone_batter_state:
+    sensor.iphone_battery_state:
+      hidden: true
+    sensor.melinas_iphone_battery_level:
+      hidden: true
+    sensor.melinas_iphone_battery_state:
       hidden: true
     sensor.wink_relay_sensor_proximity:
       hidden: true
@@ -91,10 +101,10 @@
       hidden: true
       friendly_name: Door
       entity_picture: /local/garage.jpg
-    sensor.weather_raining: 
+    sensor.weather_raining:
       friendly_name: Rain
       entity_picture: /local/rain.jpg
-    sensor.forecastio_precip_probability: 
+    sensor.forecastio_precip_probability:
       friendly_name: Rain
       entity_picture: /local/rain.jpg
     sensor.weather_temperature:
@@ -134,10 +144,14 @@
 #############Switches#################
 ######################################
 
+    switch.outlet_1:
+      hidden: true
+    switch.outlet_2:
+      hidden: true
     switch.outside_christmas_lights:
       icon: mdi:pine-tree
     switch.keurig:
-      icon: mdi:coffee 
+      icon: mdi:coffee
     switch.siren:
       icon: mdi:bell-ring
     switch.dining_room_fan:
@@ -150,10 +164,10 @@
       assumed_state: true
     switch.hallway_ceiling_fan_fan:
       friendly_name: Fan
-      entity_picture: /local/fan.jpg 
+      entity_picture: /local/fan.jpg
     switch.hallway_ceiling_fan_light:
       friendly_name: Light
-      entity_picture: /local/fan_light.jpg 
+      entity_picture: /local/fan_light.jpg
     switch.office_lamp:
       friendly_name: Melina's Lamp
       icon: mdi:lamp
@@ -225,14 +239,19 @@
       hidden: true
     script.garage_is_open:
       hidden: true
+    script.under_bed_light:
+      hidden: true
 
 ######################################
 ##############Random##################
 ######################################
 
-    climate.hallway:
-      friendly_name: Nest
-      entity_picture: /local/nest.jpg
-
     device_tracker.melina_iphone:
+      hidden: true
+
+##################################
+#############Scenes#################
+##################################
+
+    scene.test:
       hidden: true

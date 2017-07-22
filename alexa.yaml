@@ -38,11 +38,11 @@
         type: plaintext
         text: >
           {%- for state in states.binary_sensor -%}
-            {%- if state.name.lower() == Door.lower() -%}
+            {%- if state.name.lower() == Door.lower() + " opened" -%}
               {%- if state.state == 'on' -%}
                 The {{ state.name }} is open
               {%- else -%}
-                The {{ state.name }} is closed
+                The {{ state.name.replace(" opened", "") }} is closed
               {%- endif -%}
             {%- endif -%}
           {%- else -%}
@@ -196,7 +196,7 @@
       action:
         service: homeassistant.turn_on
         data_template:
-          entity_id: switch.{{ Switch.lower().replace(" ", "_") }}
+          entity_id: switch.{{ Switch.lower().replace(" ", "_").replace("cattle", "kettle").replace("candle", "kettle") }}
       speech:
         type: plaintext
         text: !include alexa_confirm.yaml
@@ -205,7 +205,7 @@
       action:
         service: homeassistant.turn_off
         data_template:
-          entity_id: switch.{{ Switch.lower().replace(" ", "_") }}
+          entity_id: switch.{{ Switch.lower().replace(" ", "_").replace("cattle", "kettle").replace("candle", "kettle") }}
       speech:
         type: plaintext
         text: !include alexa_confirm.yaml
