@@ -1,3 +1,16 @@
+  dim_bathroom_lights:
+    alias: dim bathroom lights
+    sequence:
+      - service: light.turn_on
+        data:
+          entity_id: light.bathroom_light
+          brightness: 1
+      - delay:
+          seconds: 30
+      - service: light.turn_off
+        data:
+          entity_id: light.bathroom_light
+
   good_night_melina:
     alias: Good Night Melina
     sequence:
@@ -188,7 +201,7 @@
       - service: homeassistant.turn_on
         entity_id: automation.turn_entry_and_living_room_on_when_someone_gets_home
       - service: homeassistant.turn_on
-        entity_id: automation.notify_that_billy_is_home
+        entity_id: automation.billy_is_home
       - service: homeassistant.turn_on
         entity_id: automation.melina_at_ktown
       - service: homeassistant.turn_on

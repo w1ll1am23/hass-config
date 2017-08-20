@@ -33,7 +33,7 @@
         command_on: 'shEyAAYTEgcGExIHBhMGEwYTEgcHEwcTBxMTBxMHEwcHExIHBhMGEwYTBhQGEwYTEgcSBwa8AAAAAAAA'
         command_off: 'shIyAAcTEwcHExMHBhMHEwYTEgcGEwYTBhMTBxMHEwcHExMHBxMGEwYTBxMSBxMHBhMGEwe7AAAAAAAA'
       # 0320-3
-      bedroom_fan: 
+      bedroom_fan:
         friendly_name: 'bedroom fan'
         command_on: 'sgYyAAcSEwcHEhMHBxIHEgcSEwYHEwcSBxITBgcTEwYTBhMHBxMHEgcSBxMHEgcSEwYTBge7AAAAAAAA'
         command_off: 'shUyAAcSEwcHExMHBxMHEwcTEwcHEwcTBxMTBwcSEwcTBxMHBxMHEwcSBxMTBxMHBxMGEwe7AAAAAAAA'
@@ -63,13 +63,13 @@
     mac: '34:EA:34:E0:BA:C4'
     switches:
       office_ac:
-        friendly_name: 'Office AC'
+        friendly_name: 'Office air conditioner'
         command_on: 'JgDKAJOQEzUTEhM1EzUTERMREzUTEhMREzUTERMSEjYSNhMREzUTNRMSEzUTNRM1EzUTNRM1ExITNRMRExETERMSEhITERMREzUTNRM1ExITERMRExETNhMRExETERM1EzUTNhM1Eq2TjxQ1ExETNRM1ExETEhI2ExETERM1ExISEhM1EzUTERM1EzYTERM1EzUTNRM1EzYSNhMREzUTERMRExITERMRExETERM1EzYTNRMRExETERMSEjYTERMRExETNRM2EzUTNRIADQUAAAAAAAAAAAAAAAAAAA=='
         command_off: 'JgDKAJCTEDgQFBE3ETcRFBAUEDgQFBETETgQFBAUEDcSNxETETgQFBA4ETcRNxE3ERMROBA4EDgRExETERQQFBA4EBQRExE4EDgQOBAUERMRExEUEBQQFBETERMROBA4EDgQOBE3Eq2RkhA4ERMRNxE3ERQQFBA4ERMRExE4EBQQFBE3ETcRExE4EBQQOBE3ETcRNxETETgQOBA4ERMRExEUEBQQOBAUERMROBA4EDgQFBETERMRFBAUEBQRExETETgQOBA4EDgQOBIADQUAAAAAAAAAAAAAAAAAAA=='
 
   - platform: arest
     resource: http://192.168.5.34
-    name: Hallway ceiling fan
+    name: Up stairs hallway
     pins:
       5:
        name: Light
@@ -97,17 +97,27 @@
     switches:
       camera:
         friendly_name: camera
-        command_on: /home/w1ll1am/.virtualenvs/hass_dev/bin/python3 /home/w1ll1am/.virtualenvs/hass_dev/config/vstarcontroller.py --host 192.168.5.51 --password 1218two008 --preset 0
-        command_off: /home/w1ll1am/.virtualenvs/hass_dev/bin/python3 /home/w1ll1am/.virtualenvs/hass_dev/config/vstarcontroller.py --host 192.168.5.51 --password 1218two008 --preset 1
+        command_on: /home/w1ll1am/.virtualenvs/hass_dev/bin/python3 /home/w1ll1am/.virtualenvs/hass_dev/config/vstarcontroller.py --host 192.168.5.51 --port 60075 --password vstarcam --preset 0
+        command_off: /home/w1ll1am/.virtualenvs/hass_dev/bin/python3 /home/w1ll1am/.virtualenvs/hass_dev/config/vstarcontroller.py --host 192.168.5.51 --port 60075 --password vstarcam --preset 4
       snapshot:
         friendly_name: snapshot
-        command_on: /home/w1ll1am/.virtualenvs/hass_dev/bin/python3 /home/w1ll1am/.virtualenvs/hass_dev/config/vstarcontroller.py --host 192.168.5.51 --password 1218two008 --snap --path /home/w1ll1am/.virtualenvs/hass_dev/camera_images/
+        command_on: /home/w1ll1am/.virtualenvs/hass_dev/bin/python3 /home/w1ll1am/.virtualenvs/hass_dev/config/vstarcontroller.py --host 192.168.5.51 --port 60075 --password vstarcam --snap --path /home/w1ll1am/.virtualenvs/hass_dev/camera_images/
         command_off: /usr/bin/echo blah > /dev/null
         value_template: '{{ false }}'
       door:
         friendly_name: camera to door
-        command_on: /home/w1ll1am/.virtualenvs/hass_dev/bin/python3 /home/w1ll1am/.virtualenvs/hass_dev/config/vstarcontroller.py --host 192.168.5.51 --password 1218two008 --preset 2
-        command_off: /home/w1ll1am/.virtualenvs/hass_dev/bin/python3 /home/w1ll1am/.virtualenvs/hass_dev/config/vstarcontroller.py --host 192.168.5.51 --password 1218two008 --preset 0
+        command_on: /home/w1ll1am/.virtualenvs/hass_dev/bin/python3 /home/w1ll1am/.virtualenvs/hass_dev/config/vstarcontroller.py --host 192.168.5.51 --port 60075 --password vstarcam --preset 1
+        command_off: /home/w1ll1am/.virtualenvs/hass_dev/bin/python3 /home/w1ll1am/.virtualenvs/hass_dev/config/vstarcontroller.py --host 192.168.5.51 --port 60075 --password vstarcam --preset 4
+        value_template: '{{ false }}'
+      dog:
+        friendly_name: camera to dog
+        command_on: /home/w1ll1am/.virtualenvs/hass_dev/bin/python3 /home/w1ll1am/.virtualenvs/hass_dev/config/vstarcontroller.py --host 192.168.5.51 --port 60075 --password vstarcam --preset 2
+        command_off: /home/w1ll1am/.virtualenvs/hass_dev/bin/python3 /home/w1ll1am/.virtualenvs/hass_dev/config/vstarcontroller.py --host 192.168.5.51 --port 60075 --password vstarcam --preset 4
+        value_template: '{{ false }}'
+      reboot:
+        friendly_name: camera reboot
+        command_on: /home/w1ll1am/.virtualenvs/hass_dev/bin/python3 /home/w1ll1am/.virtualenvs/hass_dev/config/vstarcontroller.py --host 192.168.5.51 --port 60075 --password vstarcam --reboot
+        command_off: /home/w1ll1am/.virtualenvs/hass_dev/bin/python3 /home/w1ll1am/.virtualenvs/hass_dev/config/vstarcontroller.py --host 192.168.5.51 --port 60075 --password vstarcam --reboot
         value_template: '{{ false }}'
 
 ################################

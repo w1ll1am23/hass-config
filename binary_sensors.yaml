@@ -1,3 +1,7 @@
+  - platform: ping
+    host: 192.168.5.7
+    name: Living room TV
+
   - platform: workday
     country: US
 
@@ -8,8 +12,14 @@
 
   - platform: template
     sensors:
-      office_temp_threshold:
+      office_temp_high_threshold:
         value_template: "{{ states('sensor.office_temperature')|int >= 77 }}"
+        entity_id: sensor.office_temperature
+
+  - platform: template
+    sensors:
+      office_temp_low_threshold:
+        value_template: "{{ states('sensor.office_temperature')|int < 77 }}"
         entity_id: sensor.office_temperature
 
   - platform: template

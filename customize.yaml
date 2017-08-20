@@ -2,9 +2,13 @@
 ##########Binary Sensors###################
 ######################################
 
+    binary_sensor.living_room_tv:
+      hidden: true
     binary_sensor.workday_sensor:
       hidden: true
-    binary_sensor.office_temp_threshold:
+    binary_sensor.office_temp_high_threshold:
+      hidden: true
+    binary_sensor.office_temp_low_threshold:
       hidden: true
     binary_sensor.wink_relay_sensor_presence:
       hidden: true
@@ -144,6 +148,24 @@
 #############Switches#################
 ######################################
 
+    switch.living_room_tv_power:
+      hidden: true
+    switch.living_room_soundbar_power:
+      hidden: true
+    switch.living_room_tv_pause:
+      hidden: true
+    switch.living_room_tv_play:
+      hidden: true
+    switch.camera:
+      hidden: true
+    switch.reboot:
+      hidden: true
+    switch.dog:
+      hidden: true
+    switch.door:
+      hidden: true
+    switch.snapshot:
+      hidden: true
     switch.outlet_1:
       hidden: true
     switch.outlet_2:
@@ -162,10 +184,10 @@
       assumed_state: true
     switch.printer_light:
       assumed_state: true
-    switch.hallway_ceiling_fan_fan:
+    switch.up_stairs_hallway_fan:
       friendly_name: Fan
       entity_picture: /local/fan.jpg
-    switch.hallway_ceiling_fan_light:
+    switch.up_stairs_hallway_light:
       friendly_name: Light
       entity_picture: /local/fan_light.jpg
     switch.office_lamp:
@@ -199,6 +221,8 @@
 ##############Script##################
 ######################################
 
+    script.dim_bathroom_lights:
+      hidden: true
     script.alarm_away:
       hidden: true
     script.alarm_home:

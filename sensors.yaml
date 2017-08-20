@@ -2,6 +2,8 @@
   #############Garage Freezer#############
   #######################################
 
+  # - platform: season
+
   - platform: arest
     resource: http://192.168.5.26
     name: Garage Freezer

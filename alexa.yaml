@@ -1,239 +1,238 @@
-  intents:
-    WhereAreWeIntent:
-      speech:
-        type: plaintext
-        text: >
-          {%- if is_state('device_tracker.melina_iphone', 'home') and
-                 is_state('device_tracker.w1ll1am_a0001', 'home') -%}
-            You are both home, you silly
-          {%- else -%}
-            Melina is at {{ states("device_tracker.melina_iphone") }}
-            and William is at {{ states("device_tracker.w1ll1am_a0001") }}
-          {% endif %}
+  WhereAreWeIntent:
+    speech:
+      type: plain
+      text: >
+        {%- if is_state('device_tracker.melina_iphone', 'home') and
+               is_state('device_tracker.w1ll1am_a0001', 'home') -%}
+          You are both home, you silly
+        {%- else -%}
+          Melina is at {{ states("device_tracker.melina_iphone") }}
+          and William is at {{ states("device_tracker.w1ll1am_a0001") }}
+        {% endif %}
 
-    LocateIntent:
-      speech:
-        type: plaintext
-        text: >
-          {%- for state in states.device_tracker -%}
-            {%- if state.name.lower() == User.lower() -%}
-              {{ state.name }} is at {{ state.state }}
-            {%- endif -%}
-          {%- else -%}
-            I am sorry, I do not know where {{ User }} is.
-          {%- endfor -%}
-
-    IsLockLockedIntent:
-      speech:
-        type: plaintext
-        text: >
-          {%- if states.lock.front_door.state == "locked" -%}
-            Yes, it is locked.
-          {%- else -%}
-            No, it is not.
+  LocateIntent:
+    speech:
+      type: plain
+      text: >
+        {%- for state in states.device_tracker -%}
+          {%- if state.name.lower() == User.lower() -%}
+            {{ state.name }} is at {{ state.state }}
           {%- endif -%}
+        {%- else -%}
+          I am sorry, I do not know where {{ User }} is.
+        {%- endfor -%}
 
-    DoorStatusIntent:
-      speech:
-        type: plaintext
-        text: >
-          {%- for state in states.binary_sensor -%}
-            {%- if state.name.lower() == Door.lower() + " opened" -%}
-              {%- if state.state == 'on' -%}
-                The {{ state.name }} is open
-              {%- else -%}
-                The {{ state.name.replace(" opened", "") }} is closed
-              {%- endif -%}
+  IsLockLockedIntent:
+    speech:
+      type: plain
+      text: >
+        {%- if states.lock.front_door.state == "locked" -%}
+          Yes, it is locked.
+        {%- else -%}
+          No, it is not.
+        {%- endif -%}
+
+  DoorStatusIntent:
+    speech:
+      type: plain
+      text: >
+        {%- for state in states.binary_sensor -%}
+          {%- if state.name.lower() == Door.lower() + " opened" -%}
+            {%- if state.state == 'on' -%}
+              The {{ state.name }} is open
+            {%- else -%}
+              The {{ state.name.replace(" opened", "") }} is closed
             {%- endif -%}
-          {%- else -%}
-            I am sorry, I do not know.
-          {%- endfor -%}
-
-    DryerStatusIntent:
-      speech:
-        type: plaintext
-        text: >
-          {%- if states.binary_sensor.spotter_vibration.state == 'on' -%}
-            Yes the dryer is running
-          {%- else -%}
-            No the dryer isn't running
           {%- endif -%}
+        {%- else -%}
+          I am sorry, I do not know.
+        {%- endfor -%}
 
-    LockBatteryIntent:
-      speech:
-        type: plaintext
-        text: >
-          The lock battery level is {{ states.sensor.lock_battery.state | round(2) }} percent
+  DryerStatusIntent:
+    speech:
+      type: plain
+      text: >
+        {%- if states.binary_sensor.spotter_vibration.state == 'on' -%}
+          Yes the dryer is running
+        {%- else -%}
+          No the dryer isn't running
+        {%- endif -%}
 
-    TemperatureIntent:
-      speech:
-        type: plaintext
-        text: >
-          The average temperature is {{ states.sensor.average_temp.state }}
+  LockBatteryIntent:
+    speech:
+      type: plain
+      text: >
+        The lock battery level is {{ states.sensor.lock_battery.state | round(2) }} percent
 
-    EggsIntent:
-      speech:
-        type: plaintext
-        text: >
-          You have {{ states.sensor.egg_minder.state }} eggs
+  TemperatureIntent:
+    speech:
+      type: plain
+      text: >
+        The average temperature is {{ states.sensor.average_temp.state }}
 
-    PrinterStatusIntent:
-      speech:
-        type: plaintext
-        text: >
-          The current 3D print job is {{ states.sensor.octoprint_job_percentage.state  }} precent complete
+  EggsIntent:
+    speech:
+      type: plain
+      text: >
+        You have {{ states.sensor.egg_minder.state }} eggs
 
-    InternetStatusIntent:
-      speech:
-        type: plaintext
-        text: >
-          Your last download speed was {{ states.sensor.speedtest_download.state }} megabits per second.
+  PrinterStatusIntent:
+    speech:
+      type: plain
+      text: >
+        The current 3D print job is {{ states.sensor.octoprint_job_percentage.state  }} precent complete
 
-    LightColorIntent:
-      action:
-        service: light.turn_on
-        data_template:
-          entity_id: light.{{ Light.lower().replace(" ", "_").replace("molina", "melina").replace("'", "") }}
-          color_name: "{{ Color }}"
-      speech:
-        type: plaintext
-        text: !include alexa_confirm.yaml
+  InternetStatusIntent:
+    speech:
+      type: plain
+      text: >
+        Your last download speed was {{ states.sensor.speedtest_download.state }} megabits per second.
 
-    LightBrightnessIntent:
-      action:
-        service: light.turn_on
-        data_template:
-          entity_id: light.{{ Light | replace(" ", "_") }}
-          brightness: "{{ (255/100) * Percent }}"
-      speech:
-        type: plaintext
-        text: !include alexa_confirm.yaml
+  LightColorIntent:
+    action:
+      service: light.turn_on
+      data_template:
+        entity_id: light.{{ Light.lower().replace(" ", "_").replace("molina", "melina").replace("'", "") }}
+        color_name: "{{ Color }}"
+    speech:
+      type: plain
+      text: !include alexa_confirm.yaml
 
-    MediaPlayerPlayPauseIntent:
-      action:
-        service: media_player.media_play_pause
-        data_template:
-          entity_id: media_player.{{ MediaPlayer | replace(" ", "_") }}
-      speech:
-        type: plaintext
-        text: !include alexa_confirm.yaml
+  LightBrightnessIntent:
+    action:
+      service: light.turn_on
+      data_template:
+        entity_id: light.{{ Light | replace(" ", "_") }}
+        brightness: "{{ (255/100) * Percent }}"
+    speech:
+      type: plain
+      text: !include alexa_confirm.yaml
 
-    ArmAlarmHomeIntent:
-      action:
-        service: alarm_control_panel.alarm_arm_home
-        data_template:
-          entity_id: alarm_control_panel.ha_alarm
-      speech:
-        type: plaintext
-        text: >
-          Setting alarm to home in 1 minute.
+  MediaPlayerPlayPauseIntent:
+    action:
+      service: media_player.media_play_pause
+      data_template:
+        entity_id: media_player.{{ MediaPlayer | replace(" ", "_") }}
+    speech:
+      type: plain
+      text: !include alexa_confirm.yaml
 
-    ArmAlarmAwayIntent:
-      action:
-        service: alarm_control_panel.alarm_arm_away
-        data_template:
-          entity_id: alarm_control_panel.ha_alarm
-      speech:
-        type: plaintext
-        text: >
-          Setting alarm to away in 1 minute.
+  ArmAlarmHomeIntent:
+    action:
+      service: alarm_control_panel.alarm_arm_home
+      data_template:
+        entity_id: alarm_control_panel.ha_alarm
+    speech:
+      type: plain
+      text: >
+        Setting alarm to home in 1 minute.
 
-    #OfficeLightsOnIntent:
-    #  action:
-    #    service: homeassistant.turn_on
-    #    data_template:
-    #      entity_id: script.office_on
-    #  speech:
-    #    type: plaintext
-    #    text: !include alexa_confirm.yaml
+  ArmAlarmAwayIntent:
+    action:
+      service: alarm_control_panel.alarm_arm_away
+      data_template:
+        entity_id: alarm_control_panel.ha_alarm
+    speech:
+      type: plain
+      text: >
+        Setting alarm to away in 1 minute.
 
-    #OfficeLightsOffIntent:
-    #  action:
-    #    service: homeassistant.turn_on
-    #    data_template:
-    #      entity_id: script.office_off
-    #  speech:
-    #    type: plaintext
-    #    text: !include alexa_confirm.yaml
+  #OfficeLightsOnIntent:
+  #  action:
+  #    service: homeassistant.turn_on
+  #    data_template:
+  #      entity_id: script.office_on
+  #  speech:
+  #    type: plain
+  #    text: !include alexa_confirm.yaml
 
-    GoodNightIntent:
-      action:
-        service: homeassistant.turn_on
-        data_template:
-          entity_id: script.good_night
-      speech:
-        type: plaintext
-        text: Good night
+  #OfficeLightsOffIntent:
+  #  action:
+  #    service: homeassistant.turn_on
+  #    data_template:
+  #      entity_id: script.office_off
+  #  speech:
+  #    type: plain
+  #    text: !include alexa_confirm.yaml
 
-    StartTheCarIntent:
-      action:
-        service: homeassistant.turn_on
-        data_template:
-          entity_id: switch.start_car
-      speech:
-        type: plaintext
-        text: Sure thing Melina
+  GoodNightIntent:
+    action:
+      service: homeassistant.turn_on
+      data_template:
+        entity_id: script.good_night
+    speech:
+      type: plain
+      text: Good night
 
-    GroupOnIntent:
-      action:
-        service: homeassistant.turn_on
-        data_template:
-          entity_id: group.{{ Group.lower().replace(" ", "_") }}
-      speech:
-        type: plaintext
-        text: !include alexa_confirm.yaml
+  StartTheCarIntent:
+    action:
+      service: homeassistant.turn_on
+      data_template:
+        entity_id: switch.start_car
+    speech:
+      type: plain
+      text: Sure thing Melina
 
-    GroupOffIntent:
-      action:
-        service: homeassistant.turn_off
-        data_template:
-          entity_id: group.{{ Group.lower().replace(" ", "_") }}
-      speech:
-        type: plaintext
-        text: !include alexa_confirm.yaml
+  GroupOnIntent:
+    action:
+      service: homeassistant.turn_on
+      data_template:
+        entity_id: group.{{ Group.lower().replace(" ", "_") }}
+    speech:
+      type: plain
+      text: !include alexa_confirm.yaml
 
-    SwitchOnIntent:
-      action:
-        service: homeassistant.turn_on
-        data_template:
-          entity_id: switch.{{ Switch.lower().replace(" ", "_").replace("cattle", "kettle").replace("candle", "kettle") }}
-      speech:
-        type: plaintext
-        text: !include alexa_confirm.yaml
+  GroupOffIntent:
+    action:
+      service: homeassistant.turn_off
+      data_template:
+        entity_id: group.{{ Group.lower().replace(" ", "_") }}
+    speech:
+      type: plain
+      text: !include alexa_confirm.yaml
 
-    SwitchOffIntent:
-      action:
-        service: homeassistant.turn_off
-        data_template:
-          entity_id: switch.{{ Switch.lower().replace(" ", "_").replace("cattle", "kettle").replace("candle", "kettle") }}
-      speech:
-        type: plaintext
-        text: !include alexa_confirm.yaml
+  SwitchOnIntent:
+    action:
+      service: homeassistant.turn_on
+      data_template:
+        entity_id: switch.{{ Switch.lower().replace(" ", "_").replace("cattle", "kettle").replace("candle", "kettle") }}
+    speech:
+      type: plain
+      text: !include alexa_confirm.yaml
 
-    LightOnIntent:
-      action:
-        service: homeassistant.turn_on
-        data_template:
-          entity_id: light.{{ Light.lower().replace(" ", "_").replace("molina", "melina").replace("'", "") }}
-      speech:
-        type: plaintext
-        text: !include alexa_confirm.yaml
+  SwitchOffIntent:
+    action:
+      service: homeassistant.turn_off
+      data_template:
+        entity_id: switch.{{ Switch.lower().replace(" ", "_").replace("cattle", "kettle").replace("candle", "kettle") }}
+    speech:
+      type: plain
+      text: !include alexa_confirm.yaml
 
-    LightOffIntent:
-      action:
-        service: homeassistant.turn_off
-        data_template:
-          entity_id: light.{{ Light.lower().replace(" ", "_").replace("molina", "melina").replace("'", "") }}
-      speech:
-        type: plaintext
-        text: !include alexa_confirm.yaml
+  LightOnIntent:
+    action:
+      service: homeassistant.turn_on
+      data_template:
+        entity_id: light.{{ Light.lower().replace(" ", "_").replace("molina", "melina").replace("'", "") }}
+    speech:
+      type: plain
+      text: !include alexa_confirm.yaml
 
-    CameraOffIntent:
-      action:
-        service: homeassistant.turn_off
-        data_template:
-          entity_id: switch.camera
-      speech:
-        type: plaintext
-        text: >
-          Moving camera to off position
+  LightOffIntent:
+    action:
+      service: homeassistant.turn_off
+      data_template:
+        entity_id: light.{{ Light.lower().replace(" ", "_").replace("molina", "melina").replace("'", "") }}
+    speech:
+      type: plain
+      text: !include alexa_confirm.yaml
+
+  CameraOffIntent:
+    action:
+      service: homeassistant.turn_off
+      data_template:
+        entity_id: switch.camera
+    speech:
+      type: plain
+      text: >
+        Moving camera to off position
