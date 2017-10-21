@@ -2,13 +2,16 @@
 ###############Time Automations################
 ##########################################
 
-  - alias: reboot camera for calibration
+  - alias: turn off outside lights if on for 15 minutes
     trigger:
-      - platform: time
-        at: '00:01:00'
+      - platform: state
+        entity_id: switch.outside_lights
+        to: 'on'
+        for:
+          minutes: 15
     action:
-      - service: homeassistant.turn_on
-        entity_id: switch.camera_reboot
+      service: homeassistant.turn_off
+      entity_id: switch.outside_lights
 
   - alias: dim bathroom lights at night
     trigger:
@@ -26,6 +29,25 @@
       service: homeassistant.turn_on
       entity_id: script.dim_bathroom_lights
 
+  - alias: bathroom light script on
+    trigger:
+      - platform: state
+        entity_id: binary_sensor.bedroom_motion
+        to: 'on'
+      - platform: state
+        entity_id: binary_sensor.bedroom_motion_2
+        to: 'on'
+    condition:
+      condition: and
+      conditions:
+        - condition: state
+          entity_id: light.bathroom_light
+          state: 'on'
+    action:
+      - service: homeassistant.turn_off
+        entity_id: script.bathroom_lights
+      - service: homeassistant.turn_on
+        entity_id: script.bathroom_lights
 
   - alias: close garage if open for more than 15 minutes
     trigger:
@@ -126,24 +148,38 @@
   - alias: turn on living room lamp at dusk
     trigger:
       - platform: template
-        value_template: '{{ states.sun.sun.attributes.elevation < 4.0 }}'
+        value_template: '{{ states.sun.sun.attributes.elevation < 6.0 }}'
     condition:
-        condition: or
+        condition: and
         conditions:
           - condition: state
-            entity_id: device_tracker.w1ll1am_a0001
-            state: home
-          - condition: state
-            entity_id: device_tracker.melinas_iphone
+            entity_id: group.us
             state: home
     action:
       service: homeassistant.turn_on
       entity_id: light.shelf_lamp
 
 
-##########################################
+#########################################
 ##############Sensor Automations###############
-##########################################
+#########################################
+
+  - alias: lights off when coffee is done
+    trigger:
+      platform: state
+      entity_id: switch.keurig
+      to: 'off'
+    condition:
+      condition: and
+      conditions:
+          - condition: state
+            entity_id: binary_sensor.workday_sensor
+            state: 'on'
+    action:
+      - service: homeassistant.turn_off
+        entity_id: light.kitchen_light
+      - service: homeassistant.turn_off
+        entity_id: light.billys_nightstand
 
   - alias: turn living room tv off
     trigger:
@@ -454,7 +490,7 @@
       service: homeassistant.turn_on
       entity_id: light.laundry
 
-  - alias: outside lights on when door opens
+  - alias: turn outside lights on when door opens
     trigger:
       - platform: state
         entity_id: binary_sensor.front_door_opened
@@ -462,7 +498,7 @@
         to: 'on'
     condition:
       - condition: template
-        value_template: '{{ states.sun.sun.attributes.elevation < 1.0 }}'
+        value_template: '{{ states.sun.sun.attributes.elevation < 1.5 }}'
     action:
       service: homeassistant.turn_on
       entity_id: switch.outside_lights
@@ -713,7 +749,7 @@
 ##############Dasher Automations################
 ##########################################
 
-  - alias: kitchen sink off
+  - alias: kitchen sink light off
     trigger:
       - platform: event
         event_type: toggle_kitchen_sink_light
@@ -725,7 +761,7 @@
       service: homeassistant.turn_off
       entity_id: light.kitchen_sink_light
 
-  - alias: kitchen sink on
+  - alias: kitchen sink light on
     trigger:
       - platform: event
         event_type: toggle_kitchen_sink_light
@@ -736,20 +772,6 @@
     action:
       service: homeassistant.turn_on
       entity_id: light.kitchen_sink_light
-
-  - alias: downstairs hallway off
-    trigger:
-      - platform: event
-        event_type: toggle_hallway_light
-      - platform: event
-        event_type: hallway_off
-    condition:
-      - condition: state
-        entity_id: switch.hallway_ceiling_fan_light
-        state: 'on'
-    action:
-      service: homeassistant.turn_off
-      entity_id: switch.hallway_ceiling_fan_light
 
   - alias: outside off
     trigger:
@@ -861,8 +883,6 @@
     trigger:
       - platform: event
         event_type: toggle_hallway_light
-      - platform: event
-        event_type: hallway_off
     condition:
       - condition: state
         entity_id: light.down_stairs_hallway
@@ -871,24 +891,17 @@
       service: homeassistant.turn_off
       entity_id: light.down_stairs_hallway
 
-  - alias: hallway fan light on
+  - alias: downstairs hallway on
     trigger:
       - platform: event
         event_type: toggle_hallway_light
-      - platform: event
-        event_type: hallway_on
     condition:
-      condition: and
-      conditions:
-        - condition: state
-          entity_id: switch.hallway_ceiling_fan_light
-          state: 'off'
-        - condition: state
-          entity_id: light.down_stairs_hallway
-          state: 'off'
+      - condition: state
+        entity_id: light.down_stairs_hallway
+        state: 'off'
     action:
       service: homeassistant.turn_on
-      entity_id: switch.hallway_ceiling_fan_light
+      entity_id: light.down_stairs_hallway
 
 ####################################
 #########Device Tracker Automations##########
@@ -911,11 +924,7 @@
   - alias: left home
     trigger:
       - platform: state
-        entity_id: device_tracker.w1ll1am_a0001
-        from: 'home'
-        to: 'not_home'
-      - platform: state
-        entity_id: device_tracker.melinas_iphone
+        entity_id: group.us
         from: 'home'
         to: 'not_home'
     condition:
@@ -925,34 +934,35 @@
     action:
       - service: homeassistant.turn_on
         entity_id: script.lock_the_door
-
-  - alias: billy left home
-    trigger:
-      - platform: state
-        entity_id: device_tracker.w1ll1am_a0001
-        from: 'home'
-        to: 'not_home'
-    condition:
-      - condition: state
-        entity_id: device_tracker.melinas_iphone
-        state: 'not_home'
-    action:
       - service: homeassistant.turn_off
-        entity_id: group.wink_lights
+        entity_id: group.every_light
 
-  - alias: melina left home
-    trigger:
-      - platform: state
-        entity_id: device_tracker.melinas_iphone
-        from: 'home'
-        to: 'not_home'
-    condition:
-      - condition: state
-        entity_id: device_tracker.w1ll1am_a0001
-        state: 'not_home'
-    action:
-      - service: homeassistant.turn_off
-        entity_id: group.wink_lights
+  # - alias: billy left home
+  #   trigger:
+  #     - platform: state
+  #       entity_id: device_tracker.w1ll1am_a0001
+  #       from: 'home'
+  #       to: 'not_home'
+  #   condition:
+  #     - condition: state
+  #       entity_id: device_tracker.melinas_iphone
+  #       state: 'not_home'
+  #   action:
+
+
+  # - alias: melina left home
+  #   trigger:
+  #     - platform: state
+  #       entity_id: device_tracker.melinas_iphone
+  #       from: 'home'
+  #       to: 'not_home'
+  #   condition:
+  #     - condition: state
+  #       entity_id: device_tracker.w1ll1am_a0001
+  #       state: 'not_home'
+  #   action:
+  #     - service: homeassistant.turn_off
+  #       entity_id: group.every_light
 
   - alias: billy at ktown
     trigger:
@@ -1013,6 +1023,10 @@
     trigger:
       - platform: state
         entity_id: device_tracker.w1ll1am_a0001
+        from: 'not_home'
+        to: 'home'
+      - platform: state
+        entity_id: device_tracker.melinas_iphone
         from: 'not_home'
         to: 'home'
     condition:
@@ -1210,7 +1224,7 @@
         entity_id: alarm_control_panel.ha_alarm
 
 #######################################
-###########Random Event Automations###########
+###########Random Event Automations##########
 #######################################
 
   - alias: sound bar off when chromecast is off
@@ -1260,10 +1274,41 @@
         data:
           message: 'Front door failed to lock!'
 
+  - alias: tamper alert
+    trigger:
+      - platform: template
+        value_template: "{{ is_state_attr('binary_sensor.front_door_opened', 'tamper_detected', True) }}"
+      - platform: template
+        value_template: "{{ is_state_attr('binary_sensor.bathroom_door_opened', 'tamper_detected', True) }}"
+      - platform: template
+        value_template: "{{ is_state_attr('binary_sensor.garage_entry_door_opened', 'tamper_detected', True) }}"
+      - platform: template
+        value_template: "{{ is_state_attr('binary_sensor.bedroom_door_opened', 'tamper_detected', True) }}"
+      - platform: template
+        value_template: "{{ is_state_attr('binary_sensor.office_door_opened', 'tamper_detected', True) }}"
+      - platform: template
+        value_template: "{{ is_state_attr('binary_sensor.laundry_door_opened', 'tamper_detected', True) }}"
+      - platform: template
+        value_template: "{{ is_state_attr('binary_sensor.living_room_motion', 'tamper_detected', True) }}"
+      - platform: template
+        value_template: "{{ is_state_attr('binary_sensor.up_stairs_hallway_motion', 'tamper_detected', True) }}"
+      - platform: template
+        value_template: "{{ is_state_attr('binary_sensor.bedroom_motion', 'tamper_detected', True) }}"
+    action:
+      - service: notify.sms_billy
+        data_template:
+          message: >
+            {{ trigger.entity_id.split('.')[1].replace('_',' ') }} sensor tamper detected!
+      - service: persistent_notification.create
+        data_template:
+          title: Tamper detected
+          message: >
+            {{ trigger.entity_id.split('.')[1].replace('_',' ') }} sensor tamper detected!
+
   - alias: battery low alert
     trigger:
       - platform: template
-        value_template: "{{ states.switch.siren.attributes.battery_level | float < 40 }}"
+        value_template: "{{ states.wink.siren.attributes.battery_level | float < 40 }}"
       - platform: template
         value_template: "{{ states.sensor.egg_minder.attributes.battery_level | float < 40 }}"
       - platform: template
@@ -1286,17 +1331,20 @@
         value_template: "{{ states.binary_sensor.up_stairs_hallway_motion.attributes.battery_level | float < 40 }}"
       - platform: template
         value_template: "{{ states.binary_sensor.bedroom_motion.attributes.battery_level | float < 40 }}"
+      - platform: template
+        value_template: "{{ states.binary_sensor.kidde_smoke_detector_co_detected.attributes.battery_level | float < 40 }}"
+      - platform: template
+        value_template: "{{ states.lock.front_door.attributes.battery_level | float < 40 }}"
     action:
       - service: notify.sms_billy
         data_template:
           message: >
-            Change the {{ trigger.entity_id.split('.')[1].replace('_battery', '').replace('_',' ') }} battery
+            Change the {{ trigger.entity_id.split('.')[1].replace('_',' ') }} battery
       - service: persistent_notification.create
         data_template:
           title: Low Battery
           message: >
-            Change the {{ trigger.entity_id.split('.')[1].replace('_battery', '').replace('_',' ') }} battery
-
+            Change the {{ trigger.entity_id.split('.')[1].replace('_',' ') }} battery
 
   - alias: locking the door stops the auto lock script
     trigger:
@@ -1393,7 +1441,7 @@
       service: notify.sms_billy
       data_template:
         message: >
-          There is a Wink hub update available!
+          There is a Wink {{ trigger.entity_id.split('.')[1] }} update available!
 
   - alias: notify that there is a wink api issue feed
     trigger:
@@ -1434,7 +1482,7 @@
 
 
 ################################
-#########Camera stuff##############
+#########Camera stuff###########
 ###############################
 
   - alias: camera default
@@ -1490,3 +1538,11 @@
     action:
       service: homeassistant.turn_on
       entity_id: switch.reboot
+
+  - alias: reboot camera for calibration
+    trigger:
+      - platform: time
+        at: '00:01:00'
+    action:
+      - service: homeassistant.turn_on
+        entity_id: switch.reboot

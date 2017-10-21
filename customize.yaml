@@ -1,7 +1,20 @@
+####################################
+##########Wink Sirens##############
+####################################
+
+    wink.siren:
+      hidden: true
+    wink.dome:
+      hidden: true
+
 ######################################
-##########Binary Sensors###################
+##########Binary Sensors##############
 ######################################
 
+    binary_sensor.kidde_smoke_detector_co_detected:
+      hidden: true
+    binary_sensor.kidde_smoke_detector_smoke_detected:
+      hidden: true
     binary_sensor.living_room_tv:
       hidden: true
     binary_sensor.workday_sensor:
@@ -143,6 +156,8 @@
       icon: mdi:lamp
     light.shelf_lamp:
       icon: mdi:lamp
+    light.all_wink_lights:
+      hidden: true
 
 ######################################
 #############Switches#################
@@ -221,6 +236,8 @@
 ##############Script##################
 ######################################
 
+    script.bathroom_lights:
+      hidden: true
     script.dim_bathroom_lights:
       hidden: true
     script.alarm_away:

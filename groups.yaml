@@ -91,8 +91,8 @@
   Office lights: switch.melinas_office_lamp, switch.billys_office_lamp, light.office_lamp, switch.power_strip
   Hallway lights: switch.up_stairs_hallway_light, switch.up_stairs_hallway_fan, light.down_stairs_hallway, switch.down_stairs_closet_light
   Entryway: switch.outside_lights, switch.entry_light, switch.outside_christmas_lights
-  Every light: switch.outside_lights, switch.up_stairs_hallway_light, switch.office_lamp, switch.bedroom_lamp, light.down_stairs_hallway, light.garage, light.living_room_lamp, light.billys_nightstand, light.laundry, switch.entry_light, switch.dining_room_fan, light.kitchen_sink_light, light.shelf_lamp, light.bedroom_lamp, light.kitchen_light, switch.power_strip, light.office_lamp, light.under_bed_light, swtich.down_stairs_closet_light
-  Wink lights: light.laundry, light.billys_nightstand, light.office_lamp, light.living_room_lamp, light.garage, light.down_stairs_hallway, light.shelf_lamp, light.bedroom_lamp, light.bathroom_light, light.dining_room_fan_light
+  Every light: light.all_wink_lights, switch.outside_lights, switch.power_strip, light.under_bed_light, swtich.down_stairs_closet_light, switch.work_bench_lights
+  Wink lights: light.all_wink_lights
 
   ##################################
   ############Sensor Groups#############
@@ -100,11 +100,11 @@
 
   Hallway sensors: switch.siren, binary_sensor.up_stairs_hallway_motion, binary_sensor.down_stairs_bathroom_door, sensor.up_stairs_hallway_temperature
   Security: switch.siren, binary_sensor.living_room_motion, binary_sensor.front_door_opened, binary_sensor.garage_entry_door_opened, binary_sensor.up_stairs_hallway_motion, binary_sensor.kitchen_door_opened, binary_sensor.down_stairs_bathroom_door_opened, binary_sensor.office_door_opened, binary_sensor.bedroom_door_opened
-  Weather: sun.sun, sensor.hallway_humidity_2, sensor.hallway_temperature, sensor.dark_sky_precip_probability, sensor.dark_sky_summary, sensor.dark_sky_daily_summary, sensor.pws_alerts
+  Weather: sun.sun, sensor.hallway_humidity_2, sensor.hallway_temperature, sensor.dark_sky_precip_probability, sensor.dark_sky_summary, sensor.dark_sky_daily_summary, sensor.pws_alerts, sensor.dark_sky_temperature
   Office sensors: binary_sensor.office_door_opened, binary_sensor.ups_online_status, sensor.speedtest_download, sensor.speedtest_upload, sensor.speedtest_ping, sensor.ups_status, sensor.ups_time_left, sensor.office_temperature, sensor.office_humidity, binary_sensor.office_motion
   Garage sensors: binary_sensor.garage_entry_door_opened, sensor.garage_freezer_temperature
   Outside sensors: binary_sensor.front_door_opened
-  Turtle tank: sensor.turtle_tank_water, sensor.turtle_tank_basking, sensor.turtle_tank_uvb
+  Turtle tank: sensor.turtle_tank_water, sensor.turtle_tank_basking, sensor.turtle_tank_uvb, history_graph.uvb
   Kitchen sensors: sensor.egg_minder, binary_sensor.dishwasher_liquid_detected
   Bedroom sensors: sensor.bedroom_temperature, binary_sensor.bedroom_door_opened, binary_sensor.bedroom_motion, sensor.porkfolio_balance, sensor.bedroom_humidity, sensor.bedroom_temperature_2, binary_sensor.bedroom_motion_2, binary_sensor.bathroom_door_opened
   Living room sensors: binary_sensor.living_room_motion, sensor.living_room_temperature, sensor.broadlink_sensor_temperature, sensor.wink_relay_sensor_humidity, sensor.wink_relay_sensor_temperature
@@ -137,7 +137,7 @@
     name: Under cabinet lights
     entities:
       - switch.kitchen_cabinet_lights
-      - switch.cabinet_lights_25
-      - switch.cabinet_lights_brightness
-      - switch.cabinet_lights_strobe
+      # - switch.cabinet_lights_25
+      # - switch.cabinet_lights_brightness
+      # - switch.cabinet_lights_strobe
 

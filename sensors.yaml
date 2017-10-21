@@ -1,8 +1,9 @@
+
   #######################################
   #############Garage Freezer#############
   #######################################
 
-  # - platform: season
+  - platform: season
 
   - platform: arest
     resource: http://192.168.5.26
@@ -65,6 +66,7 @@
       - summary
       - precip_probability
       - daily_summary
+      - temperature
 
   - platform: wunderground
     api_key: !secret wunderground_key

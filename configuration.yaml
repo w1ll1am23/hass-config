@@ -13,8 +13,11 @@ http:
 logger:
   default: warn
   logs:
+      wink: debug
       pywink.api: debug
       requests.packages.urllib3: critical
+      urllib3.exceptions.HeaderParsingError: critical
+      urllib3.connectionpool: critical
 
 #discovery:
 
@@ -26,9 +29,15 @@ logbook:
 
 history:
 
+history_graph:
+    gr1:
+      name: UVB
+      entities:
+        - sensor.turtle_tank_uvb
+      hours_to_show: 4380
+      refresh: 300
+
 recorder:
-    purge_days: 5
-#    db_url: mysql://hass@localhost/homeassistant
 
 sun:
 
@@ -71,15 +80,8 @@ octoprint:
 
 wink:
   local_control: True
-  #email: !secret wink_user
-  #password:  !secret wink_password
-  #client_id: !secret wink_client_id
-  #client_secret: !secret wink_client_secret
 
 camera:
-  # - platform: generic
-  #   still_image_url: https://radblast.wunderground.com/cgi-bin/radar/WUNIDS_map?station=ILN&brand=wui&num=10&delay=15&type=N0R&frame=0&scale=1.000&noclutter=0&showstorms=0&mapx=400&mapy=240&centerx=400&centery=240&transx=0&transy=0&showlabels=1&severe=0&rainsnow=0&lightning=0&smooth=1&rand=24474020&lat=0&lon=0&label=you
-  #   name: CIN
   - platform: mjpeg
     mjpeg_url: !secret camera_url
 
@@ -93,7 +95,6 @@ device_tracker:
 alarm_control_panel:
   - platform: manual
     name: "HA Alarm"
-    # code: !secret alarm_code
     pending_time: 60
     trigger_time: 120
 
