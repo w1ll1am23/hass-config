@@ -1,5 +1,5 @@
 ##########################################
-###############Time Automations################
+###############Time Automations###########
 ##########################################
 
   - alias: turn off outside lights if on for 15 minutes
@@ -161,8 +161,19 @@
 
 
 #########################################
-##############Sensor Automations###############
+##############Sensor Automations#########
 #########################################
+
+  - alias: Bedroom lights off if no upstairs motion
+    trigger:
+      platform: state
+      entity_id: group.upstairs_motion
+      to: 'off'
+      for:
+        minutes: 5
+    action:
+      - service: homeassistant.turn_off
+        entity_id: group.bedroom_lights
 
   - alias: lights off when coffee is done
     trigger:
@@ -172,9 +183,9 @@
     condition:
       condition: and
       conditions:
-          - condition: state
-            entity_id: binary_sensor.workday_sensor
-            state: 'on'
+        - condition: state
+          entity_id: binary_sensor.workday_sensor
+          state: 'on'
     action:
       - service: homeassistant.turn_off
         entity_id: light.kitchen_light
@@ -904,24 +915,126 @@
       entity_id: light.down_stairs_hallway
 
 ####################################
-#########Device Tracker Automations##########
+###Device Tracker Automations#######
 ####################################
 
-  - alias: both not home
+  - alias: both not home set climate auto
     trigger:
       - platform: state
         entity_id: group.us
-        from: 'home'
         to: 'not_home'
         for:
           minutes: 30
+    condition:
+      condition: and
+      conditions:
+        - condition: template
+          value_template: '{{ states.climate.thermostat.state == "auto" }}'
+    action:
+      - service: climate.set_temperature
+        entity_id: climate.thermostat
+        data:
+          target_temp_high: 73
+          target_temp_low: 67
+
+  - alias: someone is home set climate auto
+    trigger:
+      - platform: state
+        entity_id: group.us
+        to: 'home'
+    condition:
+      condition: and
+      conditions:
+        - condition: template
+          value_template: '{{ states.climate.thermostat.state == "auto" }}'
+    action:
+      - service: climate.set_temperature
+        entity_id: climate.thermostat
+        data:
+          target_temp_high: 71
+          target_temp_low: 69
+
+  - alias: both not home set climate winter
+    trigger:
+      - platform: state
+        entity_id: group.us
+        to: 'not_home'
+        for:
+          minutes: 30
+    condition:
+      condition: and
+      conditions:
+        - condition: state
+          entity_id: sensor.season
+          state: 'Winter'
+        - condition: template
+          value_template: '{{ states.climate.thermostat.state == "heat" }}'
+    action:
+      - service: climate.set_temperature
+        entity_id: climate.thermostat
+        data:
+          temperature: 67
+
+  - alias: both not home set climate summer
+    trigger:
+      - platform: state
+        entity_id: group.us
+        to: 'not_home'
+        for:
+          minutes: 30
+    condition:
+      condition: and
+      conditions:
+        - condition: state
+          entity_id: sensor.season
+          state: 'Summer'
+        - condition: template
+          value_template: '{{ states.climate.thermostat.state == "cool" }}'
     action:
       - service: climate.set_temperature
         entity_id: climate.thermostat
         data:
           temperature: 73
 
-  - alias: left home
+  - alias: someone is home set climate winter
+    trigger:
+      - platform: state
+        entity_id: group.us
+        to: 'home'
+    condition:
+      condition: and
+      conditions:
+        - condition: state
+          entity_id: sensor.season
+          state: 'Winter'
+        - condition: template
+          value_template: '{{ states.climate.thermostat.state == "heat" }}'
+    action:
+      - service: climate.set_temperature
+        entity_id: climate.thermostat
+        data:
+          temperature: 70
+
+  - alias: someone is home set climate summer
+    trigger:
+      - platform: state
+        entity_id: group.us
+        to: 'home'
+    condition:
+      condition: and
+      conditions:
+        - condition: state
+          entity_id: sensor.season
+          state: 'Summer'
+        - condition: template
+          value_template: '{{ states.climate.thermostat.state == "cool" }}'
+    action:
+      - service: climate.set_temperature
+        entity_id: climate.thermostat
+        data:
+          temperature: 71
+
+  - alias: left home lock door
     trigger:
       - platform: state
         entity_id: group.us
@@ -936,6 +1049,17 @@
         entity_id: script.lock_the_door
       - service: homeassistant.turn_off
         entity_id: group.every_light
+
+  - alias: left home turn off lights
+    trigger:
+      - platform: state
+        entity_id: group.us
+        from: 'home'
+        to: 'not_home'
+    action:
+      - service: homeassistant.turn_off
+        entity_id: group.every_light
+
 
   # - alias: billy left home
   #   trigger:
@@ -1014,10 +1138,21 @@
       - service: notify.sms_billy
         data:
           message: 'Melina is home'
-      - service: climate.set_temperature
-        entity_id: climate.thermostat
+
+  - alias: melina is home her away home
+    trigger:
+      - platform: state
+        entity_id: device_tracker.melinas_iphone
+        from: 'not_home'
+        to: 'Home away from Home'
+    condition:
+      condition: state
+      entity_id: script.hass_start
+      state: 'off'
+    action:
+      - service: notify.sms_billy
         data:
-          temperature: 71
+          message: 'Melina is at her away home'
 
   - alias: home on friday open garage to put trash can away
     trigger:
@@ -1066,10 +1201,6 @@
       - service: notify.ios_melinas_iphone
         data:
           message: 'Billy is home'
-      - service: climate.set_temperature
-        entity_id: climate.thermostat
-        data:
-          temperature: 71
 
   - alias: turn outside lights on when someone is home
     trigger:
@@ -1204,6 +1335,32 @@
       - service: notify.ios_melinas_iphone
         data:
           message: 'Intruder detected!'
+
+  - alias: fire alert
+    trigger:
+      - platform: state
+        entity_id: binary_sensor.kidde_smoke_detector_smoke_detected
+        to: 'on'
+    action:
+      - service: notify.sms_billy
+        data:
+          message: 'Smoke detected!'
+      - service: notify.ios_melinas_iphone
+        data:
+          message: 'Smoke detected!'
+
+  - alias: co alert
+    trigger:
+      - platform: state
+        entity_id: binary_sensor.kidde_smoke_detector_co_detected
+        to: 'on'
+    action:
+      - service: notify.sms_billy
+        data:
+          message: 'Carbon Monoxide detected!'
+      - service: notify.ios_melinas_iphone
+        data:
+          message: 'Carbon Monoxide detected!'
 
   - alias: code unlock disable alarm
     trigger:
@@ -1434,9 +1591,9 @@
   - alias: notify that there is a wink hub update
     trigger:
       - platform: template
-        value_template: "{{ is_state_attr('binary_sensor.hub', 'update needed', True) }}"
+        value_template: "{{ is_state_attr('binary_sensor.hub', 'update_needed', True) }}"
       - platform: template
-        value_template: "{{ is_state_attr('binary_sensor.wink_relay', 'update needed', True) }}"
+        value_template: "{{ is_state_attr('binary_sensor.wink_relay', 'update_needed', True) }}"
     action:
       service: notify.sms_billy
       data_template:

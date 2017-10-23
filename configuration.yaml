@@ -91,6 +91,11 @@ device_tracker:
     password: !secret trackr_password
   - platform: owntracks
     max_gps_accuracy: 200
+  - platform: unifi_direct
+    host: 192.168.5.2
+    username: w1ll1am
+    password: 'rj%va1JA@Z^&^W2w'
+    track_new_devices: false
 
 alarm_control_panel:
   - platform: manual
