@@ -2,14 +2,31 @@
     host: 192.168.5.9
     mac: 'B4:43:0D:EE:F7:A0'
     switches:
+      # Disassembled rf switch
+      # garage_light:
+      #   friendly_name: 'garage light'
+      #   command_on: 'sgcyAAcSFAYHEhQGBxIHEggSFAYIEggSCBIUBggSFAYHEhQGBxIIEhQGEwYHEggSFAYUBge+AAAAAAAA'
+      #   command_off: 'sgoyAAcSFAYHEhQGBxIHEggSFAYHEggSBxIUBgcTFAYHEhQGBxIIEhQGFAYUBhQGBxIIEge9AAAAAAAA'
       # 0320-5
       kitchen_cabinet_lights:
         friendly_name: 'kitchen cabinet lights'
         command_on: 'shMyAAYTEggGExIHBhQGFAYUEggGEwYTEgcSBwYUEggGFBIHBhMGEwYTBhMGEwYTEggSCAa8AAAAAAAA'
         command_off: 'sgYyAAYTEwcGExMHBhMHEwYTEwcGEwcTEwcTBwYUEgcGExMHBhQGEwYTBhMTBxMHBhMGEwa+AAAAAAAA'
+      work_bench_lights:
+        friendly_name: 'work bench lights'
+        command_on: 'shcyAAYSBhEHEhIGBxIHEgcSEgcGEhIGBhISBgcSEgYGEhIGBxIHEhIHEgYHEQcSEgYSBgayAAAAAAAA'
+        command_off: 'shkyAAYSBhIGEhIGBhIGEgYSEgYGEhIGBxESBgcSEgYGEhIGBhIGEhIGEgYSBhIGBxIGEgayAAAAAAAA'
+      # christmas_tree:
+      #   friendly_name: 'christmas tree'
+      #   command_on: 'shEyAAYSBhIGEhIGBhIGEQcSEgYHEhIGBhISBgYSEgYGEhIGEgYSBgYSBhIHEgcSEgcSBwayAAAAAAAA'
+      #   command_off: 'shIyAAcSBxIHEhIHBxIHEgYREgcGEhIGBhISBgcSEgYHEhIHEgcSBwcSBhESBhIGBhIHEgeyAAAAAAAA'
+      # outside_christmas_lights:
+      #   friendly_name: 'outside christmas lights'
+      #   command_on: 'siQyAAYSBxIHEhIHBhIGEgYSEgYGEhIGBhISBgYSEgYSBxIHBxIGEgcSBhIGEgYSEQcSBwayAAAAAAAA'
+      #   command_off: 'shAyAAcSBhIGEhIGBhIHEgYSEgYHEhIGBhISBgYSEgYSBhIGBxIGEQcSBhISBhIGBhIHEgayAAAAAAAA'
       # 0320-2
-      printer_lights:
-        friendly_name: 'printer light'
+      garage_light:
+        friendly_name: 'garage light'
         command_on: 'shEyAAYTEgcGExIHBhMGEwYTEgcGEwYTBhMSBwYTEgcGExIHEgcSBwYTBhMGEwYTEgcSBwa7AAAAAAAA'
         command_off: 'shUyAAYTEgcGExIHBhMGEwYTEgcGEwYTBhMSBwYTEgcGExIHEgcSBwYTBhMSBxIHBxMGEwa7AAAAAAAA'
       tv_power:
@@ -20,6 +37,10 @@
         friendly_name: 'living room soundbar power'
         command_on: 'JgBQAAABJpITEhITEhISExITEhISExITEjcSNxI3EjcSNxI3EzcSNxISExISExITEhISExI3EhMSNxI3EjcSNxM3EjcSEhI3EgAE8QABK0gSAA0FAAAAAAAAAAA='
         command_off: 'JgBQAAABJpITEhITEhISExITEhISExITEjcSNxI3EjcSNxI3EzcSNxISExISExITEhISExI3EhMSNxI3EjcSNxM3EjcSEhI3EgAE8QABK0gSAA0FAAAAAAAAAAA='
+      soundbar_volume:
+        friendly_name: 'soundbar volume'
+        command_on: 'JgBIAAABKpIUEhITFDYUERQRFBEUERQSEjgUNhQRFDYUNxQ2FDYSOBQSFDYUERQRFBEUERQRFBEUNxQRFDYUNhQ2FDcUNhQ2FAANBQ=='
+        command_off: 'JgBQAAABJ5USExITEjgTEhMSExMSExITEjgSOBMSEzgSOBI4EjgTOBI4EjgSExMSExMSExITEhMSExITEzcTOBI4EjgSOBM4EgAFCAABJ0sSAA0FAAAAAAAAAAA='
       tv_play:
         friendly_name: 'living room tv play'
         command_on: 'JgBQAAABKpIUERUQFTUVEBURFBEUERQRFDYVNRUQFTYUNhQ2FDYVNRU2FDYUERQRFDYVNRURFBEUERQRFDYVNRUQFREUNhQ2FAAFBQABKkgVAA0FAAAAAAAAAAA='
@@ -66,15 +87,6 @@
         friendly_name: 'Office air conditioner'
         command_on: 'JgDKAJOQEzUTEhM1EzUTERMREzUTEhMREzUTERMSEjYSNhMREzUTNRMSEzUTNRM1EzUTNRM1ExITNRMRExETERMSEhITERMREzUTNRM1ExITERMRExETNhMRExETERM1EzUTNhM1Eq2TjxQ1ExETNRM1ExETEhI2ExETERM1ExISEhM1EzUTERM1EzYTERM1EzUTNRM1EzYSNhMREzUTERMRExITERMRExETERM1EzYTNRMRExETERMSEjYTERMRExETNRM2EzUTNRIADQUAAAAAAAAAAAAAAAAAAA=='
         command_off: 'JgDKAJCTEDgQFBE3ETcRFBAUEDgQFBETETgQFBAUEDcSNxETETgQFBA4ETcRNxE3ERMROBA4EDgRExETERQQFBA4EBQRExE4EDgQOBAUERMRExEUEBQQFBETERMROBA4EDgQOBE3Eq2RkhA4ERMRNxE3ERQQFBA4ERMRExE4EBQQFBE3ETcRExE4EBQQOBE3ETcRNxETETgQOBA4ERMRExEUEBQQOBAUERMROBA4EDgQFBETERMRFBAUEBQRExETETgQOBA4EDgQOBIADQUAAAAAAAAAAAAAAAAAAA=='
-
-  - platform: arest
-    resource: http://192.168.5.34
-    name: Up stairs hallway
-    pins:
-      5:
-       name: Light
-      4:
-       name: Fan
 
   - platform: command_line
     switches:

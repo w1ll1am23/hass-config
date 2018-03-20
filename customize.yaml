@@ -1,12 +1,3 @@
-####################################
-##########Wink Sirens##############
-####################################
-
-    wink.siren:
-      hidden: true
-    wink.dome:
-      hidden: true
-
 ######################################
 ##########Binary Sensors##############
 ######################################
@@ -23,11 +14,17 @@
       hidden: true
     binary_sensor.office_temp_low_threshold:
       hidden: true
-    binary_sensor.wink_relay_sensor_presence:
+    binary_sensor.wink_relay_downstairs_presence:
       hidden: true
-    binary_sensor.wink_relays_top_button:
+    binary_sensor.wink_relay_downstairss_top_button:
       hidden: true
-    binary_sensor.wink_relays_bottom_button:
+    binary_sensor.wink_relay_downstairss_bottom_button:
+      hidden: true
+    binary_sensor.wink_relay_upstairs_presence:
+      hidden: true
+    binary_sensor.wink_relay_upstairss_top_button:
+      hidden: true
+    binary_sensor.wink_relay_upstairss_bottom_button:
       hidden: true
     binary_sensor.remote:
       hidden: true
@@ -35,14 +32,18 @@
       hidden: true
     binary_sensor.gang_2:
       hidden: true
-    binary_sensor.wink_relay:
+    binary_sensor.gang_3:
+      hidden: true
+    binary_sensor.wink_relay_downstairs:
+      hidden: true
+    binary_sensor.wink_relay_upstairs:
       hidden: true
     binary_sensor.hub:
       hidden: true
     binary_sensor.is_on:
       hidden: true
-    binary_sensor.dishwasher_liquid_detected:
-      friendly_name: "Dishwasher leak"
+    binary_sensor.bathroom_sink_liquid_detected:
+      friendly_name: "Bathroom sink leak"
     binary_sensor.spotter_loudness:
       hidden: true
     binary_sensor.spotter_brightness:
@@ -77,8 +78,18 @@
     sensor.melinas_iphone_battery_level:
       hidden: true
     sensor.melinas_iphone_battery_state:
+       hidden: true
+    sensor.wink_relay_downstairs_proximity:
       hidden: true
-    sensor.wink_relay_sensor_proximity:
+    sensor.wink_relay_upstairs_proximity:
+      hidden: true
+    sensor.wink_relay_downstairs_humidity:
+      hidden: true
+    sensor.wink_relay_upstairs_humidity:
+      hidden: true
+    sensor.wink_relay_downstairs_temperature:
+      hidden: true
+    sensor.wink_relay_upstairs_temperature:
       hidden: true
     sensor.broadlink_sensor_temperature:
       friendly_name: living_room_temperature_2
@@ -96,18 +107,6 @@
       entity_picture: /local/humidity.jpg
     sensor.hallway_temperature:
       friendly_name: outside_temperature
-    sensor.lock_battery:
-      hidden: true
-    sensor.siren_battery:
-      hidden: true
-    sensor.eggtray_battery:
-      hidden: true
-    sensor.front_door_battery:
-      hidden: true
-    sensor.kitchen_door_battery:
-      hidden: true
-    sensor.garage_entry_door_battery:
-      hidden: true
     sensor.turtle_tank_water:
       friendly_name: Water
     sensor.turtle_tank_uvb:
@@ -148,6 +147,10 @@
 ###############Lights#################
 ######################################
 
+    light.fan_light_1:
+      hidden: true
+    light.fan_light_2:
+      hidden: true
     light.bedroom_lamp:
       icon: mdi:lamp
     light.office_lamp:
@@ -158,6 +161,15 @@
       icon: mdi:lamp
     light.all_wink_lights:
       hidden: true
+      emulated_hue_hidden: true
+    light.bathroom_light_1:
+      emulated_hue_hidden: true
+    light.bathroom_light_2:
+      emulated_hue_hidden: true
+    light.bathroom_light_3:
+      emulated_hue_hidden: true
+    light.bathroom_light_4:
+      emulated_hue_hidden: true
 
 ######################################
 #############Switches#################
@@ -165,77 +177,97 @@
 
     switch.living_room_tv_power:
       hidden: true
+      emulated_hue_name: "tv"
     switch.living_room_soundbar_power:
       hidden: true
+      emulated_hue_hidden: true
     switch.living_room_tv_pause:
       hidden: true
+      emulated_hue_hidden: true
     switch.living_room_tv_play:
       hidden: true
+      emulated_hue_hidden: true
     switch.camera:
       hidden: true
+      emulated_hue_hidden: true
     switch.reboot:
       hidden: true
+      emulated_hue_hidden: true
     switch.dog:
       hidden: true
+      emulated_hue_hidden: true
     switch.door:
       hidden: true
+      emulated_hue_hidden: true
     switch.snapshot:
       hidden: true
-    switch.outlet_1:
+      emulated_hue_hidden: true
+    switch.day:
+      emulated_hue_hidden: true
+    switch.night:
+      emulated_hue_hidden: true
+    switch.turtle:
       hidden: true
-    switch.outlet_2:
-      hidden: true
-    switch.outside_christmas_lights:
+    switch.christmas_tree:
+      icon: mdi:pine-tree
+    switch.baby_christmas_tree:
       icon: mdi:pine-tree
     switch.keurig:
       icon: mdi:coffee
-    switch.siren:
-      icon: mdi:bell-ring
+      emulated_hue_name: "coffee maker"
     switch.dining_room_fan:
       icon: mdi:fan
     switch.kitchen_cabinet_lights:
       assumed_state: true
-    switch.heated_blanket:
-      assumed_state: true
-    switch.printer_light:
-      assumed_state: true
-    switch.up_stairs_hallway_fan:
-      friendly_name: Fan
-      entity_picture: /local/fan.jpg
-    switch.up_stairs_hallway_light:
-      friendly_name: Light
-      entity_picture: /local/fan_light.jpg
     switch.office_lamp:
       friendly_name: Melina's Lamp
       icon: mdi:lamp
-    switch.garage_door:
-      entity_picture: /local/garage.jpg
-    switch.christmas_tree:
+    switch.outside_christmas_lights:
       icon: mdi:pine-tree
+    switch.power_strip:
+      emulated_hue_hidden: true
 
 ######################################
 ##############Groups##################
 ######################################
 
+    group.all_devices:
+      hidden: false
+    group.all_automations:
+      hidden: false
+    group.all_scripts:
+      hidden: false
+    group.all_lights:
+      hidden: false
+      emulated_hue_hidden: true
+    group.all_sensors:
+      hidden: false
+    group.all_binary_sensors:
+      hidden: false
     group.wink_lights:
       hidden: true
-    group.all_lights:
-      hidden: true
+      emulated_hue_hidden: true
     group.all_switches:
-      hidden: true
+      hidden: false
+      emulated_hue_hidden: true
     group.living_room_light:
       hidden: true
+      emulated_hue_hidden: true
     group.hallway_light:
       hidden: true
+      emulated_hue_hidden: true
     group.every_light:
       hidden: true
     group.entryway:
       hidden: true
+      emulated_hue_hidden: true
 
 ######################################
 ##############Script##################
 ######################################
 
+    script.christmas_tree:
+      hidden: true
     script.bathroom_lights:
       hidden: true
     script.dim_bathroom_lights:

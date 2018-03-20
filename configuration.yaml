@@ -10,16 +10,33 @@ homeassistant:
 http:
   api_password: !secret http_password
 
+
+emulated_hue:
+  exposed_domains:
+    - group
+    - light
+    - switch
+    - fan
+    - media_player
+
 logger:
-  default: warn
+  default: info
   logs:
       wink: debug
       pywink.api: debug
+      pubnub: debug
       requests.packages.urllib3: critical
       urllib3.exceptions.HeaderParsingError: critical
       urllib3.connectionpool: critical
+      homeassistant.components.device_tracker.pfsense: debug
 
 #discovery:
+
+input_datetime:
+ hvac_filter_install_date:
+   name: hvac_filter_install_date
+   has_date: true
+   has_time: false
 
 updater:
 
@@ -77,25 +94,35 @@ mqtt:
 octoprint:
   host: 192.168.5.4
   api_key: !secret octoprint_api_key
+  bed: false
+  number_of_tools: 1
 
 wink:
   local_control: True
 
 camera:
   - platform: mjpeg
-    mjpeg_url: !secret camera_url
+    name: living room camera
+    mjpeg_url: !secret living_room_camera_url
+  - platform: mjpeg
+    name: outside camera
+    mjpeg_url: !secret outside_camera_url
+  - platform: local_file
+    name: last outside motion
+    file_path: /media_drive4/cameras/outsidecamera/newest.jpg
 
 device_tracker:
+  - platform: unifi_direct
+    host: 192.168.5.2
+    username: w1ll1am
+    password: !secret unifi_password
+    new_device_details:
+      track_new_devices: False
   - platform: trackr
     username: !secret my_email
     password: !secret trackr_password
   - platform: owntracks
     max_gps_accuracy: 200
-  - platform: unifi_direct
-    host: 192.168.5.2
-    username: w1ll1am
-    password: 'rj%va1JA@Z^&^W2w'
-    track_new_devices: false
 
 alarm_control_panel:
   - platform: manual
@@ -148,21 +175,21 @@ input_boolean:
     initial: off
     icon: mdi:beach_access
 
-cover:
-  - platform: command_line
-    covers:
-      garage_door:
-        command_open: /usr/bin/curl 192.168.5.28:3000/toggleDoor
-        command_close: /usr/bin/curl 192.168.5.28:3000/toggleDoor
-        command_stop: /usr/bin/curl 192.168.5.28:3000/toggleDoor
-        command_state: /usr/bin/curl 192.168.5.28:3000
-        value_template: >
-          {%- if is_state("sensor.arest_sensor_garage", "Closed") -%}
-          0
-          {%- else -%}
-          100
-          {%- endif %}
-        friendly_name: Garage Door
+#cover:
+#  - platform: command_line
+#    covers:
+#      garage_door:
+#        command_open: /usr/bin/curl 192.168.5.28:3000/toggleDoor
+#        command_close: /usr/bin/curl 192.168.5.28:3000/toggleDoor
+#        command_stop: /usr/bin/curl 192.168.5.28:3000/toggleDoor
+#        command_state: /usr/bin/curl 192.168.5.28:3000
+#        value_template: >
+#          {%- if is_state("sensor.arest_sensor_garage", "Closed") -%}
+#          0
+#          {%- else -%}
+#          100
+#          {%- endif %}
+#        friendly_name: Garage Door
 
 light:
   - platform: flux_led
@@ -186,3 +213,6 @@ input_select:
       - "Snapshot"
     initial: 'Default'
     icon: mdi:camera
+
+tts:
+  - platform: picotts

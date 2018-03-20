@@ -1,6 +1,91 @@
+
 ##########################################
 ###############Time Automations###########
 ##########################################
+
+  - alias: turtle morning
+    trigger:
+      - platform: time
+        at: '09:00:00'
+    action:
+      service: homeassistant.turn_on
+      entity_id: script.turtle_morning
+
+  - alias: turtle night
+    trigger:
+      - platform: time
+        at: '22:00:00'
+    action:
+      service: homeassistant.turn_on
+      entity_id: script.turtle_night
+
+  - alias: good morning
+    trigger:
+      - platform: time
+        at: '06:30:00'
+    condition:
+      condition: and
+      conditions:
+        - condition: state
+          entity_id: binary_sensor.workday_sensor
+          state: 'on'
+    action:
+      service: homeassistant.turn_on
+      entity_id: script.good_morning
+
+
+  # 7776000 = 90 days
+  - alias: filter change reminder
+    trigger:
+      platform: time
+      at: '18:30:00'
+    condition:
+      condition: and
+      conditions:
+      - condition: template
+        value_template: '{{ as_timestamp(now()) > (states.input_datetime.hvac_filter_install_date.attributes.timestamp + 7776000) }}'
+    action:
+      - service: notify.sms_billy
+        data:
+          message: >
+            HVAC filter needs replaced
+      - service: persistent_notification.create
+        data_template:
+          title: HVAC filter needs replaced
+          message: >
+            Replace filter
+
+  # 3888000 = 45 days
+  - alias: filter change reminder
+    trigger:
+      platform: time
+      at: '18:30:00'
+    condition:
+      condition: and
+      conditions:
+      - condition: template
+        value_template: '{{ as_timestamp(now()) > (states.input_datetime.hvac_filter_install_date.attributes.timestamp + 7776000) }}'
+    action:
+      - service: notify.sms_billy
+        data:
+          message: >
+            HVAC filter needs rotated
+      - service: persistent_notification.create
+        data_template:
+          title: HVAC filter needs replaced
+          message: >
+            HVAC filter needs rotated
+
+  - alias: turn off entry light if on for 5 minutes
+    trigger:
+      - platform: state
+        entity_id: switch.entry_light
+        to: 'on'
+        for:
+          minutes: 5
+    action:
+      service: homeassistant.turn_off
+      entity_id: switch.entry_light
 
   - alias: turn off outside lights if on for 15 minutes
     trigger:
@@ -33,9 +118,6 @@
     trigger:
       - platform: state
         entity_id: binary_sensor.bedroom_motion
-        to: 'on'
-      - platform: state
-        entity_id: binary_sensor.bedroom_motion_2
         to: 'on'
     condition:
       condition: and
@@ -98,7 +180,7 @@
           entity_id: binary_sensor.workday_sensor
           state: 'on'
         - condition: state
-          entity_id: device_tracker.w1ll1am_a0001
+          entity_id: device_tracker.w1ll1am_oneplus5t
           state: 'not_home'
         - condition: state
           entity_id: device_tracker.melinas_iphone
@@ -142,8 +224,10 @@
       - platform: event
         event_type: toggle_outside_lights
     action:
-      service: homeassistant.turn_off
-      entity_id: switch.outside_lights
+      - service: homeassistant.turn_off
+        entity_id: switch.outside_lights
+      - service: homeassistant.turn_off
+        entity_id: switch.outside_christmas_lights
 
   - alias: turn on living room lamp at dusk
     trigger:
@@ -156,21 +240,107 @@
             entity_id: group.us
             state: home
     action:
-      service: homeassistant.turn_on
-      entity_id: light.shelf_lamp
+      - service: homeassistant.turn_on
+        entity_id: light.shelf_lamp
+      - service: homeassistant.turn_on
+        entity_id: script.christmas_tree
 
+  - alias: turn on christmas lights at dusk
+    trigger:
+      - platform: template
+        value_template: '{{ states.sun.sun.attributes.elevation < 4.0 }}'
+    action:
+      - service: homeassistant.turn_on
+        entity_id: switch.outside_christmas_lights
 
 #########################################
 ##############Sensor Automations#########
 #########################################
 
-  - alias: Bedroom lights off if no upstairs motion
+  - alias: line cross notification
+    trigger:
+      - platform: state
+        entity_id: binary_sensor.front_door_field_detection
+        to: 'on'
+    condition:
+      condition: and
+      conditions:
+        - condition: state
+          entity_id: binary_sensor.front_door_opened
+          state: 'off'
+    action:
+      - service: notify.sms_billy
+        data:
+          message: 'Someone is at the door'
+      - service: notify.ios_melinas_iphone
+        data:
+          message: 'Someone is at the door'
+
+  - alias: line cross lights on
+    trigger:
+      - platform: state
+        entity_id: binary_sensor.front_door_field_detection
+        to: 'on'
+    condition:
+      - condition: template
+        value_template: '{{ states.sun.sun.attributes.elevation < 2.5 }}'
+    action:
+      - service: homeassistant.turn_on
+        entity_id: switch.entry
+      - service: homeassistant.turn_on
+        entity_id: switch.outside_lights
+
+  - alias: stairs motion hallway lights on
+    trigger:
+      - platform: state
+        entity_id: binary_sensor.stairs_motion
+        to: 'on'
+    condition:
+      condition: and
+      conditions:
+        - condition: state
+          entity_id: light.ceiling_fan
+          state: 'off'
+    action:
+      - service: light.turn_on
+        entity_id: light.ceiling_fan
+      - service: homeassistant.turn_on
+        entity_id: switch.upstairs_hallway
+
+  - alias: ceiling fan lights off after 5 minutes
+    trigger:
+      - platform: state
+        entity_id: light.ceiling_fan
+        to: 'on'
+        for:
+          minutes: 5
+    action:
+      service: light.turn_off
+      entity_id: light.ceiling_fan
+
+  - alias: hallway light off after 5 minutes
+    trigger:
+      - platform: state
+        entity_id: switch.upstairs_hallway
+        to: 'on'
+        for:
+          minutes: 5
+    action:
+      service: homeassistant.turn_off
+      entity_id: switch.upstairs_hallway
+
+  - alias: bedroom lights off if no upstairs motion
     trigger:
       platform: state
       entity_id: group.upstairs_motion
       to: 'off'
       for:
-        minutes: 5
+        minutes: 15
+    condition:
+      condition: and
+      conditions:
+        - condition: time
+          after: '07:30:00'
     action:
       - service: homeassistant.turn_off
         entity_id: group.bedroom_lights
@@ -249,7 +419,7 @@
           state: 'off'
     action:
       service: light.turn_on
-      entity_id: light.bathroom_light_1
+      entity_id: light.bathroom_light_4
       data:
         brightness: 10
 
@@ -319,7 +489,7 @@
   - alias: dining room fan on
     trigger:
       platform: state
-      entity_id: binary_sensor.wink_relays_bottom_button
+      entity_id: binary_sensor.wink_relay_downstairss_bottom_button
       from: 'off'
       to: 'on'
     condition:
@@ -333,7 +503,7 @@
   - alias: dining room fan off
     trigger:
       platform: state
-      entity_id: binary_sensor.wink_relays_bottom_button
+      entity_id: binary_sensor.wink_relay_downstairss_bottom_button
       from: 'off'
       to: 'on'
     condition:
@@ -347,7 +517,7 @@
   - alias: dining room fan light on
     trigger:
       platform: state
-      entity_id: binary_sensor.wink_relays_top_button
+      entity_id: binary_sensor.wink_relay_downstairss_top_button
       from: 'off'
       to: 'on'
     condition:
@@ -361,7 +531,7 @@
   - alias: dining room fan light off
     trigger:
       platform: state
-      entity_id: binary_sensor.wink_relays_top_button
+      entity_id: binary_sensor.wink_relay_downstairss_top_button
       from: 'off'
       to: 'on'
     condition:
@@ -372,20 +542,21 @@
       - service: homeassistant.turn_off
         entity_id: light.dining_room_fan_light
 
-  - alias: office lights on remote
-    trigger:
-      platform: template
-      value_template: "{{ is_state_attr('binary_sensor.remote', 'button_on_pressed', True)}}"
-    action:
-      - service: homeassistant.turn_on
-        entity_id: light.office_lamp
-      - service: homeassistant.turn_on
-        entity_id: switch.power_strip
+  # - alias: office lights on remote
+  #   trigger:
+  #     platform: template
+  #     value_template: "{{ is_state_attr('binary_sensor.remote', 'button_on_pressed', True)}}"
+  #   action:
+  #     - service: homeassistant.turn_on
+  #       entity_id: light.office_lamp
+  #     - service: homeassistant.turn_on
+  #       entity_id: switch.power_strip
 
-  - alias: office lights off remote
+  - alias: office lights off hallway relay
     trigger:
-      platform: template
-      value_template: "{{ is_state_attr('binary_sensor.remote', 'button_off_pressed', True)}}"
+      platform: state
+      entity_id: binary_sensor.wink_relay_upstairss_bottom_button
+      to: 'on'
     action:
       - service: homeassistant.turn_off
         entity_id: light.office_lamp
@@ -422,16 +593,16 @@
           message: >
             Dryer is done!
 
-  - alias: notify of dishwasher leak
+  - alias: notify of bathroom sink leak
     trigger:
       - platform: state
-        entity_id: binary_sensor.dishwasher_liquid_detected
+        entity_id: binary_sensor.bathroom_sink_liquid_detected
         to: 'on'
     action:
       - service: notify.sms_billy
         data:
           message: >
-            The dishwasher is leaking!!!
+            The bathroom sink is leaking!!!
 
   - alias: power is out
     trigger:
@@ -591,9 +762,6 @@
       - platform: state
         entity_id: binary_sensor.bedroom_motion
         to: 'on'
-      - platform: state
-        entity_id: binary_sensor.bedroom_motion_2
-        to: 'on'
     condition:
       condition: and
       conditions:
@@ -611,9 +779,6 @@
       - platform: state
         entity_id: binary_sensor.bedroom_motion
         to: 'on'
-      - platform: state
-        entity_id: binary_sensor.bedroom_motion_2
-        to: 'on'
     condition:
       condition: and
       conditions:
@@ -626,29 +791,29 @@
       service: homeassistant.turn_on
       entity_id: script.under_bed_light
 
-  - alias: notify turtle tank water is too cold
-    trigger:
-      - platform: numeric_state
-        entity_id: sensor.tank_water
-        below: 23
-    action:
-      - service: notify.sms_billy
-        data:
-          message: >
-            Tank water too cold! {{ states('sensor.tank_water') }}
+  # - alias: notify turtle tank water is too cold
+  #   trigger:
+  #     - platform: numeric_state
+  #       entity_id: sensor.tank_water
+  #       below: 23
+  #   action:
+  #     - service: notify.sms_billy
+  #       data:
+  #         message: >
+  #           Tank water too cold! {{ states('sensor.tank_water') }}
 
-  - alias: notify turtle tank bulb has burned out
-    trigger:
-      - platform: state
-        entity_id: binary_sensor.tank_basking_threshold
-        to: 'on'
-        for:
-          minutes: 45
-    action:
-      - service: notify.sms_billy
-        data:
-          message: >
-            Check basking bulbs! {{ states('sensor.turtle_tank_basking') }}
+  # - alias: notify turtle tank bulb has burned out
+  #   trigger:
+  #     - platform: state
+  #       entity_id: binary_sensor.tank_basking_threshold
+  #       to: 'on'
+  #       for:
+  #         minutes: 45
+  #   action:
+  #     - service: notify.sms_billy
+  #       data:
+  #         message: >
+  #           Check basking bulbs! {{ states('sensor.turtle_tank_basking') }}
 
   - alias: notify uvb bulb needs changed
     trigger:
@@ -660,6 +825,19 @@
       data:
         message: >
           UVB output too low! Replace bulb {{ states('sensor.tank_uvb') }}
+
+  - alias: billy unlocked the door close garage
+    trigger:
+      - platform: state
+        entity_id: binary_sensor.billy
+        to: 'on'
+    condition:
+      - condition: state
+        entity_id: cover.garage_door
+        state: 'open'
+    action:
+      - service: cover.close_cover
+        entity_id: cover.garage_door
 
   - alias: notify that billy unlocked the door
     trigger:
@@ -725,8 +903,6 @@
       - platform: event
         event_type: good_night
     action:
-      - service: light.turn_on
-        entity_id: light.melinas_nightstand
       - service: homeassistant.turn_on
         entity_id: script.good_night
 
@@ -757,8 +933,32 @@
       entity_id: script.good_morning
 
 ##########################################
-##############Dasher Automations################
+##############Dasher Automations##########
 ##########################################
+
+  - alias: garage door open
+    trigger:
+      - platform: event
+        event_type: toggle_garage_door
+    condition:
+      - condition: state
+        entity_id: cover.garage_door
+        state: 'closed'
+    action:
+      service: cover.open_cover
+      entity_id: cover.garage_door
+
+  - alias: garage door close
+    trigger:
+      - platform: event
+        event_type: toggle_garage_door
+    condition:
+      - condition: state
+        entity_id: cover.garage_door
+        state: 'open'
+    action:
+      service: cover.close_cover
+      entity_id: cover.garage_door
 
   - alias: kitchen sink light off
     trigger:
@@ -918,6 +1118,90 @@
 ###Device Tracker Automations#######
 ####################################
 
+  - alias: disable home automations for 15 minutes after we leave
+    trigger:
+      - platform: state
+        entity_id: group.us
+        to: 'not_home'
+    action:
+      - service: automation.turn_off
+        entity_id: automation.someone_is_home_set_climate_auto
+      - service: automation.turn_off
+        entity_id: automation.someone_is_home_set_climate_winter
+      - service: automation.turn_off
+        entity_id: automation.someone_is_home_set_climate_summer
+      - service: automation.turn_off
+        entity_id: automation.turn_outside_lights_on_when_someone_is_home
+      - service: automation.turn_off
+        entity_id: automation.turn_entry_and_living_room_on_when_someone_gets_home
+
+  - alias: enable home automations after 15 minutes of being away
+    trigger:
+      - platform: state
+        entity_id: group.us
+        to: 'not_home'
+        for:
+          minutes: 15
+    action:
+      - service: automation.turn_on
+        entity_id: automation.someone_is_home_set_climate_auto
+      - service: automation.turn_on
+        entity_id: automation.someone_is_home_set_climate_winter
+      - service: automation.turn_on
+        entity_id: automation.someone_is_home_set_climate_summer
+      - service: automation.turn_on
+        entity_id: automation.turn_outside_lights_on_when_someone_is_home
+      - service: automation.turn_on
+        entity_id: automation.turn_entry_and_living_room_on_when_someone_gets_home
+
+  - alias: disable home automations for 15 minutes after billy leaves
+    trigger:
+      - platform: state
+        entity_id: device_tracker.w1ll1am_oneplus5t
+        to: 'not_home'
+    action:
+      - service: automation.turn_off
+        entity_id: automation.billy_is_home
+      - service: automation.turn_off
+        entity_id: automation.billy_is_home_open_garage
+
+  - alias: enable home automations after 15 minutes of billy being away
+    trigger:
+      - platform: state
+        entity_id: device_tracker.w1ll1am_oneplus5t
+        to: 'not_home'
+        for:
+          minutes: 15
+    action:
+      - service: automation.turn_on
+        entity_id: automation.billy_is_home
+      - service: automation.turn_on
+        entity_id: automation.billy_is_home_open_garage
+
+  - alias: disable home automations for 15 minutes after melina leaves
+    trigger:
+      - platform: state
+        entity_id: device_tracker.melinas_iphone
+        to: 'not_home'
+    action:
+      - service: automation.turn_off
+        entity_id: automation.melina_is_home
+      - service: automation.turn_off
+        entity_id: automation.ios_unlock_door_notification
+
+  - alias: enable home automations after 15 minutes of melina being away
+    trigger:
+      - platform: state
+        entity_id: device_tracker.melinas_iphone
+        to: 'not_home'
+        for:
+          minutes: 15
+    action:
+      - service: automation.turn_on
+        entity_id: automation.melina_is_home
+      - service: automation.turn_off
+        entity_id: automation.ios_unlock_door_notification
+
   - alias: both not home set climate auto
     trigger:
       - platform: state
@@ -947,6 +1231,10 @@
       conditions:
         - condition: template
           value_template: '{{ states.climate.thermostat.state == "auto" }}'
+        - condition: template
+          value_template: '{{ states.climate.thermostat.attributes.target_temp_low != 69 }}'
+        - condition: template
+          value_template: '{{ states.climate.thermostat.attributes.target_temp_high != 71 }}'
     action:
       - service: climate.set_temperature
         entity_id: climate.thermostat
@@ -964,9 +1252,6 @@
     condition:
       condition: and
       conditions:
-        - condition: state
-          entity_id: sensor.season
-          state: 'Winter'
         - condition: template
           value_template: '{{ states.climate.thermostat.state == "heat" }}'
     action:
@@ -990,6 +1275,8 @@
           state: 'Summer'
         - condition: template
           value_template: '{{ states.climate.thermostat.state == "cool" }}'
+        - condition: template
+          value_template: '{{ states.climate.thermostat.attributes.target_temp_high != 73 }}'
     action:
       - service: climate.set_temperature
         entity_id: climate.thermostat
@@ -1004,11 +1291,10 @@
     condition:
       condition: and
       conditions:
-        - condition: state
-          entity_id: sensor.season
-          state: 'Winter'
         - condition: template
           value_template: '{{ states.climate.thermostat.state == "heat" }}'
+        - condition: template
+          value_template: '{{ states.climate.thermostat.attributes.target_temp_low != 70 }}'
     action:
       - service: climate.set_temperature
         entity_id: climate.thermostat
@@ -1028,6 +1314,8 @@
           state: 'Summer'
         - condition: template
           value_template: '{{ states.climate.thermostat.state == "cool" }}'
+        - condition: template
+          value_template: '{{ states.climate.thermostat.attributes.target_temp_high != 71 }}'
     action:
       - service: climate.set_temperature
         entity_id: climate.thermostat
@@ -1056,6 +1344,8 @@
         entity_id: group.us
         from: 'home'
         to: 'not_home'
+        for:
+          minutes: 5
     action:
       - service: homeassistant.turn_off
         entity_id: group.every_light
@@ -1064,7 +1354,7 @@
   # - alias: billy left home
   #   trigger:
   #     - platform: state
-  #       entity_id: device_tracker.w1ll1am_a0001
+  #       entity_id: device_tracker.w1ll1am_oneplus5t
   #       from: 'home'
   #       to: 'not_home'
   #   condition:
@@ -1082,7 +1372,7 @@
   #       to: 'not_home'
   #   condition:
   #     - condition: state
-  #       entity_id: device_tracker.w1ll1am_a0001
+  #       entity_id: device_tracker.w1ll1am_oneplus5t
   #       state: 'not_home'
   #   action:
   #     - service: homeassistant.turn_off
@@ -1091,7 +1381,7 @@
   - alias: billy at ktown
     trigger:
       - platform: state
-        entity_id: device_tracker.w1ll1am_a0001
+        entity_id: device_tracker.w1ll1am_oneplus5t
         from: 'not_home'
         to: 'Ktown'
     condition:
@@ -1139,7 +1429,7 @@
         data:
           message: 'Melina is home'
 
-  - alias: melina is home her away home
+  - alias: melina is at her away home
     trigger:
       - platform: state
         entity_id: device_tracker.melinas_iphone
@@ -1154,14 +1444,10 @@
         data:
           message: 'Melina is at her away home'
 
-  - alias: home on friday open garage to put trash can away
+  - alias: billy is home open garage
     trigger:
       - platform: state
-        entity_id: device_tracker.w1ll1am_a0001
-        from: 'not_home'
-        to: 'home'
-      - platform: state
-        entity_id: device_tracker.melinas_iphone
+        entity_id: device_tracker.w1ll1am_oneplus5t
         from: 'not_home'
         to: 'home'
     condition:
@@ -1170,9 +1456,9 @@
           - condition: state
             entity_id: input_boolean.on_vacation
             state: 'off'
-          - condition: time
-            weekday:
-              - fri
+          - condition: state
+            entity_id: binary_sensor.workday_sensor
+            state: 'on'
           - condition: time
             after: '13:00:00'
           - condition: time
@@ -1181,16 +1467,20 @@
             entity_id: cover.garage_door
             state: 'closed'
             for:
-                hours: 8
+                hours: 7
     action:
       - service: cover.open_cover
         data:
           entity_id: cover.garage_door
+      - service: notify.sms_billy
+        data:
+          message: >
+            Opening the garage automatically! Woot!
 
   - alias: billy is home
     trigger:
       - platform: state
-        entity_id: device_tracker.w1ll1am_a0001
+        entity_id: device_tracker.w1ll1am_oneplus5t
         from: 'not_home'
         to: 'home'
     condition:
@@ -1198,6 +1488,10 @@
       entity_id: script.hass_start
       state: 'off'
     action:
+      - service: homeassistant.turn_off
+        entity_id: automation.billy_is_home
+      - service: homeassistant.turn_off
+        entity_id: automation.billy_is_home
       - service: notify.ios_melinas_iphone
         data:
           message: 'Billy is home'
@@ -1213,7 +1507,7 @@
         from: 'off'
         to: 'on'
       - platform: state
-        entity_id: device_tracker.w1ll1am_a0001
+        entity_id: device_tracker.w1ll1am_oneplus5t
         from: 'not_home'
         to: 'home'
       - platform: state
@@ -1240,7 +1534,7 @@
         from: 'off'
         to: 'on'
       - platform: state
-        entity_id: device_tracker.w1ll1am_a0001
+        entity_id: device_tracker.w1ll1am_oneplus5t
         from: 'not_home'
         to: 'home'
       - platform: state
@@ -1342,6 +1636,8 @@
         entity_id: binary_sensor.kidde_smoke_detector_smoke_detected
         to: 'on'
     action:
+      - service: homeassistant.turn_on
+        entity_id: group.every_light
       - service: notify.sms_billy
         data:
           message: 'Smoke detected!'
@@ -1355,6 +1651,8 @@
         entity_id: binary_sensor.kidde_smoke_detector_co_detected
         to: 'on'
     action:
+      - service: homeassistant.turn_on
+        entity_id: group.every_light
       - service: notify.sms_billy
         data:
           message: 'Carbon Monoxide detected!'
@@ -1384,15 +1682,22 @@
 ###########Random Event Automations##########
 #######################################
 
+  - alias: turn billy is home back on
+    trigger:
+      - platform: state
+        entity_id: automation.billy_is_home
+        to: 'off'
+        for:
+          minutes: 30
+    action:
+      - service: homeassistant.turn_on
+        entity_id: automation.billy_is_home
+
   - alias: sound bar off when chromecast is off
     trigger:
       - platform: state
         entity_id: media_player.living_room
         to: 'off'
-    condition:
-      - condition: state
-        entity_id: switch.living_room_soundbar_power
-        state: 'on'
     action:
       - service: homeassistant.turn_off
         entity_id: switch.living_room_soundbar_power
@@ -1402,13 +1707,10 @@
       - platform: state
         entity_id: media_player.living_room
         to: 'playing'
-    condition:
-      - condition: state
-        entity_id: switch.living_room_soundbar_power
-        state: 'off'
+        from: 'off'
     action:
       - service: homeassistant.turn_on
-        entity_id: switch.living_room_soundbar_power
+        entity_id: switch.soundbar_volume
 
   - alias: check for locked lock
     trigger:
@@ -1450,7 +1752,7 @@
       - platform: template
         value_template: "{{ is_state_attr('binary_sensor.up_stairs_hallway_motion', 'tamper_detected', True) }}"
       - platform: template
-        value_template: "{{ is_state_attr('binary_sensor.bedroom_motion', 'tamper_detected', True) }}"
+        value_template: "{{ is_state_attr('binary_sensor.stairs_motion', 'tamper_detected', True) }}"
     action:
       - service: notify.sms_billy
         data_template:
@@ -1481,13 +1783,13 @@
       - platform: template
         value_template: "{{ states.binary_sensor.laundry_door_opened.attributes.battery_level | float < 40 }}"
       - platform: template
-        value_template: "{{ states.binary_sensor.dishwasher_liquid_detected.attributes.battery_level | float < 40 }}"
+        value_template: "{{ states.binary_sensor.bathroom_liquid_detected.attributes.battery_level | float < 40 }}"
       - platform: template
         value_template: "{{ states.binary_sensor.living_room_motion.attributes.battery_level | float < 40 }}"
       - platform: template
         value_template: "{{ states.binary_sensor.up_stairs_hallway_motion.attributes.battery_level | float < 40 }}"
       - platform: template
-        value_template: "{{ states.binary_sensor.bedroom_motion.attributes.battery_level | float < 40 }}"
+        value_template: "{{ states.binary_sensor.stairs_motion.attributes.battery_level | float < 40 }}"
       - platform: template
         value_template: "{{ states.binary_sensor.kidde_smoke_detector_co_detected.attributes.battery_level | float < 40 }}"
       - platform: template
@@ -1557,43 +1859,27 @@
       - platform: state
         entity_id: sensor.freezer_temperature
         to: 'unavailable'
-      - platform: state
-        entity_id: switch.hallway_ceiling_fan_fan
-        to: 'unavailable'
-      - platform: state
-        entity_id: switch.hallway_ceiling_fan_light
-        to: 'unavailable'
       - platform: template
         value_template: "{{ not states.sensor.garage_freezer_temperature }}"
-      - platform: template
-        value_template: "{{ not states.sensor.turtle_tank_water }}"
+      - platform: state
+        entity_id: switch.turtle
+        to: 'unavailable'
+      # - platform: template
+      #   value_template: "{{ not states.sensor.turtle_tank_water }}"
     action:
       service: notify.sms_billy
       data_template:
         message: >
           {{ trigger.entity_id.split('.')[1] }} is offline.
 
-  - alias: turn ceiling fan light on when kitchen cabinet lights turned off
-    trigger:
-      - platform: state
-        entity_id: switch.kitchen_cabinet_lights
-        to: 'off'
-      - platform: state
-        entity_id: switch.kitchen_sink_light
-        to: 'off'
-    condition:
-      - condition: time
-        after: '21:40:00'
-    action:
-      service: homeassistant.turn_on
-      entity_id: switch.hallway_ceiling_fan_light
-
   - alias: notify that there is a wink hub update
     trigger:
       - platform: template
         value_template: "{{ is_state_attr('binary_sensor.hub', 'update_needed', True) }}"
       - platform: template
-        value_template: "{{ is_state_attr('binary_sensor.wink_relay', 'update_needed', True) }}"
+        value_template: "{{ is_state_attr('binary_sensor.wink_relay_downstairs', 'update_needed', True) }}"
+      - platform: template
+        value_template: "{{ is_state_attr('binary_sensor.wink_relay_upstairs', 'update_needed', True) }}"
     action:
       service: notify.sms_billy
       data_template:

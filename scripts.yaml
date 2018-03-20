@@ -1,8 +1,44 @@
+  turtle_morning:
+    sequence:
+      - service: homeassistant.turn_on
+        data:
+          entity_id: switch.day
+      - delay:
+          seconds: 5
+      - service: homeassistant.turn_off
+        data:
+          entity_id: switch.night
+
+  turtle_night:
+    sequence:
+      - service: homeassistant.turn_on
+        data:
+          entity_id: switch.night
+      - delay:
+          seconds: 5
+      - service: homeassistant.turn_off
+        data:
+          entity_id: switch.day
+
+  christmas_tree:
+    alias: christmas tree
+    sequence:
+      - service: homeassistant.turn_on
+        data:
+          entity_id: switch.christmas_tree
+      - delay:
+          seconds: 5
+      - service: homeassistant.turn_on
+        data:
+          entity_id: switch.baby_christmas_tree
+      - delay:
+          seconds: 5
+
   bathroom_lights:
     alias: bathroom lights timer
     sequence:
       - delay:
-          minutes: 20
+          minutes: 30
       - service: light.turn_off
         data:
           entity_id: light.bathroom_light
@@ -151,36 +187,28 @@
   good_night:
     alias: Good Night
     sequence:
+        - service: light.turn_on
+          data:
+            entity_id: light.melinas_nightstand
         - service: lock.lock
           data:
             entity_id: lock.front_door
         - service: homeassistant.turn_off
           data:
-            entity_id: group.every_light
+            entity_id: group.good_night_group
         - delay:
             minutes: 2
         - event: check_for_locked_lock
           event_data:
             name: Locked?
             message: is the front door locked?
-        - service: light.turn_on
-          data:
-            entity_id: light.billys_nightstand
-            brightness: 5
-        - delay:
-           minutes: 2
-        - service: light.turn_off
-          data:
-            entity_id: light.billys_nightstand
-        - delay:
-           minutes: 2
-        - service: homeassistant.turn_on
-          data:
-            entity_id: switch.bedroom_fan
 
   good_morning:
     alias: Good Morning
     sequence:
+        - service: homeassistant.turn_off
+          data:
+            entity_id: switch.bedroom_fan
         - service: light.turn_on
           data:
             entity_id: light.billys_nightstand
@@ -188,9 +216,6 @@
         - service: homeassistant.turn_on
           data:
             entity_id: switch.keurig
-        - service: homeassistant.turn_on
-          data:
-            entity_id: switch.bedroom_fan
         - delay:
             minutes: 5
         - service: light.turn_on

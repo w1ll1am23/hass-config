@@ -23,20 +23,20 @@
   #########Turtle Tank Sensors###########
   #######################################
 
-  - platform: arest
-    resource: http://192.168.5.16:3001
-    name: Turtle Tank
-    monitored_variables:
-      Water:
-        name: Water
-        unit_of_measurement: '°C'
+  # - platform: arest
+  #   resource: http://192.168.5.16:3001
+  #   name: Turtle Tank
+  #   monitored_variables:
+  #     Water:
+  #       name: Water
+  #       unit_of_measurement: '°C'
 
-      Basking:
-        name: Basking
-        unit_of_measurement: '°C'
-      UVB:
-        name: UVB
-        unit_of_measurement: 'uW/cm2'
+  #     Basking:
+  #       name: Basking
+  #       unit_of_measurement: '°C'
+  #     UVB:
+  #       name: UVB
+  #       unit_of_measurement: 'uW/cm2'
 
   #######################################
   ##########Octoprint Sensors############
@@ -53,7 +53,7 @@
   - platform: template
     sensors:
       average_temp:
-        value_template: '{{ ((states.sensor.living_room_temperature.state | float +  states.sensor.living_room_temperature.state | float +  states.sensor.up_stairs_hallway_temperature.state | float + states.climate.thermostat.attributes.current_temperature | float + states.sensor.spotter_temperature.state | float + states.sensor.broadlink_sensor_temperature.state | float + states.sensor.office_temperature.state | float + states.sensor.bedroom_temperature_2.state | float ) / 8 )  | round(2) }}'
+        value_template: '{{ ((states.sensor.living_room_temperature.state | float +  states.sensor.living_room_temperature.state | float +  states.sensor.up_stairs_hallway_temperature.state | float + states.sensor.stairs_temperature.state | float + states.climate.thermostat.attributes.current_temperature | float + states.sensor.broadlink_sensor_temperature.state | float + states.sensor.office_temperature.state | float + states.sensor.bedroom_temperature.state | float + states.sensor.wink_relay_downstairs_temperature.state | float + states.sensor.wink_relay_upstairs_temperature.state | float) / 10 )  | round(2) }}'
         unit_of_measurement: '°F'
 
   #######################################
@@ -144,3 +144,53 @@
     name: "Bedroom Temperature"
     unit_of_measurement: "°F"
     value_template: '{{ value_json.temperature | round(1) }}'
+
+
+  #######################################
+  #############Battery levels############
+  #######################################
+
+  - platform: template
+    sensors:
+      living_room_motion_battery:
+        value_template: '{{ (states.binary_sensor.living_room_motion.attributes.battery_level | float) | round(2) }}'
+        unit_of_measurement: '%'
+      stairs_motion_battery:
+        value_template: '{{ (states.binary_sensor.stairs_motion.attributes.battery_level | float) | round(2) }}'
+        unit_of_measurement: '%'
+      up_stairs_hallway_motion_battery:
+        value_template: '{{ (states.binary_sensor.up_stairs_hallway_motion.attributes.battery_level | float) | round(2) }}'
+        unit_of_measurement: '%'
+      front_door_lock_battery:
+        value_template: '{{ (states.lock.front_door.attributes.battery_level | float) | round(2) }}'
+        unit_of_measurement: '%'
+      eggtray_battery:
+        value_template: '{{ (states.sensor.egg_minder.attributes.battery_level | float) | round(2) }}'
+        unit_of_measurement: '%'
+      front_door_sensor_battery:
+        value_template: '{{ (states.binary_sensor.front_door_opened.attributes.battery_level | float) | round(2) }}'
+        unit_of_measurement: '%'
+      garage_entry_door_sensor_battery:
+        value_template: '{{ (states.binary_sensor.garage_entry_door_opened.attributes.battery_level | float) | round(2) }}'
+        unit_of_measurement: '%'
+      bedroom_door_sensor_battery:
+        value_template: '{{ (states.binary_sensor.bedroom_door_opened.attributes.battery_level | float) | round(2) }}'
+        unit_of_measurement: '%'
+      office_door_sensor_battery:
+        value_template: '{{ (states.binary_sensor.office_door_opened.attributes.battery_level | float) | round(2) }}'
+        unit_of_measurement: '%'
+      down_stairs_bathroom_door_sensor_battery:
+        value_template: '{{ (states.binary_sensor.down_stairs_bathroom_door_opened.attributes.battery_level | float) | round(2) }}'
+        unit_of_measurement: '%'
+      bedroom_bathroom_door_sensor_battery:
+        value_template: '{{ (states.binary_sensor.bathroom_door_opened.attributes.battery_level | float) | round(2) }}'
+        unit_of_measurement: '%'
+      bathroom_sink_sensor_battery:
+        value_template: '{{ (states.binary_sensor.bathroom_sink_liquid_detected.attributes.battery_level | float) | round(2) }}'
+        unit_of_measurement: '%'
+      siren_battery:
+        value_template: '{{ (states.wink.siren.attributes.battery_level | float) | round(2) }}'
+        unit_of_measurement: '%'
+      smoke_detectors_battery:
+        value_template: '{{ (states.binary_sensor.kidde_smoke_detector_smoke_detected.attributes.battery_level | float) | round(2) }}'
+        unit_of_measurement: '%'

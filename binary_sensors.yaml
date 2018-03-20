@@ -1,3 +1,9 @@
+
+  - platform: hikvision
+    host: 192.168.5.31
+    username: admin
+    password: 7m*8!MoPg!vVDo8@
+
   - platform: ping
     host: 192.168.5.7
     name: Living room TV
@@ -25,7 +31,7 @@
   - platform: template
     sensors:
       tank_basking_threshold:
-        value_template: "{{ states('sensor.turtle_tank_basking')|int <= 27 }}"
+        value_template: "{{ states('sensor.turtle_tank_basking')|int <= 83 }}"
         entity_id: sensor.turtle_tank_basking
 
   - platform: template
