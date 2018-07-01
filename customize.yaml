@@ -1,330 +1,40 @@
-######################################
-##########Binary Sensors##############
-######################################
-
-    binary_sensor.kidde_smoke_detector_co_detected:
-      hidden: true
-    binary_sensor.kidde_smoke_detector_smoke_detected:
-      hidden: true
-    binary_sensor.living_room_tv:
-      hidden: true
-    binary_sensor.workday_sensor:
-      hidden: true
-    binary_sensor.office_temp_high_threshold:
-      hidden: true
-    binary_sensor.office_temp_low_threshold:
-      hidden: true
-    binary_sensor.wink_relay_downstairs_presence:
-      hidden: true
-    binary_sensor.wink_relay_downstairss_top_button:
-      hidden: true
-    binary_sensor.wink_relay_downstairss_bottom_button:
-      hidden: true
-    binary_sensor.wink_relay_upstairs_presence:
-      hidden: true
-    binary_sensor.wink_relay_upstairss_top_button:
-      hidden: true
-    binary_sensor.wink_relay_upstairss_bottom_button:
-      hidden: true
-    binary_sensor.remote:
-      hidden: true
-    binary_sensor.gang:
-      hidden: true
-    binary_sensor.gang_2:
-      hidden: true
-    binary_sensor.gang_3:
-      hidden: true
-    binary_sensor.wink_relay_downstairs:
-      hidden: true
-    binary_sensor.wink_relay_upstairs:
-      hidden: true
-    binary_sensor.hub:
-      hidden: true
-    binary_sensor.is_on:
-      hidden: true
-    binary_sensor.bathroom_sink_liquid_detected:
-      friendly_name: "Bathroom sink leak"
-    binary_sensor.spotter_loudness:
-      hidden: true
-    binary_sensor.spotter_brightness:
-      hidden: true
-    binary_sensor.spotter_vibration:
-      friendly_name: "Dryer"
-    binary_sensor.freezer_temp_threshold:
-      hidden: true
-    binary_sensor.tank_basking_threshold:
-      hidden: true
-    binary_sensor.billy:
-      hidden: true
-    binary_sensor.melina:
-      hidden: true
-    binary_sensor.gdottie:
-      hidden: true
-    binary_sensor.parents:
-      hidden: true
-    binary_sensor.octoprint_printing:
-      icon: mdi:printer-3d
-    binary_sensor.octoprint_printing_error:
-      icon: mdi:printer-3d
-
-######################################
-#############Sensors####################
-######################################
-
-    sensor.iphone_battery_level:
-      hidden: true
-    sensor.iphone_battery_state:
-      hidden: true
-    sensor.melinas_iphone_battery_level:
-      hidden: true
-    sensor.melinas_iphone_battery_state:
-       hidden: true
-    sensor.wink_relay_downstairs_proximity:
-      hidden: true
-    sensor.wink_relay_upstairs_proximity:
-      hidden: true
-    sensor.wink_relay_downstairs_humidity:
-      hidden: true
-    sensor.wink_relay_upstairs_humidity:
-      hidden: true
-    sensor.wink_relay_downstairs_temperature:
-      hidden: true
-    sensor.wink_relay_upstairs_temperature:
-      hidden: true
-    sensor.broadlink_sensor_temperature:
-      friendly_name: living_room_temperature_2
-    sensor.arest_sensor_garage:
-      hidden: true
-    sensor.porkfolio_balance:
-      icon: mdi:pig
-      friendly_name: "Piggy Bank"
-    sensor.octoprint_job_percentage:
-      icon: mdi:printer-3d
-    sensor.mosquitto_active:
-      hidden: true
-    sensor.hallway_humidity_2:
-      friendly_name: outside_humidity
-      entity_picture: /local/humidity.jpg
-    sensor.hallway_temperature:
-      friendly_name: outside_temperature
-    sensor.turtle_tank_water:
-      friendly_name: Water
-    sensor.turtle_tank_uvb:
-      friendly_name: UVB
-    sensor.turtle_tank_basking:
-      friendly_name: Basking
-    sensor.garage_door:
-      hidden: true
-      friendly_name: Door
-      entity_picture: /local/garage.jpg
-    sensor.weather_raining:
-      friendly_name: Rain
-      entity_picture: /local/rain.jpg
-    sensor.forecastio_precip_probability:
-      friendly_name: Rain
-      entity_picture: /local/rain.jpg
-    sensor.weather_temperature:
-      friendly_name: Temperature
-    sensor.spotter_temperature:
-      hidden: true
-    sensor.spotter_humidity:
-      hidden: true
-      entity_picture: /local/humidity.jpg
-    sensor.weather_humidity:
-      friendly_name: Humidity
-      entity_picture: /local/humidity.jpg
-    sensor.outside_humidity:
-      friendly_name: Humidity
-      entity_picture: /local/humidity.jpg
-    sensor.weather_lux:
-      friendly_name: lux
-    sensor.weather_pressure:
-      friendly_name: pressure
-    sensor.weather_heat_index:
-      friendly_name: heat_index
-
-######################################
-###############Lights#################
-######################################
-
-    light.fan_light_1:
-      hidden: true
-    light.fan_light_2:
-      hidden: true
-    light.bedroom_lamp:
-      icon: mdi:lamp
-    light.office_lamp:
-      icon: mdi:lamp
-    light.living_room_lamp:
-      icon: mdi:lamp
-    light.shelf_lamp:
-      icon: mdi:lamp
-    light.all_wink_lights:
-      hidden: true
-      emulated_hue_hidden: true
-    light.bathroom_light_1:
-      emulated_hue_hidden: true
-    light.bathroom_light_2:
-      emulated_hue_hidden: true
-    light.bathroom_light_3:
-      emulated_hue_hidden: true
-    light.bathroom_light_4:
-      emulated_hue_hidden: true
-
-######################################
-#############Switches#################
-######################################
-
-    switch.living_room_tv_power:
-      hidden: true
-      emulated_hue_name: "tv"
-    switch.living_room_soundbar_power:
-      hidden: true
-      emulated_hue_hidden: true
-    switch.living_room_tv_pause:
-      hidden: true
-      emulated_hue_hidden: true
-    switch.living_room_tv_play:
-      hidden: true
-      emulated_hue_hidden: true
-    switch.camera:
-      hidden: true
-      emulated_hue_hidden: true
-    switch.reboot:
-      hidden: true
-      emulated_hue_hidden: true
-    switch.dog:
-      hidden: true
-      emulated_hue_hidden: true
-    switch.door:
-      hidden: true
-      emulated_hue_hidden: true
-    switch.snapshot:
-      hidden: true
-      emulated_hue_hidden: true
-    switch.day:
-      emulated_hue_hidden: true
-    switch.night:
-      emulated_hue_hidden: true
-    switch.turtle:
-      hidden: true
-    switch.christmas_tree:
-      icon: mdi:pine-tree
-    switch.baby_christmas_tree:
-      icon: mdi:pine-tree
-    switch.keurig:
-      icon: mdi:coffee
-      emulated_hue_name: "coffee maker"
-    switch.dining_room_fan:
-      icon: mdi:fan
-    switch.kitchen_cabinet_lights:
-      assumed_state: true
-    switch.office_lamp:
-      friendly_name: Melina's Lamp
-      icon: mdi:lamp
-    switch.outside_christmas_lights:
-      icon: mdi:pine-tree
-    switch.power_strip:
-      emulated_hue_hidden: true
-
-######################################
-##############Groups##################
-######################################
-
-    group.all_devices:
-      hidden: false
-    group.all_automations:
-      hidden: false
-    group.all_scripts:
-      hidden: false
-    group.all_lights:
-      hidden: false
-      emulated_hue_hidden: true
-    group.all_sensors:
-      hidden: false
-    group.all_binary_sensors:
-      hidden: false
-    group.wink_lights:
-      hidden: true
-      emulated_hue_hidden: true
-    group.all_switches:
-      hidden: false
-      emulated_hue_hidden: true
-    group.living_room_light:
-      hidden: true
-      emulated_hue_hidden: true
-    group.hallway_light:
-      hidden: true
-      emulated_hue_hidden: true
-    group.every_light:
-      hidden: true
-    group.entryway:
-      hidden: true
-      emulated_hue_hidden: true
-
-######################################
-##############Script##################
-######################################
-
-    script.christmas_tree:
-      hidden: true
-    script.bathroom_lights:
-      hidden: true
-    script.dim_bathroom_lights:
-      hidden: true
-    script.alarm_away:
-      hidden: true
-    script.alarm_home:
-      hidden: true
-    script.good_night_melina:
-      icon: mdi:sleep
-    script.power_strip_off:
-      icon: mdi:power-plug-off
-    script.power_strip_on:
-      icon: mdi:power-plug
-    script.bedroom_lights_on_day:
-      hidden: true
-    script.bedroom_lights_on_night:
-      hidden: true
-    script.hass_start:
-      hidden: true
-    script.home_at_dusk:
-      hidden: true
-    script.pubnub_update:
-      hidden: true
-    script.melinas_light:
-      hidden: true
-    script.good_night:
-      hidden: true
-    script.good_morning:
-      hidden: true
-    script.lock_door:
-      hidden: true
-    script.lock_the_door:
-      hidden: true
-    script.garage_light:
-      hidden: true
-    script.office_lights:
-      hidden: true
-    script.test:
-      hidden: true
-    script.hall_light:
-      hidden: true
-    script.garage_is_open:
-      hidden: true
-    script.under_bed_light:
-      hidden: true
-
-######################################
-##############Random##################
-######################################
-
-    device_tracker.melina_iphone:
-      hidden: true
-
-##################################
-#############Scenes#################
-##################################
-
-    scene.test:
-      hidden: true
+group.all_lights:
+  hidden: false
+  emulated_hue_hidden: true
+group.all_switches:
+  hidden: false
+  emulated_hue_hidden: true
+group.all_devices:
+  hidden: false
+group.all_automations:
+  hidden: false
+light.all_wink_lights:
+  hidden: true
+  emulated_hue_hidden: true
+light.bathroom_light_1:
+  emulated_hue_hidden: true
+light.bathroom_light_2:
+  emulated_hue_hidden: true
+light.bathroom_light_3:
+  emulated_hue_hidden: true
+light.bathroom_light_4:
+  emulated_hue_hidden: true
+switch.keurig:
+  icon: mdi:coffee
+  emulated_hue_name: coffee maker
+switch.living_room_soundbar_power:
+  emulated_hue_hidden: true
+switch.living_room_tv_pause:
+  emulated_hue_hidden: true
+switch.power_strip:
+  emulated_hue_hidden: true
+group.living_room_light:
+  emulated_hue_hidden: true
+group.hallway_light:
+  emulated_hue_hidden: true
+group.every_light:
+  hidden: true
+group.entryway:
+  emulated_hue_hidden: true
+switch.top_light_load:
+  friendly_name: Upstairs hallway light

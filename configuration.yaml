@@ -1,81 +1,76 @@
 homeassistant:
+  # Name of the location where Home Assistant is running
   name: Home
+  # Location required to calculate the time the sun rises and sets
   latitude: !secret latitude
   longitude: !secret longitude
+  # Impacts weather/sunrise data (altitude above sea level in meters)
   elevation: 247
+  # metric for Metric, imperial for Imperial
   unit_system: imperial
+  # Pick yours from here: http://en.wikipedia.org/wiki/List_of_tz_database_time_zones
   time_zone: America/Louisville
+  # Customization file
   customize: !include customize.yaml
 
-http:
-  api_password: !secret http_password
+# Enables the frontend
+frontend:
 
-
-emulated_hue:
-  exposed_domains:
-    - group
-    - light
-    - switch
-    - fan
-    - media_player
+# Enables configuration UI
+config:
 
 logger:
   default: info
   logs:
-      wink: debug
-      pywink.api: debug
-      pubnub: debug
-      requests.packages.urllib3: critical
-      urllib3.exceptions.HeaderParsingError: critical
-      urllib3.connectionpool: critical
-      homeassistant.components.device_tracker.pfsense: debug
+      pydukeenergy.api: debug
 
-#discovery:
-
-input_datetime:
- hvac_filter_install_date:
-   name: hvac_filter_install_date
-   has_date: true
-   has_time: false
+http:
+  api_password: !secret http_password
 
 updater:
+  # Optional, allows Home Assistant developers to focus on popular components.
+  # include_used_components: true
 
-frontend:
-
-logbook:
-
+# Enables support for tracking state changes over time
 history:
 
-history_graph:
-    gr1:
-      name: UVB
-      entities:
-        - sensor.turtle_tank_uvb
-      hours_to_show: 4380
-      refresh: 300
+# View all events in a logbook
+logbook:
 
-recorder:
+# Enables a map showing the location of tracked devices
+map:
 
+# Track the sun
 sun:
 
-ios:
-  push:
-    categories:
-      - name: Front Door
-        identifier: 'LOCK'
-        actions:
-          - identifier: 'UNLOCK_DOOR'
-            title: 'Yes'
-            activationMode: 'background'
-            authenticationRequired: no
-            destructive: yes
-            behavior: 'default'
-          - identifier: 'DISMISS'
-            title: 'Dismiss'
-            activationMode: 'background'
-            authenticationRequired: no
-            destructive: no
-            behavior: 'default'
+history_graph:
+  duke_energy_usage:
+    entities:
+      - sensor.power2
+    hours_to_show: 744
+
+group: !include groups.yaml
+automation: !include automations.yaml
+script: !include scripts.yaml
+zone: !include zones.yaml
+switch: !include switches.yaml
+sensor: !include sensors.yaml
+binary_sensor: !include binary_sensors.yaml
+media_player: !include media_player.yaml
+cloud: !include cloud.yaml
+
+zwave:
+ usb_path: /dev/ttyUSB0
+ network_key: !secret zwave_key
+ polling_interval: 30000
+ device_config:
+   sensor.aeotec_dsb09104_home_energy_meter_power_4:
+     polling_intensity: 1
+     refresh_value: 2
+
+# zha:
+#   usb_path: /dev/ttyUSB1
+#   database_path: zigbee.db
 
 apcupsd:
 
@@ -84,7 +79,7 @@ wemo:
     - 192.168.5.33
 
 mqtt:
-  broker: 192.168.5.5
+  broker: 127.0.0.1
   port: 1883
   client_id: HASS
   keepalive: 60
@@ -109,26 +104,33 @@ camera:
     mjpeg_url: !secret outside_camera_url
   - platform: local_file
     name: last outside motion
-    file_path: /media_drive4/cameras/outsidecamera/newest.jpg
+    file_path: /media/outsidecamera/newest.jpg
+  - platform: ffmpeg
+    name: Office
+    input: -rtsp_transport tcp -i rtsp://192.168.5.63:8554/unicast
+  - platform: ffmpeg
+    name: printer
+    input: -f mjpeg -i http://192.168.5.4:8080/?action=stream -vf "transpose=2, transpose=2"
 
 device_tracker:
+  - platform: owntracks_http
+    max_gps_accuracy: 200
+    new_device_defaults:
+      track_new_devices: False
   - platform: unifi_direct
     host: 192.168.5.2
     username: w1ll1am
     password: !secret unifi_password
-    new_device_details:
-      track_new_devices: False
   - platform: trackr
     username: !secret my_email
     password: !secret trackr_password
-  - platform: owntracks
-    max_gps_accuracy: 200
 
 alarm_control_panel:
   - platform: manual
     name: "HA Alarm"
     pending_time: 60
     trigger_time: 120
+    code: 1234
 
 notify:
   - platform: smtp
@@ -150,47 +152,6 @@ notify:
     password: !secret sender_email_password
     recipient: !secret melinas_number
 
-zone: !include zones.yaml
-switch: !include switches.yaml
-sensor: !include sensors.yaml
-binary_sensor: !include binary_sensors.yaml
-automation: !include automations.yaml
-script: !include scripts.yaml
-group: !include groups.yaml
-media_player: !include media_player.yaml
-alexa:
-intent_script: !include alexa.yaml
-
-################################################
-################Input booleans#################
-################################################
-
-input_boolean:
-  dryer_switch:
-   name: Toggle dryer automation
-   initial: off
-   icon: mdi:sync
-  on_vacation:
-    name: On Vacation
-    initial: off
-    icon: mdi:beach_access
-
-#cover:
-#  - platform: command_line
-#    covers:
-#      garage_door:
-#        command_open: /usr/bin/curl 192.168.5.28:3000/toggleDoor
-#        command_close: /usr/bin/curl 192.168.5.28:3000/toggleDoor
-#        command_stop: /usr/bin/curl 192.168.5.28:3000/toggleDoor
-#        command_state: /usr/bin/curl 192.168.5.28:3000
-#        value_template: >
-#          {%- if is_state("sensor.arest_sensor_garage", "Closed") -%}
-#          0
-#          {%- else -%}
-#          100
-#          {%- endif %}
-#        friendly_name: Garage Door
-
 light:
   - platform: flux_led
     devices:
@@ -209,10 +170,31 @@ input_select:
       - "Door"
       - "Dog"
       - "Off"
-      - "Reboot"
-      - "Snapshot"
     initial: 'Default'
     icon: mdi:camera
 
-tts:
-  - platform: picotts
+shell_command:
+  pull_last_motion_event: /bin/bash /media/newest.sh
+
+input_boolean:
+  dryer_switch:
+   name: Toggle dryer automation
+   initial: off
+   icon: mdi:sync
+
+cover:
+  - platform: mqtt
+    name: "Garage Door"
+    state_topic: "garage/door/1/status"
+    command_topic: "garage/door/1/action"
+    availability_topic: "GarHAge/availability"
+    qos: 0
+    optimistic: false
+    retain: false
+    payload_open: "OPEN"
+    payload_close: "CLOSE"
+    payload_stop: "STATE"
+    state_open: "open"
+    state_closed: "closed"
+    payload_available: "online"
+    payload_not_available: "offline"

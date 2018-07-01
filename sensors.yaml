@@ -1,3 +1,32 @@
+  - platform: template
+    sensors:
+      power2:
+        unit_of_measurement: 'kWh'
+        value_template: >-
+          {% if states.sensor.duke_energy_320336767 %}
+            {% if states.sensor.duke_energy_320336767.state | float > 0.0 %}
+              {{ states.sensor.duke_energy_320336767.state | float }}
+            {% else %}
+              {{ states.sensor.power2.state }}
+            {% endif %}
+          {% else %}
+            {{ states.sensor.power2.state }}
+          {% endif %}
+      bed_count:
+        value_template: >-
+          {% if  states.sensor.bed_load.state | float < 1 %}
+            0
+          {% elif (states.sensor.bed_load.state | float > 1) and (states.sensor.bed_load.state | float < 10) %}
+            1
+          {% elif (states.sensor.bed_load.state | float > 10) %}
+            2
+          {% else %}
+            -1
+          {% endif %}
+
+  - platform: duke_energy
+    username: !secret duke_username
+    password: !secret duke_password
 
   #######################################
   #############Garage Freezer#############
@@ -13,30 +42,74 @@
         name: temperature
         unit_of_measurement: '°C'
 
-  - platform: arest
-    resource: http://192.168.5.28:3000
-    monitored_variables:
-      door:
-        name: garage
 
   #######################################
   #########Turtle Tank Sensors###########
   #######################################
 
+  - platform: mqtt
+    state_topic: "turtleTank/sensors"
+    name: "Turtle tank internal temperature"
+    unit_of_measurement: "°C"
+    value_template: '{{ float(value_json.internal_temp) }}'
+    availability_topic: "turtleTank/availability"
+  - platform: mqtt
+    state_topic: "turtleTank/sensors"
+    name: "Turtle tank basking temperature"
+    unit_of_measurement: "°C"
+    value_template: '{{ float(value_json.basking_temp) }}'
+    availability_topic: "turtleTank/availability"
+  - platform: mqtt
+    state_topic: "turtleTank/sensors"
+    name: "Turtle tank water temperature"
+    unit_of_measurement: "°C"
+    value_template: '{{ float(value_json.water_temp) }}'
+    availability_topic: "turtleTank/availability"
+  - platform: mqtt
+    state_topic: "turtleTank/sensors"
+    name: "Turtle tank amps"
+    unit_of_measurement: "amps"
+    value_template: '{{ float(value_json.amps) }}'  
+    availability_topic: "turtleTank/availability"
+  - platform: mqtt
+    state_topic: "turtleTank/sensors"
+    name: "Turtle tank kwhs"
+    unit_of_measurement: "kWh"
+    value_template: '{{ float(value_json.kwh) }}'
+    availability_topic: "turtleTank/availability"
+  - platform: mqtt
+    state_topic: "bedroom/bed/value"
+    name: "Bed load"
+    unit_of_measurement: "kg"
+    value_template: '{{ float(value_json.value) }}'
+    availability_topic: "BedOccupancy/availability"
+
   # - platform: arest
-  #   resource: http://192.168.5.16:3001
+  #   resource: http://192.168.5.60
+  #   scan_interval: 32
   #   name: Turtle Tank
   #   monitored_variables:
-  #     Water:
+  #     water_temperature:
   #       name: Water
   #       unit_of_measurement: '°C'
-
-  #     Basking:
+  #     basking_temperature:
   #       name: Basking
   #       unit_of_measurement: '°C'
-  #     UVB:
-  #       name: UVB
-  #       unit_of_measurement: 'uW/cm2'
+  #     internal_temperature:
+  #       name: Internal
+  #       unit_of_measurement: '°C'
+  #     amps:
+  #       name: Power usage
+  #       unit_of_measurement: 'amps'
+  #     kWh:
+  #       name: Power used
+  #       unit_of_measurement: 'kWh'
+  #     water_low:
+  #       name: Water low
+  #     leaking:
+  #       name: Leak
+  #     error_message:
+  #       name: error message
 
   #######################################
   ##########Octoprint Sensors############
@@ -158,8 +231,11 @@
       stairs_motion_battery:
         value_template: '{{ (states.binary_sensor.stairs_motion.attributes.battery_level | float) | round(2) }}'
         unit_of_measurement: '%'
+      laundry_room_door_battery:
+        value_template: '{{ (states.binary_sensor.laundry_room_door_opened.attributes.battery_level | float) | round(2) }}'
+        unit_of_measurement: '%'
       up_stairs_hallway_motion_battery:
-        value_template: '{{ (states.binary_sensor.up_stairs_hallway_motion.attributes.battery_level | float) | round(2) }}'
+        value_template: '{{ (states.binary_sensor.upstairs_hallway_motion.attributes.battery_level | float) | round(2) }}'
         unit_of_measurement: '%'
       front_door_lock_battery:
         value_template: '{{ (states.lock.front_door.attributes.battery_level | float) | round(2) }}'
@@ -171,7 +247,7 @@
         value_template: '{{ (states.binary_sensor.front_door_opened.attributes.battery_level | float) | round(2) }}'
         unit_of_measurement: '%'
       garage_entry_door_sensor_battery:
-        value_template: '{{ (states.binary_sensor.garage_entry_door_opened.attributes.battery_level | float) | round(2) }}'
+        value_template: '{{ (states.binary_sensor.garage_door_opened.attributes.battery_level | float) | round(2) }}'
         unit_of_measurement: '%'
       bedroom_door_sensor_battery:
         value_template: '{{ (states.binary_sensor.bedroom_door_opened.attributes.battery_level | float) | round(2) }}'

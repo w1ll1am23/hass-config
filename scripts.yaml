@@ -1,249 +1,49 @@
-  turtle_morning:
-    sequence:
-      - service: homeassistant.turn_on
-        data:
-          entity_id: switch.day
-      - delay:
-          seconds: 5
-      - service: homeassistant.turn_off
-        data:
-          entity_id: switch.night
-
-  turtle_night:
-    sequence:
-      - service: homeassistant.turn_on
-        data:
-          entity_id: switch.night
-      - delay:
-          seconds: 5
-      - service: homeassistant.turn_off
-        data:
-          entity_id: switch.day
-
-  christmas_tree:
-    alias: christmas tree
-    sequence:
-      - service: homeassistant.turn_on
-        data:
-          entity_id: switch.christmas_tree
-      - delay:
-          seconds: 5
-      - service: homeassistant.turn_on
-        data:
-          entity_id: switch.baby_christmas_tree
-      - delay:
-          seconds: 5
-
-  bathroom_lights:
-    alias: bathroom lights timer
-    sequence:
-      - delay:
-          minutes: 30
-      - service: light.turn_off
-        data:
-          entity_id: light.bathroom_light
-
-  dim_bathroom_lights:
-    alias: dim bathroom lights
-    sequence:
-      - service: light.turn_on
-        data:
-          entity_id: light.bathroom_light
-          brightness: 1
-      - delay:
-          seconds: 30
-      - service: light.turn_off
-        data:
-          entity_id: light.bathroom_light
-
-  lock_door:
-    alias: Lock door
-    sequence:
-      - service: lock.lock
-        data:
-          entity_id: lock.front_door
-      - delay:
-          minutes: 2
-      - event: check_for_locked_lock
-        event_data:
-          name: Locked?
-          message: is the front door locked?
-
-  alarm_home:
-    alias: alarm
-    sequence:
-      - service: homeassistant.turn_on
-        data:
-          entity_id: group.every_light
-      - event: alarm_triggered
-        event_data:
-          name: ALARM_HOME
-          message: Intruder
-
-  alarm_away:
-    alias: alarm
-    sequence:
-      - service: homeassistant.turn_on
-        data:
-          entity_id: group.every_light
-      - event: alarm_triggered
-        event_data:
-          name: ALARM_AWAY
-          message: Intruder
-
-  lock_the_door:
-    sequence:
-      - delay:
-          minutes: 5
-      - service: lock.lock
-        data:
-          entity_id: lock.front_door
-      - delay:
-          minutes: 2
-      - event: check_for_locked_lock
-        event_data:
-          name: Locked?
-          message: is the front door locked?
-
-########################################
-############Sensor Scripts##############
-########################################
-
-  bedroom_lights_on_day:
-    sequence:
-      - service: light.turn_on
-        data:
-          entity_id: light.melinas_night_stand
-          color_temp: 365
-          brightness: 255
-      - service: light.turn_on
-        data:
-          entity_id: light.billys_night_stand
-      - service: homeassistant.turn_on
-        data:
-          entity_id: light.bedroom_lamp
-
-  bedroom_lights_on_night:
-    sequence:
-      - service: light.turn_on
-        data:
-          entity_id: light.melinas_night_stand
-          brightness: 150
-          rgb_color: [255, 0, 0]
-      - service: light.turn_on
-        data:
-          entity_id: light.billys_night_stand
-      - service: homeassistant.turn_on
-        data:
-          entity_id: light.bedroom_lamp
-
-  under_bed_light:
-    sequence:
-      - service: light.turn_on
-        data:
-          entity_id: light.under_bed_light
-          brightness: 150
-          rgb_color: [255, 0, 0]
-      - delay:
-          minutes: 3
-      - service: light.turn_off
-        data:
-          entity_id: light.under_bed_light
-
-  hall_light:
-    sequence:
-      - delay:
-          minutes: 3
-      - service: light.turn_off
-        data:
-          entity_id: light.down_stairs_hallway
-
-  office_lights:
-    sequence:
-      - delay:
-          minutes: 5
-      - service: homeassistant.turn_off
-        data:
-          entity_id: group.office_lights
-
-  home_at_dusk:
-    sequence:
-      - service: homeassistant.turn_on
-        data:
-          entity_id: switch.entry
-      - service: homeassistant.turn_on
-        data:
-          entity_id: light.living_room_lamp
-      - delay:
-          minutes: 2
-      - service: homeassistant.turn_off
-        data:
-          entity_id: switch.entry
-
-########################################
-############Tasker Scripts##############
-########################################
-
-  good_night:
-    alias: Good Night
-    sequence:
-        - service: light.turn_on
-          data:
-            entity_id: light.melinas_nightstand
-        - service: lock.lock
-          data:
-            entity_id: lock.front_door
-        - service: homeassistant.turn_off
-          data:
-            entity_id: group.good_night_group
-        - delay:
-            minutes: 2
-        - event: check_for_locked_lock
-          event_data:
-            name: Locked?
-            message: is the front door locked?
-
-  good_morning:
-    alias: Good Morning
-    sequence:
-        - service: homeassistant.turn_off
-          data:
-            entity_id: switch.bedroom_fan
-        - service: light.turn_on
-          data:
-            entity_id: light.billys_nightstand
-            brightness: 5
-        - service: homeassistant.turn_on
-          data:
-            entity_id: switch.keurig
-        - delay:
-            minutes: 5
-        - service: light.turn_on
-          data:
-            entity_id: light.kitchen_light
-            brightness: 255
-        - service: homeassistant.turn_on
-          data:
-            entity_id: switch.entry_light
-
-  hass_start:
-    sequence:
-      - delay:
-          minutes: 2
-      - service: homeassistant.turn_on
-        entity_id: automation.melina_is_home
-      - service: homeassistant.turn_on
-        entity_id: automation.turn_on_living_room_lamp_at_dusk
-      - service: homeassistant.turn_on
-        entity_id: automation.turn_outside_lights_on_when_someone_is_home
-      - service: homeassistant.turn_on
-        entity_id: automation.turn_entry_and_living_room_on_when_someone_gets_home
-      - service: homeassistant.turn_on
-        entity_id: automation.billy_is_home
-      - service: homeassistant.turn_on
-        entity_id: automation.melina_at_ktown
-      - service: homeassistant.turn_on
-        entity_id: automation.left_home
-      - service: homeassistant.turn_on
-        entity_id: automation.billy_at_ktown
-
+billy_morning:
+  alias: Billy morning
+  sequence:
+  - data:
+      entity_id: switch.keurig
+    service: switch.turn_on
+  - data:
+      brightness: 5
+      entity_id: light.billys_nightstand
+    service: light.turn_on
+  - data:
+      brightness: 255
+      entity_id: light.kitchen_light
+    service: light.turn_on
+  - delay: '2'
+  - event: check_that_keurig_is_on
+    event_data: {}
+bathroom_lights_timer:
+  alias: Bathroom lights timer
+  sequence:
+  - delay: 00:30:00
+  - data:
+      entity_id: light.bathroom_light
+    service: light.turn_off
+lock_the_door_after_5_minutes:
+  alias: Lock the door after 5 minutes
+  sequence:
+  - delay: 00:05:00
+  - data:
+      entity_id: lock.front_door
+    service: lock.lock
+  - delay: 00:01:00
+  - event: check_for_locked_lock
+    event_data: {}
+under_bed_light_night_motion:
+  alias: Under bed light night motion
+  sequence:
+  - data:
+      brightness: 150
+      entity_id: light.under_bed_light
+      rgb_color:
+      - 255
+      - 0
+      - 0
+    service: light.turn_on
+  - delay: '3'
+  - data:
+      entity_id: light.under_bed_light
+    service: light.turn_off

@@ -12,6 +12,7 @@
       - group.all_devices
       - group.security
       - sensor.plex
+      - history_graph.duke_energy_usage
 
   bedroom:
     icon: mdi:hotel
@@ -66,7 +67,8 @@
     name: Turtle
     view: yes
     entities:
-      - group.turtle_tank
+      - group.turtle_switches
+      - group.turtle_tank_sensors
 
   Outside:
     name: Outside
@@ -87,6 +89,9 @@
       - media_player.office
       - group.m3d
       - group.office_switches
+      - switch.office_ac
+      - camera.office
+      - camera.printer
 
   Hallway:
     name: Hallway
@@ -119,29 +124,30 @@
   Living room lights: light.living_room_lamp, light.shelf_lamp, light.dining_room_fan_light, switch.christmas_tree, switch.baby_christmas_tree
   Kitchen lights: light.kitchen_sink_light, switch.kitchen_cabinet_lights, light.kitchen_light
   Garage lights: switch.garage_light, switch.work_bench_lights
-  Office lights: switch.melinas_office_lamp, switch.billys_office_lamp, light.office_lamp, switch.power_strip
-  Hallway lights: light.down_stairs_hallway, switch.down_stairs_closet_light, light.ceiling_fan
+  Office lights: switch.melinas_office_lamp, switch.billys_office_lamp, light.office_lamp, switch.power_strip, switch.office_lamp_2
+  Hallway lights: light.down_stairs_hallway, switch.down_stairs_closet_light, light.ceiling_fan, switch.top_light_load
   Entryway: switch.outside_lights, switch.entry_light, switch.outside_christmas_lights
   Every light: light.all_wink_lights, switch.outside_lights, switch.power_strip, light.under_bed_light, switch.down_stairs_closet_light, switch.work_bench_lights
   Wink lights: light.all_wink_lights
   Good night group: switch.baby_christmas_tree, light.bedtime, switch.outside_lights, switch.power_strip, light.under_bed_light, switch.down_stairs_closet_light, switch.work_bench_lights, switch.kitchen_cabinet_lights, switch.christmas_tree
+  Turtle switches: switch.turtle_tank_uvb_lamp, switch.turtle_tank_day_basking_lamp, switch.turtle_tank_night_basking_lamp, switch.turtle_tank_heat_lamp, switch.turtle_tank_heater_1, switch.turtle_tank_heater_2, switch.turtle_tank_filter, switch.turtle_tank_extra
 
   ##################################
   ############Sensor Groups#########
   ##################################
 
   Hallway sensors: wink.siren, binary_sensor.up_stairs_hallway_motion, binary_sensor.down_stairs_bathroom_door, sensor.up_stairs_hallway_temperature, binary_sensor.stairs_motion, sensor.stairs_temperature
-  Security: wink.siren, binary_sensor.living_room_motion, binary_sensor.front_door_opened, binary_sensor.garage_entry_door_opened, binary_sensor.up_stairs_hallway_motion, binary_sensor.down_stairs_bathroom_door_opened, binary_sensor.office_door_opened, binary_sensor.bedroom_door_opened, binary_sensor.stairs_motion, lock.front_door, camera.outside_camera, camera.living_room_camera, alarm_control_panel.ha_alarm
+  Security: wink.siren, binary_sensor.living_room_motion, binary_sensor.front_door_opened, binary_sensor.garage_door_opened, binary_sensor.upstairs_hallway_motion, binary_sensor.back_door_opened, binary_sensor.office_door_opened, binary_sensor.bedroom_door_opened, binary_sensor.stairs_motion, lock.front_door, camera.outside_camera, camera.living_room_camera, alarm_control_panel.ha_alarm, camera.office
   Weather: sun.sun, sensor.hallway_humidity_2, sensor.hallway_temperature, sensor.dark_sky_precip_probability, sensor.dark_sky_summary, sensor.dark_sky_daily_summary, sensor.pws_alerts, sensor.dark_sky_temperature
-  Office sensors: binary_sensor.office_door_opened, binary_sensor.ups_online_status, sensor.speedtest_download, sensor.speedtest_upload, sensor.speedtest_ping, sensor.ups_status, sensor.ups_time_left, sensor.office_temperature, sensor.office_humidity, binary_sensor.office_motion
+  Office sensors: binary_sensor.office_door_opened, binary_sensor.ups_online_status, sensor.speedtest_download, sensor.speedtest_upload, sensor.speedtest_ping, sensor.ups_status, sensor.ups_time_left, sensor.office_temperature, sensor.office_humidity, binary_sensor.office_motion, binary_sensor.office_camera_motion
   Garage sensors: binary_sensor.garage_entry_door_opened, sensor.garage_freezer_temperature
   Outside sensors: binary_sensor.front_door_opened, binary_sensor.front_door_line_crossing, binary_sensor.front_door_motion, binary_sensor.front_door_field_detection
-  Turtle tank: switch.day, switch.night
   Kitchen sensors: sensor.egg_minder
-  Bedroom sensors: binary_sensor.bedroom_door_opened, sensor.porkfolio_balance, sensor.bedroom_humidity, sensor.bedroom_temperature, binary_sensor.bedroom_motion, binary_sensor.bathroom_door_opened, binary_sensor.bathroom_sink_liquid_detected
-  Living room sensors: binary_sensor.living_room_motion, sensor.living_room_temperature, sensor.broadlink_sensor_temperature, sensor.wink_relay_sensor_humidity, sensor.wink_relay_sensor_temperature
+  Bedroom sensors: binary_sensor.bedroom_door_opened, sensor.porkfolio_balance, sensor.bedroom_humidity, sensor.bedroom_temperature, binary_sensor.bedroom_motion, binary_sensor.bathroom_door_opened, binary_sensor.bathroom_sink_liquid_detected, sensor.bed_count, sensor.bed_load
+  Living room sensors: binary_sensor.living_room_motion, sensor.living_room_temperature, sensor.broadlink_sensor_temperature, sensor.wink_relay_sensor_humidity, sensor.wink_relay_sensor_temperature, binary_sensor.living_room_tv
   external doors: binary_sensor.front_door_opened, binary_sensor.garage_entry_door_opened, binary_sensor.kitchen_door_opened
   upstairs_motion: binary_sensor.bedroom_motion, binary_sensor.bedroom_motion_2, binary_sensor.office_motion, binary_sensor.upstairs_hallway_motion
+  turtle_tank_sensors: sensor.turtle_tank_basking_temperature, sensor.turtle_tank_water_temperature, sensor.turtle_tank_internal_temperature, sensor.turtle_tank_amps, sensor.turtle_tank_kwhs, binary_sensor.turtle_tank_filter_leak, binary_sensor.turtle_tank_water_level_low
 
   ##################################
   ############Random Groups#########
@@ -150,11 +156,11 @@
   Hallway thermostat: climate.thermostat, input_datetime.hvac_filter_install_date
   Outside switches: switch.outside_lights, lock.front_door, switch.entry_light, switch.outside_christmas_lights
   Living room switches: switch.blanket, fan.dining_room_fan
-  Office switches: switch.office_air_conditioner
+  Office switches: switch.office_air_conditioner, switch.office_camera_ir
   Bedroom switches: switch.bedroom_fan
   switches: script.good_night_melina
   laundry room: light.laundry, binary_sensor.spotter_vibration, binary_sensor.laundry_door_opened, input_boolean.dryer_switch
-  garage switches: cover.garage_door, switch.start_car
+  garage switches: cover.garage_door, switch.the_car
   keurig: switch.keurig, binary_sensor.needs_water, binary_sensor.is_on, switch.electric_kettle
   us: device_tracker.w1ll1am_oneplus5t, device_tracker.melinas_iphone
   all_batteries: sensor.bathroom_sink_sensor_battery, sensor.bedroom_door_sensor_battery, sensor.bedroom_bathroom_door_sensor_battery, sensor.down_stairs_bathroom_door_sensor_battery, sensor.front_door_sensor_battery, sensor.front_door_lock_battery, sensor.garage_entry_door_sensor_battery, sensor.living_room_motion_battery, sensor.up_stairs_hallway_motion_battery, sensor.stairs_motion_battery, sensor.office_door_sensor_battery, sensor.siren_battery, sensor.eggtray_battery, sensor.smoke_detectors_battery

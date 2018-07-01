@@ -2,7 +2,7 @@
   - platform: hikvision
     host: 192.168.5.31
     username: admin
-    password: 7m*8!MoPg!vVDo8@
+    password: !secret camera_password
 
   - platform: ping
     host: 192.168.5.7
@@ -21,24 +21,17 @@
       office_temp_high_threshold:
         value_template: "{{ states('sensor.office_temperature')|int >= 77 }}"
         entity_id: sensor.office_temperature
-
-  - platform: template
-    sensors:
       office_temp_low_threshold:
         value_template: "{{ states('sensor.office_temperature')|int < 77 }}"
         entity_id: sensor.office_temperature
-
-  - platform: template
-    sensors:
       tank_basking_threshold:
         value_template: "{{ states('sensor.turtle_tank_basking')|int <= 83 }}"
         entity_id: sensor.turtle_tank_basking
-
-  - platform: template
-    sensors:
       freezer_temp_threshold:
-        value_template: "{{ states('sensor.garage_freezer_temperature')|int >= 6 }}"
+        value_template: "{{ states('sensor.garage_freezer_temperature')|int >= 8 }}"
         entity_id: sensor.garage_freezer_temperature
+      night:
+        value_template: "{{ (22 < now().hour < 24) or (0 <= now().hour < 7 ) }}"        
 
   - platform: arest
     resource: http://192.168.5.48
@@ -63,8 +56,30 @@
 
   - platform: mqtt
     state_topic: "fan/"
-    name: "Bedroom motion 2"
+    name: "Bedroom motion"
     value_template: '{{ value_json.motion }}'
     payload_on: "motion detected"
     payload_off: "standby"
     device_class: "motion"
+
+  - platform: mqtt
+    name: "Turtle tank filter leak"
+    state_topic: "turtleTank/sensors"
+    value_template: '{{ value_json.filter_leak }}'
+    payload_on: "LEAKING"
+    payload_off: "NOT LEAKING"
+    availability_topic: "turtleTank/availability"
+
+  - platform: mqtt
+    name: "Turtle tank water level low"
+    state_topic: "turtleTank/sensors"
+    value_template: '{{ value_json.water_level }}'
+    payload_on: "LOW"
+    payload_off: "NOT LOW"
+    availability_topic: "turtleTank/availability"
+
+  - platform: mqtt
+    name: "Office camera motion"
+    state_topic: "office/camera/motion"
+    payload_on: "ON"
+    payload_off: "OFF"

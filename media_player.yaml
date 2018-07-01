@@ -1,11 +1,6 @@
-  # - platform: cast
-  #   host: 192.168.5.18
+  - platform: cast
+    host: 192.168.5.18
   - platform: cast
     host: 192.168.5.30
   - platform: cast
     host: 192.168.5.29
-  - platform: wink_relay
-    host: 192.168.5.5
-    netmask: 255.255.255.0
-    convert: true
-    audio_boost: 10
