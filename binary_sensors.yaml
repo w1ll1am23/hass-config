@@ -1,11 +1,5 @@
-
-  - platform: hikvision
-    host: 192.168.5.31
-    username: admin
-    password: !secret camera_password
-
   - platform: ping
-    host: 192.168.5.7
+    host: 192.168.5.11
     name: Living room TV
 
   - platform: workday
@@ -34,13 +28,13 @@
         value_template: "{{ (22 < now().hour < 24) or (0 <= now().hour < 7 ) }}"        
 
   - platform: arest
-    resource: http://192.168.5.48
+    resource: http://192.168.5.10
     pin: 5
     name: needs water
     device_class: moisture
 
   - platform: arest
-    resource: http://192.168.5.48
+    resource: http://192.168.5.10
     pin: 4
     name: 'is on'
 

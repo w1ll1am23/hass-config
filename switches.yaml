@@ -1,5 +1,6 @@
+
   - platform: broadlink
-    host: 192.168.5.9
+    host: 192.168.5.22
     mac: 'B4:43:0D:EE:F7:A0'
     switches:
       # Disassembled rf switch
@@ -29,7 +30,7 @@
         friendly_name: 'garage light'
         command_on: 'shEyAAYTEgcGExIHBhMGEwYTEgcGEwYTBhMSBwYTEgcGExIHEgcSBwYTBhMGEwYTEgcSBwa7AAAAAAAA'
         command_off: 'shUyAAYTEgcGExIHBhMGEwYTEgcGEwYTBhMSBwYTEgcGExIHEgcSBwYTBhMSBxIHBxMGEwa7AAAAAAAA'
-      tv_power:
+      living_room_tv_power:
         friendly_name: 'living room TV power'
         command_on: 'JgBYAAABKJQSExITEzgSExITEhMSExITEjgTOBITEjgSOBI4EzgSOBITEhMSExI4ExITExITEhMSOBI4EjgTEhM4EjgSOBI4EgAFCAABJ0sSAAxGAAEoShMADQU='
         command_off: 'JgBYAAABKJQSExITEzgSExITEhMSExITEjgTOBITEjgSOBI4EzgSOBITEhMSExI4ExITExITEhMSOBI4EjgTEhM4EjgSOBI4EgAFCAABJ0sSAAxGAAEoShMADQU='
@@ -64,7 +65,7 @@
         command_off: 'sgDcAQ8jEGQQZBBkECIQZBBkECMPZBAjECIQIg0AASAJGAoXChgJGAkYChcKGAkYChcJRA9lECIQIhBkECMPZBBkEGUPIxBkD2UPIxBkECIQIhAiDQABIAoYCRgJGAkYChgJGAkYChgJGAlDEGQQIhAjD2UPIw9lEGQQZBAiEGQQZBAiEGQQIw8jECIMAAEhCRgJGAoXChgJGAkYCRgKGAkYCUMRZA8jECIQZBAiEGQQZBBkECIRYxBkESIQZBAiECIQIg0AASAKFwoYCRgJGAkZCRgJGAkYChgJQxBkECIQIhBkECIRYxFjEWQPIxBkEGQQIhBkECIQIw8jDAABIAoYCRgJGAoYCRgJGAkYChcKGAlDEGQQIhAjD2UQIhBkEGQQZBAjD2QRYxAjD2QRIhAiECIMAAEhCRgJGAoYCRgJGAoXChgJGAkYCUQQZA8jECIQZBAiEGQQZBFjECMQZA9lECIQZBAiECIQIwwAASEJGAkYChcKGAkYCRgKFwoYCRgJQxBkECMQIhBkECIQZBBkEGQRIhBjEWQPIxBkECIQIhAiDQABIQkYCRgJGAoXChgJGAoXChcKGAlDEGQQIxAiEGQQIhBkEGQQZBAjEGMRZBAiEGQQIhAiECINAAXcECIQZBAjD2QQZBBl'
 
   - platform: broadlink
-    host: 192.168.5.52
+    host: 192.168.5.21
     mac: '34:EA:34:E0:BA:C4'
     switches:
       office_ac:
@@ -76,13 +77,21 @@
         friendly_name: 'Office tv'
         command_on: 'JgDSAJGTEzYROBM2ExIQFBEUEBQTEhI3EjcSNxISExISEhMSEhITEhI3EBQTEhISExISEhMSEjcSEhE4EjcSNxI3ETgSNxIABfeRkxM2EzYTNhMSEhITEhISERQSNxI3EjcSEhMSEhITEhISEhMSNxISExISEhMSEhITEhI3EhITNhM2ETgTNhM2EjcSAAX3kZMTNhE4ETgTEhISExISEhMSEjcSNxI3EhITEhISExISEhMSEjcSEhMSEhIRFBAUEhMSNxAUEzYSNxI3EjcROBI3EgANBQAAAAAAAA=='
         command_off: 'JgDSAJGTEzYROBM2ExIQFBEUEBQTEhI3EjcSNxISExISEhMSEhITEhI3EBQTEhISExISEhMSEjcSEhE4EjcSNxI3ETgSNxIABfeRkxM2EzYTNhMSEhITEhISERQSNxI3EjcSEhMSEhITEhISEhMSNxISExISEhMSEhITEhI3EhITNhM2ETgTNhM2EjcSAAX3kZMTNhE4ETgTEhISExISEhMSEjcSNxI3EhITEhISExISEhMSEjcSEhMSEhIRFBAUEhMSNxAUEzYSNxI3EjcROBI3EgANBQAAAAAAAA=='
+      bedroom_tv_power:
+        friendly_name: 'bedroom tv power'
+        command_on: 'JgBYAAABJ5ITEhMSEzYUERQRFBEUERQSEzYUNhMSEzYUNhQ1FDYUNhQRFBEUERQ1FBITEhMSExITNhQ2FDUUERQ2FDYTNhQ2FAAFFwABJ0gUAAxLAAEnSBQADQU='
+        command_off: 'JgBYAAABJ5ITEhMSEzYUERQRFBEUERQSEzYUNhMSEzYUNhQ1FDYUNhQRFBEUERQ1FBITEhMSExITNhQ2FDUUERQ2FDYTNhQ2FAAFFwABJ0gUAAxLAAEnSBQADQU='
+      bedroom_tv_volume:
+        friendly_name: 'bedroom tv volume'
+        command_on: 'JgBYAAABJ5EUEhMSEzYUERQRFBEUERQRFDYUNRQSEzYUNhQ1FDYUNhMSEzYUERQRFBEUERQRFBEUNhQRFDYTNhQ2FDUUNhQ2EwAFGAABJ0gUAAxLAAEnSBQADQU='
+        command_off: 'JgBYAAABJ5ITEhMSEzYUERQRFBEUERQRFDYUNhMSEzYUNhQ1FDYUNhQ1FDYUERQRFBEUERQRFBEUERQRFDYUNRQ2FDYTNhQ2FAAFFwABJ0gUAAxLAAEnSBQADQU='
 
   - platform: command_line
     switches:
       keurig:
-        command_on: /usr/bin/curl 192.168.5.48/toggleRelay
-        command_off: /usr/bin/curl 192.168.5.48/toggleRelay
-        command_state: /usr/bin/curl 192.168.5.48
+        command_on: /usr/bin/curl 192.168.5.10/toggleRelay
+        command_off: /usr/bin/curl 192.168.5.10/toggleRelay
+        command_state: /usr/bin/curl 192.168.5.10
         value_template: "{{ states.binary_sensor.is_on.state == 'on' }}"
 
   - platform: mqtt
@@ -93,7 +102,14 @@
     payload_off: "OFF"
 
   - platform: mqtt
-    name: "Turtle tank UVB lamp"
+    name: "office camera ir cut"
+    state_topic: "office/camera/ir_cut"
+    command_topic: "office/camera/ir_cut/set"
+    payload_on: "ON"
+    payload_off: "OFF"
+
+  - platform: mqtt
+    name: "Turtle tank day basking lights"
     state_topic: "turtleTank/outlet/1/state"
     command_topic: "turtleTank/outlet/1/action"
     availability_topic: "turtleTank/availability"
@@ -101,10 +117,9 @@
     payload_off: "OFF"
     optimistic: false
     qos: 0
-    retain: true
 
   - platform: mqtt
-    name: "Turtle tank day basking lamp"
+    name: "Turtle tank day plant lights"
     state_topic: "turtleTank/outlet/2/state"
     command_topic: "turtleTank/outlet/2/action"
     availability_topic: "turtleTank/availability"
@@ -112,7 +127,6 @@
     payload_off: "OFF"
     optimistic: false
     qos: 0
-    retain: true
 
   - platform: mqtt
     name: "Turtle tank night basking lamp"
@@ -122,8 +136,7 @@
     payload_on: "ON"
     payload_off: "OFF"
     optimistic: false
-    qos: 0
-    retain: true    
+    qos: 0  
 
   - platform: mqtt
     name: "Turtle tank heat lamp"
@@ -134,10 +147,9 @@
     payload_off: "OFF"
     optimistic: false
     qos: 0
-    retain: true
 
   - platform: mqtt
-    name: "Turtle tank heater 1"
+    name: "Turtle tank water heaters"
     state_topic: "turtleTank/outlet/5/state"
     command_topic: "turtleTank/outlet/5/action"
     availability_topic: "turtleTank/availability"
@@ -145,10 +157,9 @@
     payload_off: "OFF"
     optimistic: false
     qos: 0
-    retain: true
 
   - platform: mqtt
-    name: "Turtle tank heater 2"
+    name: "Turtle tank bubbler"
     state_topic: "turtleTank/outlet/6/state"
     command_topic: "turtleTank/outlet/6/action"
     availability_topic: "turtleTank/availability"
@@ -156,7 +167,6 @@
     payload_off: "OFF"
     optimistic: false
     qos: 0
-    retain: true
 
   - platform: mqtt
     name: "Turtle tank filter"
@@ -167,10 +177,9 @@
     payload_off: "OFF"
     optimistic: false
     qos: 0
-    retain: true
 
   - platform: mqtt
-    name: "Turtle tank extra"
+    name: "Turtle tank WiFi"
     state_topic: "turtleTank/outlet/8/state"
     command_topic: "turtleTank/outlet/8/action"
     availability_topic: "turtleTank/availability"
@@ -178,33 +187,32 @@
     payload_off: "OFF"
     optimistic: false
     qos: 0
-    retain: true
 
   - platform: command_line
     switches:
       camera:
         friendly_name: camera
-        command_on: /usr/local/bin/python3 /config/vstarcontroller.py --host 192.168.5.51 --port 60075 --password vstarcam --preset 0
-        command_off: /usr/local/bin/python3 /config/vstarcontroller.py --host 192.168.5.51 --port 60075 --password vstarcam --preset 4
+        command_on: /usr/local/bin/python3 /config/vstarcontroller.py --host 192.168.5.32 --port 60075 --password vstarcam --preset 0
+        command_off: /usr/local/bin/python3 /config/vstarcontroller.py --host 192.168.5.32 --port 60075 --password vstarcam --preset 4
       snapshot:
         friendly_name: snapshot
-        command_on: /usr/local/bin/python3 /config/vstarcontroller.py --host 192.168.5.51 --port 60075 --password vstarcam --snap --path /home/w1ll1am/.virtualenvs/hass_dev/camera_images/
+        command_on: /usr/local/bin/python3 /config/vstarcontroller.py --host 192.168.5.32 --port 60075 --password vstarcam --snap --path /home/w1ll1am/.virtualenvs/hass_dev/camera_images/
         command_off: /usr/bin/echo blah > /dev/null
         value_template: '{{ false }}'
       door:
         friendly_name: camera to door
-        command_on: /usr/local/bin/python3 /config/vstarcontroller.py --host 192.168.5.51 --port 60075 --password vstarcam --preset 1
-        command_off: /usr/bin/python3 /config/vstarcontroller.py --host 192.168.5.51 --port 60075 --password vstarcam --preset 4
+        command_on: /usr/local/bin/python3 /config/vstarcontroller.py --host 192.168.5.32 --port 60075 --password vstarcam --preset 1
+        command_off: /usr/bin/python3 /config/vstarcontroller.py --host 192.168.5.32 --port 60075 --password vstarcam --preset 4
         value_template: '{{ false }}'
       dog:
         friendly_name: camera to dog
-        command_on: /usr/local/bin/python3 /config/vstarcontroller.py --host 192.168.5.51 --port 60075 --password vstarcam --preset 2
-        command_off: /usr/bin/python3 /config/vstarcontroller.py --host 192.168.5.51 --port 60075 --password vstarcam --preset 4
+        command_on: /usr/local/bin/python3 /config/vstarcontroller.py --host 192.168.5.32 --port 60075 --password vstarcam --preset 2
+        command_off: /usr/bin/python3 /config/vstarcontroller.py --host 192.168.5.32 --port 60075 --password vstarcam --preset 4
         value_template: '{{ false }}'
       reboot:
         friendly_name: camera reboot
-        command_on: /usr/local/bin/python3 /config/vstarcontroller.py --host 192.168.5.51 --port 60075 --password vstarcam --reboot
-        command_off: /usr/bin/python3 /config/vstarcontroller.py --host 192.168.5.51 --port 60075 --password vstarcam --reboot
+        command_on: /usr/local/bin/python3 /config/vstarcontroller.py --host 192.168.5.32 --port 60075 --password vstarcam --reboot
+        command_off: /usr/bin/python3 /config/vstarcontroller.py --host 192.168.5.32 --port 60075 --password vstarcam --reboot
         value_template: '{{ false }}'
 
   - platform: mqtt

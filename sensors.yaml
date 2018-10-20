@@ -1,5 +1,31 @@
+  - platform: google_travel_time
+    api_key: !secret google_travel_time
+    name: time to work billy
+    origin: zone.home
+    destination: zone.work
+
+  - platform: google_travel_time
+    api_key: !secret google_travel_time
+    name: time to work melina
+    origin: zone.home
+    destination: zone.melinas_work
+
+  - platform: pollen
+    zip_code: "41076"
+    monitored_conditions:
+      - allergy_average_forecasted
+      - allergy_average_historical
+      - disease_average_forecasted
+
   - platform: template
     sensors:
+      hub_mode:
+        value_template: >-
+          {% if states.binary_sensor.hub.attributes.pairing_mode %}
+            {{ states.binary_sensor.hub.attributes.pairing_mode }}
+          {% else %}
+            idle
+          {% endif %}
       power2:
         unit_of_measurement: 'kWh'
         value_template: >-
@@ -35,7 +61,7 @@
   - platform: season
 
   - platform: arest
-    resource: http://192.168.5.26
+    resource: http://192.168.5.23
     name: Garage Freezer
     monitored_variables:
       temperature:
@@ -84,33 +110,6 @@
     value_template: '{{ float(value_json.value) }}'
     availability_topic: "BedOccupancy/availability"
 
-  # - platform: arest
-  #   resource: http://192.168.5.60
-  #   scan_interval: 32
-  #   name: Turtle Tank
-  #   monitored_variables:
-  #     water_temperature:
-  #       name: Water
-  #       unit_of_measurement: '°C'
-  #     basking_temperature:
-  #       name: Basking
-  #       unit_of_measurement: '°C'
-  #     internal_temperature:
-  #       name: Internal
-  #       unit_of_measurement: '°C'
-  #     amps:
-  #       name: Power usage
-  #       unit_of_measurement: 'amps'
-  #     kWh:
-  #       name: Power used
-  #       unit_of_measurement: 'kWh'
-  #     water_low:
-  #       name: Water low
-  #     leaking:
-  #       name: Leak
-  #     error_message:
-  #       name: error message
-
   #######################################
   ##########Octoprint Sensors############
   #######################################
@@ -136,10 +135,9 @@
   - platform: darksky
     api_key: !secret darksky_api_key
     monitored_conditions:
-      - summary
+      - precip_type
       - precip_probability
-      - daily_summary
-      - temperature
+      - apparent_temperature_high
 
   - platform: wunderground
     api_key: !secret wunderground_key
@@ -161,7 +159,7 @@
 
   - platform: broadlink
     update_interval: 60
-    host: 192.168.5.9
+    host: 192.168.5.22
     mac: 'B4:43:0D:EE:F7:A0'
     monitored_conditions:
       - temperature
@@ -255,8 +253,8 @@
       office_door_sensor_battery:
         value_template: '{{ (states.binary_sensor.office_door_opened.attributes.battery_level | float) | round(2) }}'
         unit_of_measurement: '%'
-      down_stairs_bathroom_door_sensor_battery:
-        value_template: '{{ (states.binary_sensor.down_stairs_bathroom_door_opened.attributes.battery_level | float) | round(2) }}'
+      bathroom_window_sensor_battery:
+        value_template: '{{ (states.binary_sensor.bathroom_window_opened.attributes.battery_level | float) | round(2) }}'
         unit_of_measurement: '%'
       bedroom_bathroom_door_sensor_battery:
         value_template: '{{ (states.binary_sensor.bathroom_door_opened.attributes.battery_level | float) | round(2) }}'

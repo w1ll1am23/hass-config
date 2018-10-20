@@ -21,26 +21,30 @@ config:
 
 logger:
   default: info
-  logs:
-      pydukeenergy.api: debug
+  # logs:
+  #     pydukeenergy.api: debug
 
 http:
+  trusted_proxies: 192.168.5.5
+  use_x_forwarded_for: true
+  ip_ban_enabled: true
+  login_attempts_threshold: 3
+  trusted_networks:
+    - 192.168.5.4
+    - 192.168.5.5
   api_password: !secret http_password
 
-updater:
-  # Optional, allows Home Assistant developers to focus on popular components.
-  # include_used_components: true
+websocket_api:
 
-# Enables support for tracking state changes over time
+updater:
+  include_used_components: true
+
 history:
 
-# View all events in a logbook
 logbook:
 
-# Enables a map showing the location of tracked devices
 map:
 
-# Track the sun
 sun:
 
 history_graph:
@@ -56,7 +60,7 @@ zone: !include zones.yaml
 switch: !include switches.yaml
 sensor: !include sensors.yaml
 binary_sensor: !include binary_sensors.yaml
-media_player: !include media_player.yaml
+cast: !include media_player.yaml
 cloud: !include cloud.yaml
 
 zwave:
@@ -87,7 +91,7 @@ mqtt:
   password: !secret mqtt_password
 
 octoprint:
-  host: 192.168.5.4
+  host: 192.168.5.6
   api_key: !secret octoprint_api_key
   bed: false
   number_of_tools: 1
@@ -96,21 +100,23 @@ wink:
   local_control: True
 
 camera:
+  - platform: synology
+    url: !secret synology_url
+    timeout: 15
+    username: w1ll1am
+    password: !secret synology_password
   - platform: mjpeg
     name: living room camera
     mjpeg_url: !secret living_room_camera_url
-  - platform: mjpeg
-    name: outside camera
-    mjpeg_url: !secret outside_camera_url
   - platform: local_file
     name: last outside motion
     file_path: /media/outsidecamera/newest.jpg
   - platform: ffmpeg
     name: Office
-    input: -rtsp_transport tcp -i rtsp://192.168.5.63:8554/unicast
+    input: -rtsp_transport tcp -i rtsp://192.168.5.33:8554/unicast
   - platform: ffmpeg
     name: printer
-    input: -f mjpeg -i http://192.168.5.4:8080/?action=stream -vf "transpose=2, transpose=2"
+    input: -f mjpeg -i http://192.168.5.6:8080/?action=stream -vf "transpose=2, transpose=2"
 
 device_tracker:
   - platform: owntracks_http
@@ -130,7 +136,6 @@ alarm_control_panel:
     name: "HA Alarm"
     pending_time: 60
     trigger_time: 120
-    code: 1234
 
 notify:
   - platform: smtp
@@ -155,7 +160,7 @@ notify:
 light:
   - platform: flux_led
     devices:
-      192.168.5.53:
+      192.168.5.24:
         name: under bed light
 
 feedreader:
@@ -163,6 +168,19 @@ feedreader:
     - http://status.winkapp.com/history.atom
 
 input_select:
+  wink_service:
+    name: Wink services
+    options:
+      - "Off"
+      - "pull_newly_added_devices_from_wink"
+    initial: 'Off'
+  pairing_mode:
+    name: Wink pairing mode
+    options:
+      - "Off"
+      - "zwave"
+      - "zigbee"
+    initial: 'Off'
   camera_mode:
     name: Camera Mode
     options:
@@ -173,6 +191,12 @@ input_select:
     initial: 'Default'
     icon: mdi:camera
 
+input_text:
+  new_device_name:
+    name: New device name
+  current_entity_id:
+    name: Entity id
+
 shell_command:
   pull_last_motion_event: /bin/bash /media/newest.sh
 
@@ -181,6 +205,10 @@ input_boolean:
    name: Toggle dryer automation
    initial: off
    icon: mdi:sync
+  siren:
+    name: Siren
+    initial: off
+    icon: mdi:bell-ring
 
 cover:
   - platform: mqtt
@@ -198,3 +226,7 @@ cover:
     state_closed: "closed"
     payload_available: "online"
     payload_not_available: "offline"
+
+weather:
+  - platform: darksky
+    api_key: 896029527c06cbcc3ca4cf8d4b0a2c93

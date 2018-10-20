@@ -7,10 +7,7 @@
     condition: or
     conditions:
     - condition: state
-      entity_id: switch.turtle_tank_day_basking_lamp
-      state: 'off'
-    - condition: state
-      entity_id: switch.turtle_tank_uvb_lamp
+      entity_id: switch.turtle_tank_day_basking_lights
       state: 'off'
     - condition: state
       entity_id: switch.turtle_tank_night_basking_lamp
@@ -28,10 +25,7 @@
     condition: or
     conditions:
     - condition: state
-      entity_id: switch.turtle_tank_day_basking_lamp
-      state: 'on'
-    - condition: state
-      entity_id: switch.turtle_tank_uvb_lamp
+      entity_id: switch.turtle_tank_day_basking_lgihts
       state: 'on'
     - condition: state
       entity_id: switch.turtle_tank_night_basking_lamp
@@ -92,6 +86,10 @@
   trigger:
   - entity_id: media_player.living_room
     from: 'off'
+    platform: state
+    to: playing
+  - entity_id: media_player.living_room
+    from: idel
     platform: state
     to: playing
   condition: []
@@ -211,16 +209,24 @@
   - condition: state
     entity_id: lock.front_door
     state: unlocked
+  - condition: template
+    value_template: "{% if states.lock.front_door.attributes.alarm_mode != 'tamper'
+      %}
+
+      True
+
+      {%- else -%}
+
+      False
+
+      {%- endif %}"
   action:
   - data:
       entity_id: script.lock_the_door_after_5_minutes
     service: script.turn_on
 - id: '1526682384684'
-  alias: Notify that lock was unlocked
+  alias: Notify billy that lock was unlocked
   trigger:
-  - entity_id: binary_sensor.billy
-    platform: state
-    to: 'on'
   - entity_id: binary_sensor.melina
     platform: state
     to: 'on'
@@ -233,12 +239,15 @@
   - entity_id: binary_sensor.gaines
     platform: state
     to: 'on'
+  - entity_id: binary_sensor.tony
+    platform: state
+    to: 'on'
   condition: []
   action:
-  - service: notify.sms_billy
-    data_template:
+  - data_template:
       message: '{{ trigger.entity_id.split(''.'')[1].replace(''_'','' '') }} unlocked
         the door.'
+    service: notify.sms_billy
 - id: '1526682915637'
   alias: Turn on all kitchen lights when main kitchen light is turned on
   trigger:
@@ -332,6 +341,9 @@
     service: homeassistant.turn_off
   - data:
       entity_id: switch.work_bench_light
+    service: homeassistant.turn_off
+  - data:
+      entity_id: light.closet_light
     service: homeassistant.turn_off
 - id: '1526690464022'
   alias: Turn office lights off when relay bottom button is pressed
@@ -705,6 +717,8 @@
   - entity_id: binary_sensor.spotter_vibration
     platform: state
     to: 'off'
+    for:
+      minutes: 1
   condition:
   - condition: state
     entity_id: input_boolean.dryer_switch
@@ -725,6 +739,8 @@
   - entity_id: binary_sensor.octoprint_printing
     platform: state
     to: 'off'
+    for:
+      minutes: 1
   condition: []
   action:
   - data:
@@ -875,9 +891,15 @@
       minutes: 5
     platform: state
     to: '2'
+  - entity_id: media_player.bedroom
+    platform: state
+    to: 'off'
   condition:
   - after: '22:00:00'
     condition: time
+  - condition: state
+    entity_id: media_player.bedroom
+    state: 'off'
   action:
   - data:
       entity_id: light.bedtime
@@ -901,5 +923,435 @@
       entity_id: switch.office_lamp_2
     service: switch.turn_off
   - data:
+      entity_id: switch.living_room_corner_lamp
+    service: switch.turn_off
+  - data:
       entity_id: switch.bedroom_fan
     service: switch.turn_on
+  - data:
+      entity_id: light.under_bed_light
+    service: light.turn_off
+  - data:
+      entity_id: alarm_control_panel.ha_alarm
+    service: alarm_control_panel.alarm_arm_home
+- id: '1531058184954'
+  alias: Turn bathroom lights off after returning to bed
+  trigger:
+  - entity_id: sensor.bed_count
+    platform: state
+    to: '2'
+  condition:
+  - condition: or
+    conditions:
+    - after: '22:30:00'
+      condition: time
+    - before: 06:00:00
+      condition: time
+  action:
+  - data:
+      entity_id: light.bathroom
+    service: light.turn_off
+- id: '1531062656918'
+  alias: Turn bathroom light off no motion door closed
+  trigger:
+  - entity_id: binary_sensor.bedroom_motion
+    platform: state
+    to: 'off'
+    for:
+      minutes: 5
+  condition:
+  - condition: state
+    entity_id: light.bathroom_light
+    state: 'on'
+  - condition: state
+    entity_id: binary_sensor.bathroom_door_opened
+    state: 'off'
+  - condition: state
+    entity_id: switch.bathroom_fan
+    state: 'off'
+  action:
+  - data:
+      entity_id: light.bathroom_light
+    service: light.turn_off
+- id: '1531777055088'
+  alias: Turn bedroom lights off when motion detected in hallway in the morning
+  trigger:
+  - entity_id: binary_sensor.upstairs_hallway_motion
+    platform: state
+    to: 'on'
+  condition:
+  - after: 06:30:00
+    before: 07:30:00
+    condition: time
+  - condition: state
+    entity_id: switch.bathroom_fan
+    state: 'off'
+  action:
+  - data:
+      entity_id: light.bathroom_light
+    service: light.turn_off
+  - data:
+      entity_id: light.billys_nightstand
+    service: light.turn_off
+- id: '1531777289756'
+  alias: Notify that turtle tank controller is offline
+  trigger:
+  - entity_id: binary_sensor.turtle_tank_filter_leak
+    platform: state
+    to: unavailable
+    for:
+      minutes: 5
+  condition: []
+  action:
+  - data:
+      message: The turtle tank is offline
+    service: notify.sms_billy
+- id: '1531868129724'
+  alias: Notify melina that the lock was unlocked
+  trigger:
+  - entity_id: binary_sensor.billy
+    platform: state
+    to: 'on'
+  - entity_id: binary_sensor.gdottie
+    platform: state
+    to: 'on'
+  - entity_id: binary_sensor.parents
+    platform: state
+    to: 'on'
+  - entity_id: binary_sensor.gaines
+    platform: state
+    to: 'on'
+  - entity_id: binary_sensor.tony
+    platform: state
+    to: 'on'
+  condition: []
+  action:
+  - data_template:
+      message: '{{ trigger.entity_id.split(''.'')[1].replace(''_'','' '') }} unlocked
+        the door.'
+    service: notify.sms_melina
+- id: '1531964391218'
+  alias: Turn outside lights on when motion is detected
+  trigger:
+  - entity_id: binary_sensor.front_door_motion
+    platform: state
+    to: 'on'
+  condition:
+  - after: '20:00:00'
+    condition: time
+  - condition: state
+    entity_id: switch.outside_lights
+    for:
+      minutes: 1
+    state: 'off'
+  action:
+  - data:
+      entity_id: switch.outside_lights
+    service: switch.turn_on
+- id: '1532101521504'
+  alias: Set hub pairing mode
+  trigger:
+  - entity_id: input_select.pairing_mode
+    from: 'Off'
+    platform: state
+  condition: []
+  action:
+  - data_template:
+      hub_name: Hub
+      pairing_mode: '{{ states.input_select.pairing_mode.state }}'
+    service: wink.pair_new_device
+- id: '1532106575089'
+  alias: Pairing mode input select to off
+  trigger:
+  - platform: template
+    value_template: '{{ states.binary_sensor.hub.attributes.pairing_mode == ''idle''
+      }}'
+  condition: []
+  action:
+  - data:
+      entity_id: input_select.pairing_mode
+      option: 'Off'
+    service: input_select.select_option
+- id: '1532107375430'
+  alias: Call Wink service
+  trigger:
+  - entity_id: input_select.wink_service
+    from: 'Off'
+    platform: state
+  condition: []
+  action:
+  - service_template: wink.{{states.entity_id.input_select.wink_service.state}}
+- id: '1533957133241'
+  alias: Turn siren toggle to on state
+  trigger:
+  - entity_id: wink.siren
+    from: 'off'
+    platform: state
+  condition: []
+  action:
+  - data:
+      entity_id: input_boolean.siren
+    service: input_boolean.turn_on
+- id: '1533957210082'
+  alias: Turn siren off when input boolean is turned off
+  trigger:
+  - entity_id: input_boolean.siren
+    from: 'on'
+    platform: state
+    to: 'off'
+  condition: []
+  action:
+  - data:
+      enabled: false
+    service: wink.enable_siren
+- id: '1533999663391'
+  alias: Arm alarm when no one is home
+  trigger:
+  - entity_id: device_tracker.melinas_iphone
+    platform: state
+    to: not_home
+    for:
+      minutes: 5
+  - entity_id: device_tracker.w1ll1am_oneplus5t
+    platform: state
+    to: not_home
+    for:
+      minutes: 5
+  condition:
+  - condition: state
+    entity_id: device_tracker.melinas_iphone
+    state: not_home
+  - condition: state
+    entity_id: device_tracker.w1ll1am_oneplus5t
+    state: not_home
+  action:
+  - data:
+      entity_id: alarm_control_panel.ha_alarm
+    service: alarm_control_panel.alarm_arm_away
+- id: '1534013432492'
+  alias: Disarm alarm when someone gets home
+  trigger:
+  - entity_id: device_tracker.melinas_iphone
+    platform: state
+    to: home
+  - entity_id: device_tracker.w1ll1am_oneplus5t
+    platform: state
+    to: home
+  - entity_id: binary_sensor.gdottie
+    platform: state
+    to: 'on'
+  - entity_id: binary_sensor.billy
+    platform: state
+    to: 'on'
+  - entity_id: binary_sensor.melina
+    platform: state
+    to: 'on'
+  - entity_id: binary_sensor.parents
+    platform: state
+    to: 'on'
+  - entity_id: binary_sensor.gaines
+    platform: state
+    to: 'on'
+  - entity_id: binary_sensor.tony
+    platform: state
+    to: 'on'
+  condition:
+    condition: or
+    conditions:
+    - condition: state
+      entity_id: alarm_control_panel.ha_alarm
+      state: armed_away
+    - condition: state
+      entity_id: alarm_control_panel.ha_alarm
+      state: armed_home
+  action:
+  - data:
+      entity_id: alarm_control_panel.ha_alarm
+    service: alarm_control_panel.alarm_disarm
+- id: '1534013860702'
+  alias: Trigger alarm away
+  trigger:
+  - entity_id: binary_sensor.bathroom_window_opened
+    platform: state
+    to: 'on'
+  - entity_id: binary_sensor.front_door_opened
+    platform: state
+    to: 'on'
+  - entity_id: binary_sensor.garage_door_opened
+    platform: state
+    to: 'on'
+  - entity_id: binary_sensor.living_room_motion
+    platform: state
+    to: 'on'
+  - entity_id: binary_sensor.upstairs_hallway_motion
+    platform: state
+    to: 'on'
+  - entity_id: cover.garage_door
+    platform: state
+    to: open
+  condition:
+  - condition: state
+    entity_id: alarm_control_panel.ha_alarm
+    state: armed_away
+  action:
+  - data:
+      message: Intruder detected!
+    service: notify.sms_billy
+- id: '1534032201976'
+  alias: Trigger alarm home
+  trigger:
+  - entity_id: binary_sensor.front_door_opened
+    platform: state
+    to: 'on'
+    for:
+      seconds: 3
+  - entity_id: binary_sensor.garage_door_opened
+    platform: state
+    to: 'on'
+  - entity_id: binary_sensor.bathroom_window_opened
+    platform: state
+    to: 'on'
+  - entity_id: cover.garage_door
+    platform: state
+    to: open
+  condition:
+  - condition: state
+    entity_id: alarm_control_panel.ha_alarm
+    state: armed_home
+  - condition: state
+    entity_id: binary_sensor.living_room_motion
+    state: 'off'
+  action:
+  - data:
+      message: AHHHH someone is in the house
+    service: notify.sms_billy
+  - data:
+      entity_id: group.every_light
+    service: homeassistant.turn_on
+- id: '1534042579237'
+  alias: Enabled camera IR
+  trigger:
+  - at: '20:00:00'
+    platform: time
+  condition: []
+  action:
+  - data:
+      entity_id: switch.office_camera_ir
+    service: switch.turn_on
+  - data:
+      entity_id: switch.office_camera_ir_cut
+    service: switch.turn_off
+- id: '1534042654434'
+  alias: Disable Camera IR
+  trigger:
+  - at: 07:00:00
+    platform: time
+  condition: []
+  action:
+  - data:
+      entity_id: switch.office_camera_ir_cut
+    service: switch.turn_on
+  - data:
+      entity_id: switch.office_camera_ir
+    service: switch.turn_off
+- id: '1536533081269'
+  alias: Turtle tank leak detected
+  trigger:
+  - entity_id: binary_sensor.turtle_tank_filter_leak
+    platform: state
+    to: 'on'
+  condition: []
+  action:
+  - data:
+      message: There was a tank leak detected
+    service: notify.sms_billy
+- id: '1537135342350'
+  alias: Turn bedroom lights off after no motion for 20 minutes
+  trigger:
+  - entity_id: binary_sensor.bedroom_motion
+    for:
+      minutes: 20
+    platform: state
+    to: 'off'
+  condition:
+  - condition: state
+    entity_id: group.bedroom_lights
+    state: 'on'
+  action:
+  - data:
+      entity_id: group.bedroom_lights
+    service: homeassistant.turn_off
+- id: '1538101255931'
+  alias: Camera test
+  initial_state: false
+  trigger:
+  - event_data: {}
+    event_type: front_door_motion
+    platform: event
+  condition: []
+  action:
+  - data:
+      message: Front door camera motion
+    service: notify.sms_billy
+- id: '1538791309569'
+  alias: Set Dial 1
+  trigger:
+  - entity_id: sensor.dark_sky_daytime_high_apparent_temperature
+    platform: state
+  condition: []
+  action:
+    entity_id: wink.nimbus_dial_1
+    service: wink.set_nimbus_dial_state
+    data_template:
+      labels:
+      - '{{ states.sensor.dark_sky_daytime_high_apparent_temperature.state | round }}'
+      - high temp
+      value: '{{ states.sensor.dark_sky_daytime_high_apparent_temperature.state | round }}'
+- id: '1538945335141'
+  alias: Set Dail 3
+  trigger:
+  - entity_id: sensor.time_to_work_melina
+    platform: state
+  condition: []
+  action:
+  - service: wink.set_nimbus_dial_state
+    entity_id: wink.nimbus_dial_3
+    data_template:
+      labels:
+      - '{{ states.sensor.time_to_work_billy.state }} Billy'
+      - ttw
+      value: '{{ states.sensor.time_to_work_billy.state }}'
+- id: '1538946169350'
+  alias: Set Dial 4
+  trigger:
+  - entity_id: sensor.time_to_work_melina
+    platform: state
+  condition: []
+  action:
+  - service: wink.set_nimbus_dial_state
+    entity_id: wink.nimbus_dial_4
+    data_template:
+      labels:
+      - '{{ states.sensor.time_to_work_melina.state }} mel'
+      - ttw
+      value: '{{ states.sensor.time_to_work_melina.state }}'
+- id: '1538950402956'
+  alias: Set Dial 2
+  trigger:
+  - entity_id: sensor.dark_sky_precip_probability
+    platform: state
+  - entity_id: sensor.dark_sky_precip
+    platform: state
+  condition: []
+  action:
+    entity_id: wink.nimbus_dial_2
+    service: wink.set_nimbus_dial_state
+    data_template:
+      labels:
+      - "{% if states.sensor.dark_sky_precip.state != 'unknown'%}
+           {{ states.sensor.dark_sky_precip.state }} {{ states.sensor.dark_sky_precip_probability.state | round}}%
+         {%- else -%}
+           0%
+         {%- endif %}"
+      - precip
+      value: '{{ states.sensor.dark_sky_precip_probability.state | round }}'

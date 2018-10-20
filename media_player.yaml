@@ -1,6 +1,4 @@
-  - platform: cast
-    host: 192.168.5.18
-  - platform: cast
-    host: 192.168.5.30
-  - platform: cast
-    host: 192.168.5.29
+  media_player:
+    - host: 192.168.5.12
+    - host: 192.168.5.13
+    - host: 192.168.5.14
